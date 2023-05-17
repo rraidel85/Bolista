@@ -1,0 +1,7 @@
+{
+  "name": "bolista",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
