@@ -14,9 +14,21 @@
     </ion-toolbar>
   </ion-header>
 
-  <div id="container">
-    
-    <strong class="capitalize">Configuración</strong>
-    <p>En <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">Desarrollo</a></p>
-  </div>
+  <ion-list>
+    <ion-item>
+        <ion-icon slot="start" name="moon"></ion-icon>
+        <ion-label>Activar Modo Oscuro</ion-label>
+        <ion-toggle slot="end" (ngModel)="darkMode" (ionChange)="cambio()"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" ios="stopwatch-outline" md="stopwatch-sharp"></ion-icon>
+      <ion-label>Limitados</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="start" ios="cash-outline" md="cash-sharp"></ion-icon>
+      <ion-label>Pagos</ion-label>
+    </ion-item>    
+  
+</ion-list>
+
 </ion-content>
