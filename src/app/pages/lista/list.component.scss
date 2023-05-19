@@ -8,3 +8,18 @@ ion-menu-button {
     justify-content: center;
   }
   
+  .card-mid{
+    margin:20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+   
+  }
+
+  .buttons{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 2px;
+    
+  }
