@@ -8,10 +8,12 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { ListComponent } from './pages/lista/list.component';
 import { ConfComponent } from './pages/conf/conf.component';
+import { DayCardComponent } from './pages/lista/components/day-card/day-card.component';
+import { NightCardComponent } from './pages/lista/components/night-card/night-card.component';
 
 
 @NgModule({
-  declarations: [AppComponent, ListComponent,ConfComponent],
+  declarations: [AppComponent, ListComponent,ConfComponent,DayCardComponent,NightCardComponent],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
