@@ -1,0 +1,55 @@
+//Estilos toolbar
+ion-menu-button {
+    color: var(--ion-color-light);
+  }
+  
+  ion-title{
+    color: var(--ion-color-light);
+    justify-content: center;
+  }
+  
+//Estilos Tarjeta de Lista
+#list-card{
+  --background: var(--ion-color-success-shade);
+  --color: var(--ion-color-light);
+  padding: 0px;
+  border-radius: 3%;
+  margin: 5px;
+  font-weight: bold;
+  font-size: 25px;
+}
+
+.card-top{
+  display: flex;
+  font-size: 25px;
+  flex-direction: row;
+  justify-content: space-between;
+ 
+}
+
+#day-icon {
+  color: yellow;
+  font-size: 35px;
+}
+
+#trash-icon{
+ color: rgb(255, 255, 255);
+ font-size: 30px;
+}
+
+.card-mid{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+ 
+}
+
+.card-end{
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 55px;
+ 
+}

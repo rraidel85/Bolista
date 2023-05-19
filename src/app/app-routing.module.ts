@@ -1,17 +1,17 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-import { InicioComponent } from './pages/inicio/inicio.component';
+import { ListComponent } from './pages/lista/list.component';
 import { ConfComponent } from './pages/conf/conf.component';
 
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'Inicio',
+    redirectTo: 'Lista',
     pathMatch: 'full'
   },
   {
-    path: 'Inicio',
-    component: InicioComponent,
+    path: 'Lista',
+    component: ListComponent,
   },
   {
     path: 'Configuración',
