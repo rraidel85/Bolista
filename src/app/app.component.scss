@@ -1,5 +1,11 @@
 ion-menu ion-content {
-  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+  --background:var(--ion-color-light);
+  ion-list{
+    --background:var(--ion-color-light);
+    ion-item{
+      --background:var(--ion-color-light);
+  }
+}
 }
 
 ion-menu.md ion-content {
@@ -27,12 +33,11 @@ ion-menu.md ion-note {
 #inbox-list {
   background: black;
   padding: 10px 25px 50px 0px;
-  margin: -20px -8px 0px -8px;
- 
-  
+  margin: -50px -25px 0px -8px;
+  height: 40%;
 
   #logo{
-    transform: scale(1.1);
+    transform: scale(0.85);
   }
   
 }
@@ -54,23 +59,35 @@ ion-menu.md ion-list#inbox-list ion-list-header {
   
 }
 
+ion-menu.md ion-list#labels-list {
+  background: var(--ion-color-light);
+}
+
+ion-menu.ios ion-list#labels-list {
+  background: var(--ion-color-light);
+}
+
 ion-menu.md ion-list#labels-list ion-list-header {
   font-size: 16px;
-
+  
   margin-bottom: 18px;
 
-  color: #757575;
+  color: var(--ion-color-dark-shade);
 
   min-height: 26px;
 
  
 }
 
+ion-menu.ios ion-list#labels-list ion-list-header {
+  color: var(--ion-color-dark-shade);
+}
 
 ion-menu.md ion-item {
   --padding-start: 10px;
   --padding-end: 10px;
   border-radius: 4px;
+  
 }
 
 ion-menu.md ion-item.selected {
@@ -82,11 +99,30 @@ ion-menu.md ion-item.selected ion-icon {
 }
 
 ion-menu.md ion-item ion-icon {
-  color: #616e7e;
+  color: var(--ion-color-dark-tint);
 }
+
+ion-menu.ios ion-item ion-icon {
+  color: var(--ion-color-dark-tint);
+}
+
 
 ion-menu.md ion-item ion-label {
   font-weight: 500;
+  color: var(--ion-color-dark-tint);
+}
+
+ion-menu.ios ion-item ion-label {
+  font-weight: 500;
+  color: var(--ion-color-dark-tint);
+}
+
+ion-menu.md ion-item.selected ion-label {
+  color: var(--ion-color-primary);
+}
+
+ion-menu.ios ion-item.selected ion-label {
+  color: var(--ion-color-primary);
 }
 
 
@@ -120,12 +156,14 @@ ion-menu.ios ion-item ion-icon {
 
 ion-menu.ios ion-list#labels-list ion-list-header {
   margin-bottom: 8px;
+  color: var(--ion-color-dark-shade);
 }
 
 ion-menu.ios ion-list-header,
 ion-menu.ios ion-note {
   padding-left: 16px;
   padding-right: 16px;
+  --background:var(--ion-color-light);
 }
 
 ion-menu.ios ion-note {

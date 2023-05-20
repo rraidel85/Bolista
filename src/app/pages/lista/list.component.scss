@@ -1,13 +1,27 @@
 //Estilos toolbar
 ion-menu-button {
-    color: var(--ion-color-light);
+    color: white;
   }
   
   ion-title{
-    color: var(--ion-color-light);
+    color: white;
     justify-content: center;
   }
   
+//Estilos del Contenido
+
+ion-content{
+  --background:var(--ion-color-light);
+  ion-list{
+    background:var(--ion-color-light);
+  }
+}
+
+#list-buttons{
+  --background:var(--ion-color-light);
+}
+
+  //Estilos Botones Inflados
   .card-mid{
     margin:20px;
     display: flex;
