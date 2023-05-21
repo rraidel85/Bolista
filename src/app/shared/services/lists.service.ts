@@ -37,7 +37,7 @@ export class ListsService {
     }
     return this.numbers;
   }
-  addToNumbers(bets: string[]) {
+  private addToNumbers(bets: string[]) {
     let currentPrice: string = '';
     bets.forEach((bet) => {
       const splitted = bet.split('-');
@@ -100,7 +100,7 @@ export class ListsService {
     });
   }
 
-  validateList(message: string): string[] {
+  private validateList(message: string): string[] {
     const badBets: BetError[] = [];
     let unprocessedBets: string[] = [];
     let bets: string[] = [];
@@ -223,7 +223,7 @@ export class ListsService {
     return bets;
   }
 
-  tansformMessage(message: string): string[] {
+  private tansformMessage(message: string): string[] {
     const bets: string[] = [];
     let currentBet: string = '';
     let dashFound: boolean = false;
