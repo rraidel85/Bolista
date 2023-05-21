@@ -1,20 +1,10 @@
-export interface ListException {
-    badBets?:BetError[]
-    /*constructor(
-        //public message: string,
-         public repeatedPicks?: {
-            message:string
-            values:string[]
-        },
-        public badBets?: {
-            message:string
-            values:string[]
-        }
-        public repeatedPicks?:string[],
-        public badBets?:string[]
+export class ListException extends Error {
+    constructor(
+        message:string,
+        public badBets?:BetError[]
     ) {
-
-    } */
+        super(message)
+    }   
 }
 
 export interface BetError{
