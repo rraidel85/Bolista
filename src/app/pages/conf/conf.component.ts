@@ -1,4 +1,6 @@
 import { Component, Injectable, OnInit } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+import { PayModalComponent } from './components/pay-modal/pay-modal.component';
 
 @Component({
   selector: 'app-conf',
@@ -14,7 +16,8 @@ export class ConfComponent  implements OnInit {
 
   public darkMode:boolean = false;
 
-  constructor() {
+
+  constructor(private modalCtrl: ModalController) {
     const prefersDark = window.matchMedia('(prefers-color-scheme: light)');
     this.darkMode = prefersDark.matches;
    }
@@ -26,6 +29,15 @@ export class ConfComponent  implements OnInit {
     document.body.classList.toggle('dark');
    }
 
+   async openModal() {
+    const modal = await this.modalCtrl.create({
+      component: PayModalComponent,
+    });
+    modal.present();
+
+  }
+
   ngOnInit() {}
+
 
 }
