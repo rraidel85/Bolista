@@ -1,6 +1,4 @@
 import {  Routes } from '@angular/router';
-import { ListComponent } from './pages/lista/list.component';
-import { ConfComponent } from './pages/conf/conf.component';
 
 export const APP_ROUTES: Routes = [
   {
@@ -10,11 +8,11 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'Lista',
-    component: ListComponent,
+    loadComponent: () =>import('./pages/lista/list.component').then(c => c.ListComponent)
   },
   {
     path: 'Configuración',
-    component: ConfComponent,
+    loadComponent: () =>import('./pages/conf/conf.component').then(c => c.ConfComponent)
   }
   
 ];
