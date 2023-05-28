@@ -1,11 +1,13 @@
 import { Component, Injectable, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, IonicModule } from '@ionic/angular';
 import { PayModalComponent } from './components/pay-modal/pay-modal.component';
 
 @Component({
-  selector: 'app-conf',
-  templateUrl: './conf.component.html',
-  styleUrls: ['./conf.component.scss'],
+    selector: 'app-conf',
+    templateUrl: './conf.component.html',
+    styleUrls: ['./conf.component.scss'],
+    standalone: true,
+    imports: [IonicModule],
 })
 
 @Injectable({

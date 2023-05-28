@@ -9,9 +9,8 @@ describe('PayModalComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ PayModalComponent ],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+    imports: [IonicModule.forRoot(), PayModalComponent]
+}).compileComponents();
 
     fixture = TestBed.createComponent(PayModalComponent);
     component = fixture.componentInstance;

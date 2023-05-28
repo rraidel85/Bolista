@@ -9,9 +9,8 @@ describe('NightCardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NightCardComponent ],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+    imports: [IonicModule.forRoot(), NightCardComponent]
+}).compileComponents();
 
     fixture = TestBed.createComponent(NightCardComponent);
     component = fixture.componentInstance;

@@ -9,9 +9,8 @@ describe('DayCardComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ DayCardComponent ],
-      imports: [IonicModule.forRoot()]
-    }).compileComponents();
+    imports: [IonicModule.forRoot(), DayCardComponent]
+}).compileComponents();
 
     fixture = TestBed.createComponent(DayCardComponent);
     component = fixture.componentInstance;

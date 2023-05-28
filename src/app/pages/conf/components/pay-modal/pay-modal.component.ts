@@ -1,10 +1,12 @@
 import { Component} from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, IonicModule } from '@ionic/angular';
 
 @Component({
-  selector: 'app-pay-modal',
-  templateUrl: './pay-modal.component.html',
-  styleUrls: ['./pay-modal.component.scss'],
+    selector: 'app-pay-modal',
+    templateUrl: './pay-modal.component.html',
+    styleUrls: ['./pay-modal.component.scss'],
+    standalone: true,
+    imports: [IonicModule],
 })
 export class PayModalComponent{
   
