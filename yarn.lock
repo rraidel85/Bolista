@@ -3374,6 +3374,11 @@ copy-webpack-plugin@11.0.0:
     schema-utils "^4.0.0"
     serialize-javascript "^6.0.0"
 
+cordova-sms-plugin@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/cordova-sms-plugin/-/cordova-sms-plugin-1.0.3.tgz#a7ea43b15419a243f793adea137f1007c8942787"
+  integrity sha512-/w/XgmW7MuQblIBtO2TNXug0ER/lLhaQwd6qki4L7oKoBYtY0uMnvf9YiC1rbYj6SkBHARcXN9iQNefInVIBEg==
+
 core-js-compat@^3.25.1:
   version "3.30.2"
   resolved "https://registry.yarnpkg.com/core-js-compat/-/core-js-compat-3.30.2.tgz#83f136e375babdb8c80ad3c22d67c69098c1dd8b"
