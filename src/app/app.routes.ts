@@ -8,7 +8,7 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'Lista',
-    loadComponent: () =>import('./pages/lista/list.component').then(c => c.ListComponent)
+    loadChildren: () =>import('./pages//lista/list.routes').then(m => m.LIST_ROUTES)
   },
   {
     path: 'Configuración',
