@@ -7,7 +7,10 @@
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
-          "standalone": true
+          "style": "scss",
+          "standalone": true,
+          "inlineTemplate": true,
+          "skipTests": true
         }
       },
       "root": "",
@@ -139,6 +142,7 @@
   },
   "cli": {
     "schematicCollections": [
+      "@schematics/angular",
       "@ionic/angular-toolkit"
     ],
     "analytics": false
