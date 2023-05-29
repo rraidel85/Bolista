@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { MessagesService } from '../../services/messages.service';
+import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-message-list',
@@ -13,14 +15,23 @@ import { IonicModule } from '@ionic/angular';
       </ion-toolbar>
     </ion-header>
 
-    <ion-content [fullscreen]="true"> </ion-content>
+    <ion-content [fullscreen]="true">
+      <ion-list>
+        <ion-item *ngFor="let message of messages">
+          <ion-label>{{ message }}</ion-label>
+        </ion-item>
+      </ion-list>
+    </ion-content>
   `,
   styleUrls: ['./message-list.component.scss'],
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule, NgFor],
 })
 export class MessageListComponent implements OnInit {
-  constructor() {}
+
+  messages = ["un mensaje", "otro mensaje"]
+
+  constructor(private messagesService: MessagesService) {}
 
   ngOnInit() {}
 }

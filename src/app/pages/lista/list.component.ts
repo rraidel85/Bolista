@@ -3,6 +3,7 @@ import { NightCardComponent } from './ui/night-card/night-card.component';
 import { DayCardComponent } from './ui/day-card/day-card.component';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { CommonModule, NgFor, NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-inicio',
@@ -40,8 +41,8 @@ import { IonicModule } from '@ionic/angular';
         </ion-label>
       </ion-item>
 
-      <app-day-card [routerLink]="['contactos']"></app-day-card>
-      <app-night-card [routerLink]="['contactos']"></app-night-card>
+      <app-day-card [routerLink]="['mensajes']"></app-day-card>
+      <app-night-card [routerLink]="['mensajes']"></app-night-card>
       <ion-list> </ion-list>
     </ion-content>
   `,
