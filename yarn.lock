@@ -308,6 +308,20 @@
   resolved "https://registry.yarnpkg.com/@assemblyscript/loader/-/loader-0.10.1.tgz#70e45678f06c72fa2e350e8553ec4a4d72b92e06"
   integrity sha512-H71nDOOL8Y7kWRLqf6Sums+01Q5msqBW2KhDUTemh1tvY04eSkSXrK0uj/4mmY0Xr16/3zyZmsrxN7CKuRbNRg==
 
+"@awesome-cordova-plugins/core@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@awesome-cordova-plugins/core/-/core-6.3.0.tgz#05460eba56c06f9dce38f573f78bc74818fda321"
+  integrity sha512-MkcWO8akZLHa2RSJEPf76Y3P9wPqh5oXE8YCzn2vnYYeNyYWYnka2pHFsgUdbXJNiS+YeveUzvw+Isweg+wynA==
+  dependencies:
+    "@types/cordova" latest
+
+"@awesome-cordova-plugins/sms@^6.3.0":
+  version "6.3.0"
+  resolved "https://registry.yarnpkg.com/@awesome-cordova-plugins/sms/-/sms-6.3.0.tgz#7090b3b8d421c166f16beb87b5fcf2a0803e1119"
+  integrity sha512-VmcTd6Vj2QQA515pLCYHAYSbKApnuTowp2ggjyIIOVJEgVZWnsLRMQeKe18BCcpbPgCz0YuPry/y4IjVxmbRKQ==
+  dependencies:
+    "@types/cordova" latest
+
 "@babel/code-frame@7.12.11":
   version "7.12.11"
   resolved "https://registry.yarnpkg.com/@babel/code-frame/-/code-frame-7.12.11.tgz#f4ad435aa263db935b8f10f2c552d23fb716a63f"
@@ -1606,6 +1620,13 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-1.2.1.tgz#b520529ec21d8e5945a1851dfd1c32e94e39ff45"
   integrity sha512-ZnQMnLV4e7hDlUvw8H+U8ASL02SS2Gn6+9Ac3wGGLIe7+je2AeAOxPY+izIPJDfFDb7eDjev0Us8MO1iFRN8hA==
 
+"@ionic-native/sms@^5.36.0":
+  version "5.36.0"
+  resolved "https://registry.yarnpkg.com/@ionic-native/sms/-/sms-5.36.0.tgz#8ebfa2a7ac94ce1cb01947da683e748e0263214c"
+  integrity sha512-iKsGUPl1Bi5ItpjV1fHdwYONzCArybIwIQ0hHuANbl05XCUXivVE/PK5ne/I51/PZ6ykOiJrg9k3XMSglJwl/Q==
+  dependencies:
+    "@types/cordova" latest
+
 "@ionic/angular-toolkit@^9.0.0":
   version "9.0.0"
   resolved "https://registry.yarnpkg.com/@ionic/angular-toolkit/-/angular-toolkit-9.0.0.tgz#4c5480eea081fc54b58a5b09b5e669f1e9c885bd"
@@ -2064,6 +2085,11 @@
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@types/cookie/-/cookie-0.4.1.tgz#bfd02c1f2224567676c1545199f87c3a861d878d"
   integrity sha512-XW/Aa8APYr6jSVVA1y/DEIZX0/GMKLEVekNG727R8cs56ahETkRAy/3DR7+fJyh7oUgGwNQaRfXCun0+KbWY7Q==
+
+"@types/cordova@latest":
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/@types/cordova/-/cordova-11.0.0.tgz#9fba2d903ab7181ef0c0a43fb13659a6d02226b3"
+  integrity sha512-AtBm1IAqqXsXszJe6XxuA2iXLhraNCj25p/FHRyikPeW0Z3YfgM6qzWb+VJglJTmZc5lqRNy84cYM/sQI5v6Vw==
 
 "@types/cors@^2.8.12":
   version "2.8.13"
@@ -3373,6 +3399,11 @@ copy-webpack-plugin@11.0.0:
     normalize-path "^3.0.0"
     schema-utils "^4.0.0"
     serialize-javascript "^6.0.0"
+
+cordova-plugin-sms@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/cordova-plugin-sms/-/cordova-plugin-sms-1.0.5.tgz#66440954c19f73ee3e8e35e5c71ae123f43cb7b2"
+  integrity sha512-M24vTiIb7tieheWfC6t/PlSJDF9oLisdkBANYAqaxtFPbgb5IcQsVQSqbvKl5oScU4SHl/vOPsvNqeqx4jTaSQ==
 
 cordova-sms-plugin@^1.0.3:
   version "1.0.3"

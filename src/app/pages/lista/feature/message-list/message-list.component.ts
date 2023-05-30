@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { MessagesService } from '../../services/messages.service';
-import { NgFor } from '@angular/common';
+import { JsonPipe, NgFor } from '@angular/common';
+import { Plugins } from '@capacitor/core';
+
+const { Cordova } = Plugins;
+
 
 @Component({
   selector: 'app-message-list',
@@ -16,22 +20,41 @@ import { NgFor } from '@angular/common';
     </ion-header>
 
     <ion-content [fullscreen]="true">
-      <ion-list>
+      <!-- <ion-list>
         <ion-item *ngFor="let message of messages">
           <ion-label>{{ message }}</ion-label>
         </ion-item>
-      </ion-list>
+      </ion-list> -->
+      {{ messages | json }}
     </ion-content>
   `,
   styleUrls: ['./message-list.component.scss'],
   standalone: true,
-  imports: [IonicModule, NgFor],
+  imports: [IonicModule, NgFor, JsonPipe],
+  // providers: [SMS]
 })
 export class MessageListComponent implements OnInit {
 
-  messages = ["un mensaje", "otro mensaje"]
-
   constructor(private messagesService: MessagesService) {}
 
-  ngOnInit() {}
+  messages: any = []
+
+  ngOnInit(): void {
+    // console.log(SMS);
+    console.log(Cordova);
+    // SMS.listSMS({box : 'inbox'}, (data: any) => {
+    //   this.messages = data;
+    // }, function(){});
+  }
 }
+// export class MessageListComponent implements OnInit {
+
+//   messages: any = []
+
+//   constructor(private messagesService: MessagesService) {}
+
+//   ngOnInit() {
+//     this.messages = this.messagesService.getAllSMS();
+//     console.log(this.messagesService)
+//   }
+// }
