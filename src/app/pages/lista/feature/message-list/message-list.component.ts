@@ -2,10 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { MessagesService } from '../../services/messages.service';
 import { JsonPipe, NgFor } from '@angular/common';
-import { Plugins } from '@capacitor/core';
-
-const { Cordova } = Plugins;
-
+import { SMSInboxReader } from 'capacitor-sms-inbox';
 
 @Component({
   selector: 'app-message-list',
@@ -31,30 +28,17 @@ const { Cordova } = Plugins;
   styleUrls: ['./message-list.component.scss'],
   standalone: true,
   imports: [IonicModule, NgFor, JsonPipe],
-  // providers: [SMS]
 })
 export class MessageListComponent implements OnInit {
-
   constructor(private messagesService: MessagesService) {}
 
-  messages: any = []
+  messages: any = [];
 
   ngOnInit(): void {
-    // console.log(SMS);
-    console.log(Cordova);
-    // SMS.listSMS({box : 'inbox'}, (data: any) => {
-    //   this.messages = data;
-    // }, function(){});
+    SMSInboxReader.getSMSList({
+      projection: { creator: true, body: true },
+      filter: {maxCount: 10}
+    }).then((data) => this.messages = data)
+    .catch(err => console.log(err));
   }
 }
-// export class MessageListComponent implements OnInit {
-
-//   messages: any = []
-
-//   constructor(private messagesService: MessagesService) {}
-
-//   ngOnInit() {
-//     this.messages = this.messagesService.getAllSMS();
-//     console.log(this.messagesService)
-//   }
-// }
