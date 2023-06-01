@@ -12,7 +12,7 @@ import { SMSInboxReader } from 'capacitor-sms-inbox';
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title>Mensajes</ion-title>
+        <ion-title>Mensaje</ion-title>
       </ion-toolbar>
     </ion-header>
 
@@ -35,10 +35,7 @@ export class MessageListComponent implements OnInit {
   messages: any = [];
 
   ngOnInit(): void {
-    SMSInboxReader.getSMSList({
-      projection: { creator: true, body: true },
-      filter: {maxCount: 10}
-    }).then((data) => this.messages = data)
-    .catch(err => console.log(err));
+  this.messagesService.getAllSMS('58630864').then(smsList => this.messages = smsList)
+                                  .catch(err => console.log(err))
   }
 }
