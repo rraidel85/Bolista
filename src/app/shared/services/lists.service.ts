@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Picks } from '../interfaces/picks.interface';
+import { Pick } from '../interfaces/picks.interface';
 import { BetError, ListException } from '../classes/list-exception.class';
+import { ListElementsService } from 'src/app/services/list-elements.service';
+import { ListElement } from 'src/app/models/list-element.model';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ListsService {
-  private numbers: Picks = {};
+  private numbers: Pick[] = [];
   // private listRegExp: listRegExpp=/(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{2}al?\d{2}|\d{3}al?\d{3})-\d+,|\d{2}-\d+-\d+c,)*(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{2}al?\d{2}|\d{3}al?\d{3})-\d+|\d{2}-\d+-\d+c)/g
   private listRegExp: RegExp =
     /(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+,|\d{2}-\d+-\d+c,)*/g;
@@ -14,30 +17,38 @@ export class ListsService {
     /^(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+|\d{2}-\d+-\d+c)$/g;
   private allowedChars: RegExp = /^[0123456789(),alcon-]+$/;
 
-  constructor() {}
+  constructor(private listElementsService: ListElementsService) {}
 
-  processMessage(message: string): Picks;
-  processMessage(messages: string[]): Picks;
-  processMessage(input: string | string[]): Picks {
+  processMessage(message: string): Observable<ListElement[]>;
+  processMessage(messages: string[]): Observable<ListElement[]>;
+  processMessage(input: string | string[]): Observable<ListElement[]> {
+    let list: ListElement[] = [];
     if (Array.isArray(input)) {
       input.forEach((message) => {
         this.processMessage(message);
       });
     } else if (typeof input === 'string') {
       input = input.trim();
-      if (input[input.length-1]!==',') input=input+','
+      if (input[input.length - 1] !== ',') input = input + ',';
       //if no errors
       const bets = this.validateList(input);
 
       //TODO add to database
-      this.addToNumbers(bets);
+      this.addToNumbers(bets).then((asd) => {
+        this.listElementsService.getAll().then((ret) => {
+          list = ret;
+          console.log('lista',list.length);
+          
+        });
+      });
 
       //get total income
-      const totalIncome = this.getTotalIncome();
+      // const totalIncome = this.getTotalIncome();
     }
-    return this.numbers;
+
+    return of(list);
   }
-  private addToNumbers(bets: string[]) {
+  async addToNumbers(bets: string[]): Promise<void> {
     let currentPrice: string = '';
     bets.forEach((bet) => {
       const splitted = bet.split('-');
@@ -46,19 +57,22 @@ export class ListsService {
 
       // if is corrido
       if (prices[1] && prices[1].includes('c')) {
-        this.numbers[picks] = {
+        this.numbers.push({
+          pick: picks,
           price: +prices[0],
           corrido: +prices[1].replace('c', ''),
           amount: 1,
-        };
+        });
       }
       // if is candado || con
       else if (picks.includes('(') || picks.includes('con')) {
-        if (this.numbers[picks]) {
-          this.numbers[picks].price += +prices[0];
-          this.numbers[picks].amount += 1;
+        const exists = this.numbers.filter((pick) => pick.pick === picks);
+        if (exists.length > 0) {
+          const index = this.numbers.indexOf(exists[0]);
+          this.numbers[index].price += +prices[0];
+          this.numbers[index].amount += 1;
         } else {
-          this.numbers[picks] = { price: +prices[0], amount: 1 };
+          this.numbers.push({ pick: picks, price: +prices[0], amount: 1 });
         }
       } else if (picks.includes('a')) {
         picks = picks.replace('l', '');
@@ -79,24 +93,35 @@ export class ListsService {
         }
 
         serieNumbers.forEach((pick) => {
-          if (this.numbers[pick]) {
-            this.numbers[pick].price += +prices[0];
-            this.numbers[pick].amount += 1;
+          const exists = this.numbers.filter(
+            (element) => element.pick === pick
+          );
+          if (exists.length > 0) {
+            const index = this.numbers.indexOf(exists[0]);
+            this.numbers[index].price += +prices[0];
+            this.numbers[index].amount += 1;
           } else {
-            this.numbers[pick] = { price: +prices[0], amount: 1 };
+            this.numbers.push({ pick, price: +prices[0], amount: 1 });
           }
         });
       } else {
         const separatedPicks: string[] = picks.split(',');
         separatedPicks.forEach((pick) => {
-          if (this.numbers[pick]) {
-            this.numbers[pick].price += +prices[0];
-            this.numbers[pick].amount += 1;
+          const exists = this.numbers.filter(
+            (element) => element.pick === pick
+          );
+          if (exists.length > 0) {
+            const index = this.numbers.indexOf(exists[0]);
+            this.numbers[index].price += +prices[0];
+            this.numbers[index].amount += 1;
           } else {
-            this.numbers[pick] = { price: +prices[0], amount: 1 };
+            this.numbers.push({ pick, price: +prices[0], amount: 1 });
           }
         });
       }
+    });
+    this.numbers.forEach(async (element) => {
+      await this.listElementsService.create(element);
     });
   }
 
@@ -243,7 +268,7 @@ export class ListsService {
     return bets;
   }
 
-  getTotalIncome(): number {
+  /*  getTotalIncome(): number {
     let total: number = 0;
     const keys = Object.keys(this.numbers);
     for (let index = 0; index < keys.length; index++) {
@@ -253,5 +278,5 @@ export class ListsService {
         total += this.numbers[key].corrido as number;
     }
     return total;
-  }
+  } */
 }

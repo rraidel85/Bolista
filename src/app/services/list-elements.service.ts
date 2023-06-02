@@ -10,8 +10,10 @@ import { DbnameVersionService } from './dbname-version.service';
 import { BolistaDbService } from './bolista-db.service';
 import { ListElement } from 'old/models/list-element.model';
 
-@Injectable()
-export class DepartmentEmployeesService {
+@Injectable({
+  providedIn:'root'
+})
+export class ListElementsService {
   // public databaseName: string;
   // public employeeList: BehaviorSubject<EmployeeData[]> = new BehaviorSubject<EmployeeData[]>([]);
   // public departmentList: BehaviorSubject<Department[]> = new BehaviorSubject<Department[]>([]);

@@ -19,10 +19,13 @@ export class FolderPage implements OnInit {
     // let messages=[message,message2]
     //console.log(this.listsService.formatMessage());
     try {
-      const picks = this.listsService.processMessage(message2);
-      console.log(picks);
+      const picks = this.listsService.processMessage(message2).subscribe(res=>{
+
+        console.log('si',res.length);
+      });
       
     } catch (error:any) {
+      console.log('error',error);
       console.log(error.badBets);
       
     }
