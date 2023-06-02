@@ -1360,6 +1360,11 @@
   resolved "https://registry.npmjs.org/@capacitor/status-bar/-/status-bar-5.0.2.tgz"
   integrity sha512-5emXUQzx9WnQHnxzapghrqm8P80z7IPLM83PTsfN+NOkm3uw3ZOxB4T7qy9NBV2Zp+GCEpr1UrNBowxV7Ami3Q==
 
+"@capacitor/toast@^5.0.2":
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/@capacitor/toast/-/toast-5.0.2.tgz#b5f89dc052febe7d3cbbc5ac74a4517f239df4fa"
+  integrity sha512-CsVNQ5ov90hTpOLP/ZvLI0HUPPe9YUZQYs1abYPvdD6pR2SPPRdfHYcFv7FmktNjABm/dqvCLBFDVYIQssoS6w==
+
 "@colors/colors@1.5.0":
   version "1.5.0"
   resolved "https://registry.npmjs.org/@colors/colors/-/colors-1.5.0.tgz"
