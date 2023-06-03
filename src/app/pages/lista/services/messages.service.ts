@@ -17,12 +17,12 @@ export interface SmsOptions {
 })
 export class MessagesService {
 
-  smsProjection: Projection = {
+  private smsProjection: Projection = {
     id: false,
     threadId: false,
   };
 
-  smsFilters: SMSFilter = {
+  private smsFilters: SMSFilter = {
     maxCount: 10,
   }
 

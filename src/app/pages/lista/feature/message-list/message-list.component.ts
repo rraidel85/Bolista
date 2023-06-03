@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { MessagesService } from '../../services/messages.service';
-import { JsonPipe, NgFor } from '@angular/common';
-import { SMSInboxReader } from 'capacitor-sms-inbox';
+import { AsyncPipe, JsonPipe, NgFor } from '@angular/common';
+import { SMSObject } from 'capacitor-sms-inbox';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-message-list',
@@ -22,20 +24,41 @@ import { SMSInboxReader } from 'capacitor-sms-inbox';
           <ion-label>{{ message }}</ion-label>
         </ion-item>
       </ion-list> -->
-      {{ messages | json }}
+      <h1>Recibidos</h1>
+      {{ (receivedSMS$ | async) | json }}
+      <hr/>
+      <h1>Enviados</h1>
+      {{ (sentSMS$ | async) | json }}
     </ion-content>
   `,
   styleUrls: ['./message-list.component.scss'],
   standalone: true,
-  imports: [IonicModule, NgFor, JsonPipe],
+  imports: [IonicModule, NgFor, JsonPipe, AsyncPipe],
 })
 export class MessageListComponent implements OnInit {
-  constructor(private messagesService: MessagesService) {}
 
-  messages: any = [];
+  constructor(private messagesService: MessagesService,
+    private route: ActivatedRoute) {}
+
+  receivedSMS$!: Observable<{ smsList: SMSObject[] }>;
+  sentSMS$!: Observable<{ smsList: SMSObject[] }>;
 
   ngOnInit(): void {
-  this.messagesService.getAllSMS('58630864').then(smsList => this.messages = smsList)
-                                  .catch(err => console.log(err))
+    this.receivedSMS$ = this.route.paramMap.pipe(
+      switchMap(params => {
+        const contactPhone= '+5355768570';//params.get('phone')!;
+        const sms = this.messagesService.getReceivedSMS(contactPhone);
+        sms.then(s => console.log(s))
+        return this.messagesService.getReceivedSMS(contactPhone);
+      })
+    );
+
+    this.sentSMS$ = this.route.paramMap.pipe(
+      switchMap(params => {
+        const contactPhone= params.get('phone')!;
+        return this.messagesService.getSentSMS(contactPhone);
+      })
+    );
+
   }
 }
