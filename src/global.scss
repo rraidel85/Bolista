@@ -32,3 +32,26 @@ ion-toolbar{
     --background: var(--ion-color-appmenu);
 }
 
+//Estilo de Hora 
+.hour {
+    margin-right: 10px;
+    font-size: 20px;
+    color: white;
+    position: relative;
+  }
+  
+  .hour::before {
+    margin-left: 22.5px;
+    content: ':';
+    position: absolute;
+    animation: blink-animation 1s infinite;
+  }
+  
+  @keyframes blink-animation {
+    0%, 50% {
+      opacity: 1;
+    }
+    51%, 100% {
+      opacity: 0;
+    }
+  }

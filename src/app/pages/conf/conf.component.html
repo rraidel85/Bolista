@@ -4,6 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Configuración</ion-title>
+    <ion-text class="hour" slot="end">{{horaActual|hora}}</ion-text>
   </ion-toolbar>
 </ion-header>
 
@@ -15,11 +16,11 @@
         <ion-label>Activar Modo Oscuro</ion-label>
         <ion-toggle slot="end" (ngModel)="darkMode" (ionChange)="cambio()"></ion-toggle>
     </ion-item>
-    <ion-item class="list-option">
+    <ion-item class="list-option" expand="block" (click)="openLimitModal()">
       <ion-icon slot="start" ios="stopwatch-outline" md="stopwatch-sharp"></ion-icon>
       <ion-label>Limitados</ion-label>
     </ion-item>
-    <ion-item class="list-option" expand="block" (click)="openModal()">
+    <ion-item class="list-option" expand="block" (click)="openPayModal()">
       <ion-icon slot="start" ios="cash-outline" md="cash-sharp"></ion-icon>
       <ion-label>Pagos</ion-label>
     </ion-item> 

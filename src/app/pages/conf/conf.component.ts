@@ -1,6 +1,8 @@
 import { Component, Injectable, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { PayModalComponent } from './components/pay-modal/pay-modal.component';
+import { LimitModalComponent } from './components/limit-modal/limit-modal.component';
+import { HoraService } from 'src/app/services/hora.service';
 
 @Component({
   selector: 'app-conf',
@@ -15,9 +17,9 @@ import { PayModalComponent } from './components/pay-modal/pay-modal.component';
 export class ConfComponent  implements OnInit {
 
   public darkMode:boolean = false;
-
-
-  constructor(private modalCtrl: ModalController) {
+  horaActual!: string;
+ 
+  constructor(private modalCtrl: ModalController, private horaService: HoraService) {
     const prefersDark = window.matchMedia('(prefers-color-scheme: light)');
     this.darkMode = prefersDark.matches;
    }
@@ -29,7 +31,7 @@ export class ConfComponent  implements OnInit {
     document.body.classList.toggle('dark');
    }
 
-   async openModal() {
+   async openPayModal() {
     const modal = await this.modalCtrl.create({
       component: PayModalComponent,
     });
@@ -37,7 +39,17 @@ export class ConfComponent  implements OnInit {
 
   }
 
-  ngOnInit() {}
+  async openLimitModal() {
+    const modal = await this.modalCtrl.create({
+      component: LimitModalComponent,
+    });
+    modal.present();
+
+  }
+
+  ngOnInit() { this.horaService.obtenerHoraActual().subscribe(
+    hora => this.horaActual = hora
+  );}
 
 
 }

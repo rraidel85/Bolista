@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ApplicationRef } from '@angular/core';
-
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +10,12 @@ import { ApplicationRef } from '@angular/core';
 export class AppComponent {
  
   public selectedPage!: string;
+  public horaActual!: string;
   
-  constructor(private appRef: ApplicationRef) {
+  constructor(private appRef: ApplicationRef, private http:HttpClient) {
+
   }
+
 
   close() {
     // Close the application

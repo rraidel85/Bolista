@@ -1,0 +1,42 @@
+ion-content{
+    --background: var(--ion-color-light);
+}
+
+ion-title{
+    color:white; 
+}
+
+ion-button{
+    color:white;
+}
+
+ion-list {
+    
+    background: var(--ion-color-light);
+  
+
+    ion-item{
+       color: var(--ion-color-dark);
+       --background: var(--ion-color-light);
+       --border-color: var(--ion-color-dark);
+
+    ion-label{
+        font-size: 20px;
+      }
+}
+}
+
+.add-button {
+    background-color: black;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .add-button ion-icon {
+    color: white;
+    font-size: 20px;
+  }
