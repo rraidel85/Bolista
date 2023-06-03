@@ -8,11 +8,11 @@ export class HoraPipe implements PipeTransform {
     const date = new Date(value);
     const horas = date.getHours();
     const minutos = date.getMinutes();
-  
+    const segundos = date.getSeconds();
 
-    const amPm = horas >= 12 ? 'pm' : 'am';
+    const amPm = horas >= 12 ? 'PM' : 'AM';
     const hora12h = horas % 12 || 12;
 
-    return `${hora12h} ${minutos < 10 ? '0' : ''}${minutos} ${amPm}`;
+    return `${hora12h}:${minutos < 10 ? '0' : ''}${minutos}.${segundos < 10 ? '0' : ''}${segundos} ${amPm}`;
   }
 }

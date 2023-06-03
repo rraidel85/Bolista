@@ -40,18 +40,3 @@ ion-toolbar{
     position: relative;
   }
   
-  .hour::before {
-    margin-left: 22.5px;
-    content: ':';
-    position: absolute;
-    animation: blink-animation 1s infinite;
-  }
-  
-  @keyframes blink-animation {
-    0%, 50% {
-      opacity: 1;
-    }
-    51%, 100% {
-      opacity: 0;
-    }
-  }
