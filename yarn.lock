@@ -211,6 +211,15 @@
   dependencies:
     tslib "^2.3.0"
 
+"@angular/cdk@^16.0.3":
+  version "16.0.3"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-16.0.3.tgz#b2c6dcda1f8451b86ae8de352c010fdaf2853566"
+  integrity sha512-KQCKWWNiHuYmzAVSiEyVs1P+859uhlvnmUH2azoL3qUHUcvdyB+iYqv9rTVRJl4N8nOpOYrj4JP3zmvNZLsI1Q==
+  dependencies:
+    tslib "^2.3.0"
+  optionalDependencies:
+    parse5 "^7.1.2"
+
 "@angular/cli@^16.0.0":
   version "16.0.1"
   resolved "https://registry.yarnpkg.com/@angular/cli/-/cli-16.0.1.tgz#7cb6cffc3f299c46066e29570fc177e861a5e731"
@@ -1279,6 +1288,11 @@
     "@babel/helper-string-parser" "^7.21.5"
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
+
+"@capacitor-community/contacts@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@capacitor-community/contacts/-/contacts-4.0.3.tgz#222a700c2b96251ca92b45c33e7bca14bf51cb03"
+  integrity sha512-DBmxJ7h4Yx07wiqXqcUaIEEDnQWI3lF5+gbeyORDpumI71Akw8SyeFVIQ6chUNdrbLt0xztYNkG6JTWLEM5XVQ==
 
 "@capacitor/android@5.0.3":
   version "5.0.3"
@@ -6614,7 +6628,7 @@ parse5@^6.0.1:
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-6.0.1.tgz#e1a1c085c569b3dc08321184f19a39cc27f7c30b"
   integrity sha512-Ofn/CTFzRGTTxwpNEs9PP93gXShHcTq255nzRYSKe8AkVpZY7e1fpmTfOyoIvjP5HG7Z2ZM7VS9PPhQGW2pOpw==
 
-parse5@^7.0.0:
+parse5@^7.0.0, parse5@^7.1.2:
   version "7.1.2"
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-7.1.2.tgz#0736bebbfd77793823240a23b7fc5e010b7f8e32"
   integrity sha512-Czj1WaSVpaoj0wbhMzLmWD69anp2WH7FXMB9n1Sy8/ZFF9jolSQVMu1Ij5WIyGmcBmhk7EOndpO4mIpihVqAXw==
