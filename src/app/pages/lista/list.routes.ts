@@ -13,7 +13,7 @@ export const LIST_ROUTES: Routes = [
         component: ContactListComponent,
     },
     {
-        path: 'mensajes',
+        path: 'contactos/:phone',
         component: MessageListComponent,
     }   
 ];

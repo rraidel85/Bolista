@@ -41,7 +41,7 @@ import { CommonModule, NgFor, NgForOf } from '@angular/common';
         </ion-label>
       </ion-item>
 
-      <app-day-card [routerLink]="['mensajes']"></app-day-card>
+      <app-day-card [routerLink]="['contactos']"></app-day-card>
       <app-night-card [routerLink]="['mensajes']"></app-night-card>
       <ion-list> </ion-list>
     </ion-content>
