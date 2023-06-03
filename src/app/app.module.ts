@@ -10,6 +10,7 @@ import {HttpClientModule} from '@angular/common/http';
 
 import { ListComponent } from './pages/lista/list.component';
 import { ConfComponent } from './pages/conf/conf.component';
+import { WinnersComponent } from './pages/winners/winners.component';
 
 import { DayCardComponent } from './pages/lista/components/day-card/day-card.component';
 import { NightCardComponent } from './pages/lista/components/night-card/night-card.component';
@@ -20,8 +21,9 @@ import { HoraPipe } from './pipes/hora.pipe';
 
 
 
+
 @NgModule({
-  declarations: [AppComponent, ListComponent,ConfComponent,DayCardComponent,NightCardComponent,PayModalComponent,LimitModalComponent, HoraPipe],
+  declarations: [AppComponent, ListComponent,ConfComponent,WinnersComponent,DayCardComponent,NightCardComponent,PayModalComponent,LimitModalComponent, HoraPipe],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],

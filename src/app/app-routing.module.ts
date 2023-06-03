@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { ListComponent } from './pages/lista/list.component';
 import { ConfComponent } from './pages/conf/conf.component';
+import { WinnersComponent } from './pages/winners/winners.component';
 
 const routes: Routes = [
   {
@@ -12,6 +13,10 @@ const routes: Routes = [
   {
     path: 'Lista',
     component: ListComponent,
+  },
+  {
+    path: 'Ganadores',
+    component: WinnersComponent,
   },
   {
     path: 'Configuración',
