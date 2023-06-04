@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { IonModal, IonicModule } from '@ionic/angular';
 import { MessagesService } from '../../services/messages.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { SMSObject } from 'capacitor-sms-inbox';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, switchMap } from 'rxjs';
+import { OverlayEventDetail } from '@ionic/core/components';
+import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-message-list',
@@ -33,27 +36,25 @@ import { Observable, switchMap } from 'rxjs';
           >Importar</ion-button
         >
         <ion-list>
-          <ion-card *ngFor="let item of smsPruebaR">
+          <ion-card *ngFor="let item of smsPruebaR; index as i">
             <ion-card-header>
               <div class="card-header">
                 <ion-text color="primary">+5355565758</ion-text>
                 <ion-checkbox></ion-checkbox>
               </div>
             </ion-card-header>
-            <ion-card-content>
+            <ion-card-content (click)="openEditModal(item, i)">
               <ion-text class="sms-body">
                 {{ item }}
               </ion-text>
-              <ion-label class="sms-date">
-                14/04/2023 13:49
-              </ion-label>
+              <ion-label class="sms-date"> 14/04/2023 13:49 </ion-label>
             </ion-card-content>
           </ion-card>
         </ion-list>
       </ng-container>
 
       <ng-container *ngIf="selectedSegment === 'sent'">
-      <ion-button class="ion-margin-top importar-button" expand="block"
+        <ion-button class="ion-margin-top importar-button" expand="block"
           >Importar</ion-button
         >
         <ion-list>
@@ -68,16 +69,43 @@ import { Observable, switchMap } from 'rxjs';
               <ion-text class="sms-body">
                 {{ item }}
               </ion-text>
-              <ion-label class="sms-date">
-                14/04/2023 13:49
-              </ion-label>
+              <ion-label class="sms-date"> 14/04/2023 13:49 </ion-label>
             </ion-card-content>
           </ion-card>
         </ion-list>
       </ng-container>
 
-      <ion-card> </ion-card>
-
+      <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-buttons slot="start">
+                <ion-button class="modal-button" (click)="cancel()"
+                  >Cancelar</ion-button
+                >
+              </ion-buttons>
+              <ion-title class="modal-title">Editar</ion-title>
+              <ion-buttons slot="end">
+                <ion-button
+                  class="modal-button"
+                  (click)="confirm()"
+                  [strong]="true"
+                  >Aceptar</ion-button
+                >
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <ion-item>
+              <ion-input
+                type="text"
+                [value]="currentEditingText"
+                [(ngModel)]="currentEditingText"
+              ></ion-input>
+            </ion-item>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
       <!-- <h1>Recibidos</h1>
       {{ receivedSMS$ | async | json }}
       <hr />
@@ -87,7 +115,7 @@ import { Observable, switchMap } from 'rxjs';
   `,
   styleUrls: ['./message-list.component.scss'],
   standalone: true,
-  imports: [IonicModule, NgFor, JsonPipe, AsyncPipe, NgIf],
+  imports: [IonicModule, NgFor, JsonPipe, AsyncPipe, NgIf, FormsModule],
 })
 export class MessageListComponent implements OnInit {
   selectedSegment: string = 'received';
@@ -95,6 +123,11 @@ export class MessageListComponent implements OnInit {
   sentSMS$!: Observable<{ smsList: SMSObject[] }>;
   smsPruebaR: any[] = [];
   smsPruebaE: any[] = [];
+  currentEditingIndex!: number;
+  currentEditingText!: string; // Current sms text in editing input and value saved after done edit
+  oldSmsText!: string; // Old sms text before editing in case user cancel edit
+  isModalOpen: boolean = false;
+  @ViewChild(IonModal) modal!: IonModal;
 
   constructor(
     private messagesService: MessagesService,
@@ -130,5 +163,34 @@ export class MessageListComponent implements OnInit {
 
   segmentChanged(event: any) {
     this.selectedSegment = event.target.value;
+  }
+
+  openEditModal(smsText: any, smsIndex: any) {
+    this.isModalOpen = true;
+    this.currentEditingIndex = smsIndex;
+    this.oldSmsText = smsText;
+    this.currentEditingText = smsText;
+  }
+
+  cancel() {
+    this.isModalOpen = false;
+  }
+
+  confirm() {
+    const dismissData: ModalSmsDataDismiss = {
+      smsText: this.currentEditingText,
+      smsIndex: this.currentEditingIndex,
+    };
+    this.modal.dismiss(dismissData, 'confirm');
+  }
+
+  onWillDismiss(event: Event) {
+    const ev = event as CustomEvent<OverlayEventDetail<ModalSmsDataDismiss>>;
+    if (ev.detail.role === 'confirm') {
+      console.log('entroo');
+      this.smsPruebaR[ev.detail.data!.smsIndex] = ev.detail.data!.smsText;
+      this.oldSmsText = ev.detail.data!.smsText;
+    }
+    this.isModalOpen = false;
   }
 }
