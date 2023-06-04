@@ -1,7 +1,7 @@
 import { Routes } from "@angular/router";
 import { ListComponent } from "./list.component";
-import { MessageListComponent } from "./feature/message-list/message-list.component";
 import { ContactListComponent } from "./feature/contact-list/contact-list.component";
+import { SmsListComponent } from "./feature/sms-list/sms-list.component";
 
 export const LIST_ROUTES: Routes = [
     {
@@ -14,6 +14,6 @@ export const LIST_ROUTES: Routes = [
     },
     {
         path: 'contactos/:phone',
-        component: MessageListComponent,
+        component: SmsListComponent,
     }   
 ];

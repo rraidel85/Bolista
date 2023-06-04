@@ -15,7 +15,7 @@ export interface SmsOptions {
 @Injectable({
   providedIn: 'root',
 })
-export class MessagesService {
+export class SmsService {
 
   private smsProjection: Projection = {
     id: false,

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { IonModal, IonicModule } from '@ionic/angular';
-import { MessagesService } from '../../services/messages.service';
+import { SmsService } from '../../services/sms.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { SMSObject } from 'capacitor-sms-inbox';
 import { ActivatedRoute } from '@angular/router';
@@ -10,7 +10,7 @@ import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-message-list',
+  selector: 'app-sms-list',
   template: `
     <ion-header [translucent]="true">
       <ion-toolbar>
@@ -113,11 +113,11 @@ import { FormsModule } from '@angular/forms';
       {{ sentSMS$ | async | json }} -->
     </ion-content>
   `,
-  styleUrls: ['./message-list.component.scss'],
+  styleUrls: ['./sms-list.component.scss'],
   standalone: true,
   imports: [IonicModule, NgFor, JsonPipe, AsyncPipe, NgIf, FormsModule],
 })
-export class MessageListComponent implements OnInit {
+export class SmsListComponent implements OnInit {
   selectedSegment: string = 'received';
   receivedSMS$!: Observable<{ smsList: SMSObject[] }>;
   sentSMS$!: Observable<{ smsList: SMSObject[] }>;
@@ -130,7 +130,7 @@ export class MessageListComponent implements OnInit {
   @ViewChild(IonModal) modal!: IonModal;
 
   constructor(
-    private messagesService: MessagesService,
+    private smsService: SmsService,
     private route: ActivatedRoute
   ) {}
 
@@ -144,19 +144,19 @@ export class MessageListComponent implements OnInit {
 
     this.receivedSMS$ = this.route.paramMap.pipe(
       switchMap((params) => {
-        const contactPhone = this.messagesService.checkCountryCode(
+        const contactPhone = this.smsService.checkCountryCode(
           params.get('phone')!
         );
-        const sms = this.messagesService.getReceivedSMS(contactPhone);
+        const sms = this.smsService.getReceivedSMS(contactPhone);
         sms.then((s) => console.log(s));
-        return this.messagesService.getReceivedSMS(contactPhone);
+        return this.smsService.getReceivedSMS(contactPhone);
       })
     );
 
     this.sentSMS$ = this.route.paramMap.pipe(
       switchMap((params) => {
         const contactPhone = params.get('phone')!;
-        return this.messagesService.getSentSMS(contactPhone);
+        return this.smsService.getSentSMS(contactPhone);
       })
     );
   }
