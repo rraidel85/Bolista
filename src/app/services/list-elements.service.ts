@@ -27,6 +27,7 @@ export class ListElementsService {
   // private versionUpgrades = deptEmployeesVersionUpgrades;
   // private loadToVersion = deptEmployeesVersionUpgrades[deptEmployeesVersionUpgrades.length-1].toVersion;
   private tableName = 'list_elements';
+  private keys;
   private mDb!: SQLiteDBConnection;
 
   constructor(
@@ -37,11 +38,19 @@ export class ListElementsService {
     /* this.databaseName = environment.databaseNames.filter((x) =>
       x.name.includes('employees')
     )[0].name; */
+    this.keys=Object.keys(ListElement).filter(x=>x!=='id')
     this.mDb = this.bolistadbSercie.mDb;
   }
   async create(listElement: ListElement) {
     try {
       await this.sqliteService.save(this.mDb, this.tableName, listElement);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async createMany(list: ListElement[]) {
+    try {
+      await this.sqliteService.saveMany(this.mDb, this.tableName, list);
     } catch (error) {
       console.log(error);
     }

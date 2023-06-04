@@ -34,11 +34,12 @@ export class ListsService {
       const bets = this.validateList(input);
 
       //TODO add to database
+
       this.addToNumbers(bets).then((asd) => {
         this.listElementsService.getAll().then((ret) => {
           list = ret;
-          console.log('lista',list.length);
-          
+          console.log('lista', list.length);
+          console.log('lista', list.length);
         });
       });
 
@@ -57,12 +58,25 @@ export class ListsService {
 
       // if is corrido
       if (prices[1] && prices[1].includes('c')) {
-        this.numbers.push({
-          pick: picks,
-          price: +prices[0],
-          corrido: +prices[1].replace('c', ''),
-          amount: 1,
-        });
+        const exists = this.numbers.filter((element) => element.pick === picks);
+        if (exists.length > 0) {
+          const index = this.numbers.indexOf(exists[0]);
+          this.numbers[index].price += +prices[0];
+          if (this.numbers[index].corrido) {
+            this.numbers[index].corrido! += +prices[1].replace('c', '');
+          } else {
+            this.numbers[index].corrido = +prices[1].replace('c', '');
+          }
+
+          this.numbers[index].amount += 1;
+        } else {
+          this.numbers.push({
+            pick: picks,
+            price: +prices[0],
+            corrido: +prices[1].replace('c', ''),
+            amount: 1,
+          });
+        }
       }
       // if is candado || con
       else if (picks.includes('(') || picks.includes('con')) {
@@ -120,9 +134,8 @@ export class ListsService {
         });
       }
     });
-    this.numbers.forEach(async (element) => {
-      await this.listElementsService.create(element);
-    });
+    // console.log(JSON.stringify(this.numbers));
+    await this.listElementsService.createMany(this.numbers);
   }
 
   private validateList(message: string): string[] {
