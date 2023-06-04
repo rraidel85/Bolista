@@ -8,6 +8,7 @@ import { Observable, switchMap } from 'rxjs';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
 import { FormsModule } from '@angular/forms';
+import { SmsComponent } from '../sms/sms.component';
 
 @Component({
   selector: 'app-sms-list',
@@ -32,46 +33,28 @@ import { FormsModule } from '@angular/forms';
       </ion-segment>
 
       <ng-container *ngIf="selectedSegment === 'received'">
-        <ion-button class="ion-margin-top importar-button" expand="block"
-          >Importar</ion-button
-        >
+        <ion-button class="ion-margin-top importar-button" expand="block">
+          Importar
+        </ion-button>
         <ion-list>
-          <ion-card *ngFor="let item of smsPruebaR; index as i">
-            <ion-card-header>
-              <div class="card-header">
-                <ion-text color="primary">+5355565758</ion-text>
-                <ion-checkbox></ion-checkbox>
-              </div>
-            </ion-card-header>
-            <ion-card-content (click)="openEditModal(item, i)">
-              <ion-text class="sms-body">
-                {{ item }}
-              </ion-text>
-              <ion-label class="sms-date"> 14/04/2023 13:49 </ion-label>
-            </ion-card-content>
-          </ion-card>
+          <app-sms
+            (modalOpen)="openEditModal(sms, i)"
+            *ngFor="let sms of smsPruebaR; index as i"
+            [sms]="sms"
+          ></app-sms>
         </ion-list>
       </ng-container>
 
       <ng-container *ngIf="selectedSegment === 'sent'">
-        <ion-button class="ion-margin-top importar-button" expand="block"
-          >Importar</ion-button
-        >
+        <ion-button class="ion-margin-top importar-button" expand="block">
+          Importar
+        </ion-button>
         <ion-list>
-          <ion-card *ngFor="let item of smsPruebaE">
-            <ion-card-header>
-              <div class="card-header">
-                <ion-text color="primary">+5355565758</ion-text>
-                <ion-checkbox></ion-checkbox>
-              </div>
-            </ion-card-header>
-            <ion-card-content>
-              <ion-text class="sms-body">
-                {{ item }}
-              </ion-text>
-              <ion-label class="sms-date"> 14/04/2023 13:49 </ion-label>
-            </ion-card-content>
-          </ion-card>
+          <app-sms
+            (modalOpen)="openEditModal(sms, i)"
+            *ngFor="let sms of smsPruebaR; index as i"
+            [sms]="sms"
+          ></app-sms>
         </ion-list>
       </ng-container>
 
@@ -106,6 +89,7 @@ import { FormsModule } from '@angular/forms';
           </ion-content>
         </ng-template>
       </ion-modal>
+
       <!-- <h1>Recibidos</h1>
       {{ receivedSMS$ | async | json }}
       <hr />
@@ -115,7 +99,15 @@ import { FormsModule } from '@angular/forms';
   `,
   styleUrls: ['./sms-list.component.scss'],
   standalone: true,
-  imports: [IonicModule, NgFor, JsonPipe, AsyncPipe, NgIf, FormsModule],
+  imports: [
+    IonicModule,
+    NgFor,
+    JsonPipe,
+    AsyncPipe,
+    NgIf,
+    FormsModule,
+    SmsComponent,
+  ],
 })
 export class SmsListComponent implements OnInit {
   selectedSegment: string = 'received';
@@ -129,10 +121,7 @@ export class SmsListComponent implements OnInit {
   isModalOpen: boolean = false;
   @ViewChild(IonModal) modal!: IonModal;
 
-  constructor(
-    private smsService: SmsService,
-    private route: ActivatedRoute
-  ) {}
+  constructor(private smsService: SmsService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.smsPruebaR = ['45', '89', '97'];
@@ -165,7 +154,7 @@ export class SmsListComponent implements OnInit {
     this.selectedSegment = event.target.value;
   }
 
-  openEditModal(smsText: any, smsIndex: any) {
+  openEditModal(smsText: string, smsIndex: number) {
     this.isModalOpen = true;
     this.currentEditingIndex = smsIndex;
     this.oldSmsText = smsText;
@@ -187,7 +176,6 @@ export class SmsListComponent implements OnInit {
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<ModalSmsDataDismiss>>;
     if (ev.detail.role === 'confirm') {
-      console.log('entroo');
       this.smsPruebaR[ev.detail.data!.smsIndex] = ev.detail.data!.smsText;
       this.oldSmsText = ev.detail.data!.smsText;
     }

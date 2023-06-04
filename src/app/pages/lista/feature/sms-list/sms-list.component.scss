@@ -2,28 +2,6 @@
   margin-right: 10px;
   margin-left: 10px;
 }
-ion-card-header {
-  padding-bottom: 11px;
-}
-.card-header {
-  display: flex;
-  justify-content: space-between;
-
-  ion-text {
-    font-size: 18px;
-  }
-}
-ion-card-content {
-  .sms-body {
-    font-size: 20px;
-    color: black;
-  }
-
-  .sms-date {
-    display: block;
-    margin-top: 6px;
-  }
-}
 .modal-button{
   --color: white;
 }
