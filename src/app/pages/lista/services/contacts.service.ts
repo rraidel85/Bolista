@@ -21,10 +21,10 @@ export class ContactsService {
 
   async getAllContacts(): Promise<ContactPayload[]> {
     const returnedContacts = await Contacts.getContacts(this.contactOptions);
-    
+
     return (
       returnedContacts.contacts
-        // .slice(0, 10)
+        // .slice(10, 50)
         .filter((contact) => !!contact.phones) // Exclude contacts with no phone number
         .map((contact) => {
           // Remove dashes and remove white spaces from phone numbers
@@ -71,6 +71,9 @@ export class ContactsService {
           );
           return { ...contact, phones: validPhones };
         })
+        .sort(
+          (a, b) => a.name?.display?.localeCompare(b.name?.display || '') || 0
+        ) // Order contacs alphabetically 
     );
   }
 }
