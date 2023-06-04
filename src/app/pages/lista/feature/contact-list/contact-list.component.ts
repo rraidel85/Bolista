@@ -28,25 +28,25 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
         <ion-list>
           <!-- <ng-container
           > -->
-            <ion-item
-              class="contact"
-              [routerLink]="[contact.phones![0].number]"
+          <ion-item
+            class="contact"
+            [routerLink]="[contact.phones![0].number]"
             *cdkVirtualFor="let contact of contacts; trackBy: trackByFn"
-            >
-              <ion-thumbnail>
-                <ion-icon
-                  class="contact-icon"
-                  name="person-circle-outline"
-                  color="primary"
-                ></ion-icon>
-              </ion-thumbnail>
-              <ion-label class="contact-info">
-                <h4 class="contact-info-name">{{ contact.name?.display }}</h4>
-                <h4>{{ contact.phones![0].number }}</h4>
-              </ion-label>
-            </ion-item>
+          >
+            <ion-thumbnail>
+              <ion-icon
+                class="contact-icon"
+                name="person-circle-outline"
+                color="primary"
+              ></ion-icon>
+            </ion-thumbnail>
+            <ion-label class="contact-info">
+              <h4 class="contact-info-name">{{ contact.name?.display }}</h4>
+              <h4>{{ contact.phones![0].number }}</h4>
+            </ion-label>
+          </ion-item>
 
-            <!-- <ng-template #contactAccordion>
+          <!-- <ng-template #contactAccordion>
               <ion-accordion-group>
                 <ion-accordion value="contact.phones![0].number">
                   <ion-item
@@ -95,10 +95,7 @@ export class ContactListComponent implements OnInit {
   ngOnInit() {
     this.contactsService
       .getAllContacts()
-      .then(
-        (contacts) =>
-          (this.contacts = contacts.filter((c) => c.phones?.length! > 1))
-      )
+      .then((contacts) => (this.contacts = contacts))
       .catch((error) => console.error(error));
   }
 

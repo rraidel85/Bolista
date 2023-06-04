@@ -63,4 +63,12 @@ export class MessagesService {
     };
     return SMSInboxReader.getSMSList(smsOptions);
   }
+
+  checkCountryCode(phoneNumber: string): string{
+    if (phoneNumber.startsWith('+')) {
+      return phoneNumber;
+    } else {
+      return '+53' + phoneNumber;
+    }
+  }
 }
