@@ -1,10 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-limit-modal',
   templateUrl: './limit-modal.component.html',
   styleUrls: ['./limit-modal.component.scss'],
+  standalone: true,
+  imports: [CommonModule, IonicModule]
 })
 export class LimitModalComponent  implements OnInit {
 
