@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { NightCardComponent } from './ui/night-card/night-card.component';
-import { DayCardComponent } from './ui/day-card/day-card.component';
+import { NightCardComponent } from './components/night-card/night-card.component';
+import { DayCardComponent } from './components/day-card/day-card.component';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { CommonModule, NgFor, NgForOf } from '@angular/common';
 
 @Component({
   selector: 'app-inicio',

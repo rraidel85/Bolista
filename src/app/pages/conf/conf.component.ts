@@ -1,6 +1,6 @@
-import { Component, Injectable, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalController, IonicModule } from '@ionic/angular';
-import { PayModalComponent } from './ui/pay-modal/pay-modal.component';
+import { PayModalComponent } from './components/pay-modal/pay-modal.component';
 
 @Component({
   selector: 'app-conf',
