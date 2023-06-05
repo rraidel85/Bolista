@@ -11,34 +11,63 @@
 <ion-content [fullscreen]="true">
 
   <ion-list>
-    <ion-item>
-      <ion-label>Tiro:</ion-label>
-      <ion-select (ngModel)="tiro" interface="popover">
-        <ion-select-option value="mediodia">Mediodía</ion-select-option>
-        <ion-select-option value="noche">Noche</ion-select-option>
-      </ion-select>
-    
-    </ion-item>
 
-    <ion-item>
-      <ion-label position="stacked">Pick3:</ion-label>
-      <ion-input (ngModel)="pick3"></ion-input>
-    </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label>Tiro:</ion-label>
+            <ion-select (ngModel)="tiro" interface="popover">
+              <ion-select-option value="mediodia">Mediodía</ion-select-option>
+              <ion-select-option value="noche">Noche</ion-select-option>
+            </ion-select>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-<div style="display: flex; flex-direction: row; margin: 20px;justify-content: space-between;">
-  <div style="margin-right: 5px;">
-  <ion-item>
-    <ion-label position="stacked">Pick4:</ion-label>
-    <ion-input (ngModel)="pick3"></ion-input>
-  </ion-item>
-</div>
-<div>
-  <ion-item>
-    <ion-label position="stacked">Pick4:</ion-label>
-    <ion-input (ngModel)="pick3"></ion-input>
-  </ion-item>
-</div>
-</div>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="stacked">Pick3:</ion-label>
+            <ion-input (ngModel)="pick3"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-item>
+            <ion-label position="stacked">Pick4:</ion-label>
+            <ion-input (ngModel)="pick3"></ion-input>
+          </ion-item>
+        </ion-col>
+
+        <ion-col>
+          <ion-item>
+            <ion-label position="stacked">Pick4:</ion-label>
+            <ion-input (ngModel)="pick3"></ion-input>
+          </ion-item>
+        </ion-col>
+
+      </ion-row>
+    </ion-grid>
+
+
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+         <div class="trophy-section">Premios</div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
   </ion-list>
 
 
