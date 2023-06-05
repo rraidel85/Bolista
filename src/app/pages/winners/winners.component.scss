@@ -1,0 +1,42 @@
+//Estilos toolbar
+ion-menu-button {
+    color: white;
+  }
+  
+  ion-title{
+    color: white;
+    justify-content: center;
+  }
+
+  ion-content {
+    --background: var(--ion-color-light);
+  
+    ion-list {
+      background: var(--ion-color-light);
+
+      ion-item{
+        --background: var(--ion-color-light);
+        --border-color: var(--ion-color-dark);
+        color: var(--ion-color-dark);;
+      }
+
+    }
+  }
+
+ion-grid ion-row ion-col ion-item ion-label{
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--ion-color-dark);
+  }
+
+
+  //Estilo sección de premios
+  .trophy-section{
+    margin-top: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    justify-content: center;
+    display: flex;
+    color: var(--ion-color-dark);
+    border: 1px solid var(--ion-color-dark);
+  }

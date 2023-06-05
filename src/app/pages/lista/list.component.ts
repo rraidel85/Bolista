@@ -3,6 +3,7 @@ import { NightCardComponent } from './components/night-card/night-card.component
 import { DayCardComponent } from './components/day-card/day-card.component';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { HoraService } from 'src/app/services/hora.service';
 
 @Component({
   selector: 'app-inicio',
@@ -49,8 +50,17 @@ import { IonicModule } from '@ionic/angular';
   standalone: true,
   imports: [IonicModule, RouterLink, DayCardComponent, NightCardComponent],
 })
-export class ListComponent implements OnInit {
-  constructor() {}
+export class ListComponent  implements OnInit {
 
-  ngOnInit() {}
+  horaActual!: string;
+ 
+  constructor(private horaService: HoraService) {}
+  
+
+  ngOnInit() {
+    this.horaService.obtenerHoraActual().subscribe(
+      hora => this.horaActual = hora
+    );
+  }
+
 }

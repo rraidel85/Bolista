@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ApplicationRef } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -150,8 +151,12 @@ import { IonicModule } from '@ionic/angular';
 })
 export class AppComponent {
   public selectedPage!: string;
+  public horaActual!: string;
+  
+  constructor(private appRef: ApplicationRef, private http:HttpClient) {
 
-  constructor(private appRef: ApplicationRef) {}
+  }
+
 
   close() {
     // Close the application
