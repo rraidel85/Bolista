@@ -1,0 +1,27 @@
+//Estilos toolbar
+ion-menu-button {
+    color: white;
+  }
+  
+  ion-title{
+    color: white;
+    justify-content: center;
+  }
+
+
+  
+//Estilos del Contenido
+
+ion-content{
+  --background:var(--ion-color-light);
+  ion-list{
+    background:var(--ion-color-light);
+  }
+}
+
+ion-segment {
+  
+    font-weight: bold;
+    
+    
+  }

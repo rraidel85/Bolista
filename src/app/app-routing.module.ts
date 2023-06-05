@@ -3,6 +3,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { ListComponent } from './pages/lista/list.component';
 import { ConfComponent } from './pages/conf/conf.component';
 import { WinnersComponent } from './pages/winners/winners.component';
+import { DetailOptionComponent } from './pages/lista/components/detail-option/detail-option.component';
 
 const routes: Routes = [
   {
@@ -21,6 +22,10 @@ const routes: Routes = [
   {
     path: 'Configuración',
     component: ConfComponent,
+  },
+  {
+    path: 'Lista/Detalles',
+    component: DetailOptionComponent,
   }
   
 ];

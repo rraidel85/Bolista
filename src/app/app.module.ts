@@ -14,6 +14,7 @@ import { WinnersComponent } from './pages/winners/winners.component';
 
 import { DayCardComponent } from './pages/lista/components/day-card/day-card.component';
 import { NightCardComponent } from './pages/lista/components/night-card/night-card.component';
+import { DetailOptionComponent } from './pages/lista/components/detail-option/detail-option.component';
 import { PayModalComponent } from './pages/conf/components/pay-modal/pay-modal.component';
 import { LimitModalComponent } from './pages/conf/components/limit-modal/limit-modal.component';
 
@@ -22,8 +23,9 @@ import { HoraPipe } from './pipes/hora.pipe';
 
 
 
+
 @NgModule({
-  declarations: [AppComponent, ListComponent,ConfComponent,WinnersComponent,DayCardComponent,NightCardComponent,PayModalComponent,LimitModalComponent, HoraPipe],
+  declarations: [AppComponent, ListComponent,ConfComponent,WinnersComponent,DayCardComponent,NightCardComponent, DetailOptionComponent,PayModalComponent,LimitModalComponent, HoraPipe],
   imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule,HttpClientModule],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
