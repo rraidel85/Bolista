@@ -8,9 +8,25 @@ ion-menu-button {
     justify-content: center;
   }
 
+  ion-content {
+    --background: var(--ion-color-light);
+  
+    ion-list {
+      background: var(--ion-color-light);
+
+      ion-item{
+        --background: var(--ion-color-light);
+        --border-color: var(--ion-color-dark);
+        color: var(--ion-color-dark);;
+      }
+
+    }
+  }
+
 ion-grid ion-row ion-col ion-item ion-label{
     font-size: 20px;
     font-weight: bold;
+    color: var(--ion-color-dark);
   }
 
 
@@ -21,5 +37,6 @@ ion-grid ion-row ion-col ion-item ion-label{
     font-weight: bold;
     justify-content: center;
     display: flex;
-    border: 1px solid;
+    color: var(--ion-color-dark);
+    border: 1px solid var(--ion-color-dark);
   }
