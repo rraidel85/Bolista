@@ -10,9 +10,36 @@
 
 <ion-content [fullscreen]="true">
 
-<ion-list>
-  
-</ion-list>
+  <ion-list>
+    <ion-item>
+      <ion-label>Tiro:</ion-label>
+      <ion-select (ngModel)="tiro" interface="popover">
+        <ion-select-option value="mediodia">Mediodía</ion-select-option>
+        <ion-select-option value="noche">Noche</ion-select-option>
+      </ion-select>
+    
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Pick3:</ion-label>
+      <ion-input (ngModel)="pick3"></ion-input>
+    </ion-item>
+
+<div style="display: flex; flex-direction: row; margin: 20px;justify-content: space-between;">
+  <div style="margin-right: 5px;">
+  <ion-item>
+    <ion-label position="stacked">Pick4:</ion-label>
+    <ion-input (ngModel)="pick3"></ion-input>
+  </ion-item>
+</div>
+<div>
+  <ion-item>
+    <ion-label position="stacked">Pick4:</ion-label>
+    <ion-input (ngModel)="pick3"></ion-input>
+  </ion-item>
+</div>
+</div>
+  </ion-list>
 
 
 </ion-content>

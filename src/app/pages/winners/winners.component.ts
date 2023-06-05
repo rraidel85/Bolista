@@ -8,7 +8,8 @@ import { HoraService } from 'src/app/services/hora.service';
 })
 export class WinnersComponent  implements OnInit {
   horaActual!: string;
-
+  tiro!: string;
+  pick3!: string;
   constructor(private horaService: HoraService) { }
 
   ngOnInit() { this.horaService.obtenerHoraActual().subscribe(
