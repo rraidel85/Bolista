@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ApplicationRef } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
@@ -148,6 +148,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['app.component.scss'],
   standalone: true,
   imports: [IonicModule, RouterLink, RouterLinkActive],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class AppComponent {
   public selectedPage!: string;

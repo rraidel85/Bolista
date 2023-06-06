@@ -1257,16 +1257,9 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
-"@babel/runtime@^7.21.0":
+"@babel/runtime@^7.21.0", "@babel/runtime@^7.8.4":
   version "7.22.3"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.22.3.tgz#0a7fce51d43adbf0f7b517a71f4c3aaca92ebcbb"
-  integrity sha512-XsDuspWKLUsxwCp6r7EhsExHtYfbe5oAGQ19kqngTdCPUoPQzOPdUbD/pB9PJiwb2ptYKQDjSJT3R6dC+EPqfQ==
-  dependencies:
-    regenerator-runtime "^0.13.11"
-
-"@babel/runtime@^7.8.4":
-  version "7.22.3"
-  resolved "https://registry.npmjs.org/@babel/runtime/-/runtime-7.22.3.tgz"
   integrity sha512-XsDuspWKLUsxwCp6r7EhsExHtYfbe5oAGQ19kqngTdCPUoPQzOPdUbD/pB9PJiwb2ptYKQDjSJT3R6dC+EPqfQ==
   dependencies:
     regenerator-runtime "^0.13.11"
@@ -1319,17 +1312,17 @@
   resolved "https://registry.yarnpkg.com/@capacitor-community/contacts/-/contacts-4.0.3.tgz#222a700c2b96251ca92b45c33e7bca14bf51cb03"
   integrity sha512-DBmxJ7h4Yx07wiqXqcUaIEEDnQWI3lF5+gbeyORDpumI71Akw8SyeFVIQ6chUNdrbLt0xztYNkG6JTWLEM5XVQ==
 
-"@capacitor/android@5.0.3":
-  version "5.0.3"
-  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-5.0.3.tgz#954f968c3d0b6d104ae9639fc5aad04acc0a8369"
-  integrity sha512-jPN6JJUbN2cCrAjP+0Q4gIwIxleFVChZWh+/gsbDDfSpogdpZNwZnriUNxSRTZayL58tUzLHuxpJxY6hsddDrA==
-
-"@capacitor-community/sqlite@^5.0.1":
+"@capacitor-community/sqlite@5.0.1":
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/@capacitor-community/sqlite/-/sqlite-5.0.1.tgz#192de0327c9e459792136489ba3753114a3fa54a"
   integrity sha512-aMgNvqkYttb+M7Rnr4DwTuZ70andseAppaYWYIV4kDzTxDVMZzT41og0ZNEWX51PUlra6kIe7Cb6TYR0AGgDJQ==
   dependencies:
     jeep-sqlite "^2.3.6"
+
+"@capacitor/android@5.0.3":
+  version "5.0.3"
+  resolved "https://registry.yarnpkg.com/@capacitor/android/-/android-5.0.3.tgz#954f968c3d0b6d104ae9639fc5aad04acc0a8369"
+  integrity sha512-jPN6JJUbN2cCrAjP+0Q4gIwIxleFVChZWh+/gsbDDfSpogdpZNwZnriUNxSRTZayL58tUzLHuxpJxY6hsddDrA==
 
 "@capacitor/app@5.0.2":
   version "5.0.2"
@@ -1381,7 +1374,7 @@
   resolved "https://registry.npmjs.org/@capacitor/status-bar/-/status-bar-5.0.2.tgz"
   integrity sha512-5emXUQzx9WnQHnxzapghrqm8P80z7IPLM83PTsfN+NOkm3uw3ZOxB4T7qy9NBV2Zp+GCEpr1UrNBowxV7Ami3Q==
 
-"@capacitor/toast@^5.0.2":
+"@capacitor/toast@5.0.2":
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/@capacitor/toast/-/toast-5.0.2.tgz#b5f89dc052febe7d3cbbc5ac74a4517f239df4fa"
   integrity sha512-CsVNQ5ov90hTpOLP/ZvLI0HUPPe9YUZQYs1abYPvdD6pR2SPPRdfHYcFv7FmktNjABm/dqvCLBFDVYIQssoS6w==
@@ -3166,6 +3159,11 @@ caniuse-lite@^1.0.30001449, caniuse-lite@^1.0.30001464:
   version "1.0.30001487"
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001487.tgz#d882d1a34d89c11aea53b8cdc791931bdab5fe1b"
   integrity sha512-83564Z3yWGqXsh2vaH/mhXfEM0wX+NlBCm1jYHOb97TrTWJEmPTccZgeLTPBUUb0PNVo+oomb7wkimZBIERClA==
+
+caniuse-lite@^1.0.30001489:
+  version "1.0.30001495"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001495.tgz#64a0ccef1911a9dcff647115b4430f8eff1ef2d9"
+  integrity sha512-F6x5IEuigtUfU5ZMQK2jsy5JqUUlEFRVZq8bO2a+ysq5K7jD6PPc9YXZj78xDNS3uNchesp1Jw47YXEqr+Viyg==
 
 capacitor-sms-inbox@^1.1.1:
   version "1.1.1"
