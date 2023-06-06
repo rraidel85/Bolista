@@ -1,27 +1,65 @@
 //Estilos toolbar
 ion-menu-button {
-    color: white;
-  }
-  
-  ion-title{
-    color: white;
-    justify-content: center;
-  }
+  color: white;
+}
 
+ion-title {
+  color: white;
+  justify-content: center;
+}
 
-  
 //Estilos del Contenido
 
-ion-content{
-  --background:var(--ion-color-light);
-  ion-list{
-    background:var(--ion-color-light);
+ion-content {
+  --background: var(--ion-color-light);
+  ion-list {
+    background: var(--ion-color-light);
   }
 }
 
 ion-segment {
-  
-    font-weight: bold;
-    
-    
+  font-weight: bold;
+}
+
+#day-icon {
+  color: #fbb853;
+  font-size: 35px;
+  margin-right: 7px;
+}
+.page-tab-header {
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  font-size: 19px;
+  color: #5c5b5b;
+
+  .page-tab-header-date {
+    display: flex;
+    align-items: center;
   }
+  ion-label {
+    text-align: right;
+  }
+}
+ion-card-content {
+  display: flex;
+  font-size: 16px;
+
+  ion-text {
+    display: inline-block;
+  }
+  .first {
+    width: 10%;
+  }
+  .second {
+    width: 20%;
+    display: flex;
+    flex-direction: row-reverse;
+    color: #208302;
+  }
+  .checkbox {
+    width: 70%;
+    display: flex;
+    flex-direction: row-reverse;
+  }
+}

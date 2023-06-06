@@ -34,7 +34,7 @@ import { HttpClient } from '@angular/common/http';
                 </ion-item>
 
                 <ion-item
-                  routerLink="/pase"
+                  routerLink="lista/detalles"
                   detail="false"
                   routerLinkActive="selected"
                   lines="none"

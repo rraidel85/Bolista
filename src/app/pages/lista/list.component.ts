@@ -42,7 +42,7 @@ import { HoraService } from 'src/app/services/hora.service';
       </ion-item>
 
       <app-day-card [routerLink]="['contactos']"></app-day-card>
-      <app-night-card [routerLink]="['contactos','58630864']"></app-night-card>
+      <app-night-card [routerLink]="[]"></app-night-card>
       <ion-list> </ion-list>
     </ion-content>
   `,

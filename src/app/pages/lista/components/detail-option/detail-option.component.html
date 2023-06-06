@@ -4,13 +4,12 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Detalles</ion-title>
-    <ion-text class="hour" slot="end">{{horaActual|hora}}</ion-text>
-    
+    <!-- <ion-text class="hour" slot="end">{{ horaActual | hora }}</ion-text> -->
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-segment value="custom">
+  <ion-segment value="Detalles" (ionChange)="segmentChanged($event)">
     <ion-segment-button value="Detalles">
       <ion-label>Detalles</ion-label>
     </ion-segment-button>
@@ -22,6 +21,27 @@
     </ion-segment-button>
   </ion-segment>
 
+  <!-- Detalles -->
+  <ng-container *ngIf="tabSeleccionado === 'Detalles'">
+    <div class="page-tab-header">
+      <div class="page-tab-header-date">
+        <ion-icon id="day-icon" name="sunny"></ion-icon>
+        <ion-text>5 de junio de 2023</ion-text>
+      </div>
+      <ion-label style="flex-grow: 1;">Todos</ion-label>
+    </div>
+    <ion-card *ngFor="let number of numberList">
+      <ion-card-content>
+        <ion-text class="first">{{ number.index }}</ion-text>
+        <div class="second">
+          <ion-text >{{ number.randomNumber }}</ion-text>
+        </div>
+        <div class="checkbox">
+          <ion-checkbox slot="end"></ion-checkbox>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button>
@@ -39,8 +59,4 @@
       </ion-fab-button>
     </ion-fab-list>
   </ion-fab>
-
-
-
-
 </ion-content>
