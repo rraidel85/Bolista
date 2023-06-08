@@ -16,7 +16,7 @@ import { IonicModule } from '@ionic/angular';
       </div>
       
       <div class="pase-title">Pase</div>
-      <div class="pase-section" routerLink="">
+      <div class="pase-section">
         <div class="cash-button">$ 0.00</div>
         <div class="cash">$ 0.00</div>
       </div>
@@ -25,8 +25,8 @@ import { IonicModule } from '@ionic/angular';
 <div class="divider"></div>
 
       <div class="list-title">Lista</div>
-      <div class="list-section" routerLink="">
-        <div class="cash-button">$ 0.00</div>
+      <div class="list-section">
+      <div class="cash-button" [routerLink]="['contactos']" detail="false" routerLinkActive="selected">$ 0.00</div>
         <div class="cash">$ 0.00</div>
       </div>
 
