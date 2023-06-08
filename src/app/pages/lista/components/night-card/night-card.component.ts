@@ -30,10 +30,10 @@ import { IonicModule } from '@ionic/angular';
         <div class="cash">$ 0.00</div>
       </div>
 
-      <div class="card-end" routerLink="">
+      <div class="card-end">
 
         <div class="porcent-button">0 %</div>
-        <div class="detail-button">Detalles</div>
+        <div class="detail-button" [routerLink]="['detalles']" detail="false" routerLinkActive="selected">Detalles</div>
 
       </div>
     </ion-grid>
