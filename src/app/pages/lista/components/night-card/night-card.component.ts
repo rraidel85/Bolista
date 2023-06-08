@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-night-card',
@@ -20,7 +22,7 @@ import { IonicModule } from '@ionic/angular';
         <div class="cash-button">$ 0.00</div>
         <div class="cash">$ 0.00</div>
       </div>
-      <div class="pase-porcent">0 %</div>
+      <app-porcent-popover [buttonId]="'pase-porcent'"></app-porcent-popover>
 
 <div class="divider"></div>
 
@@ -32,7 +34,7 @@ import { IonicModule } from '@ionic/angular';
 
       <div class="card-end">
 
-        <div class="porcent-button">0 %</div>
+        <app-porcent-popover [buttonId]="'list-porcent'"></app-porcent-popover>
         <div class="detail-button" [routerLink]="['detalles']" detail="false" routerLinkActive="selected">Detalles</div>
 
       </div>
@@ -42,7 +44,7 @@ import { IonicModule } from '@ionic/angular';
   `,
   styleUrls: ['./night-card.component.scss'],
   standalone: true,
-  imports: [IonicModule, RouterLink],
+  imports: [IonicModule, RouterLink,FormsModule, PorcentPopoverComponent],
 })
 export class NightCardComponent implements OnInit {
   constructor() {}
