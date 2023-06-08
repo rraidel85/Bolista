@@ -48,8 +48,8 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
     </ion-label>
   </ion-item>
 
-      <app-day-card [routerLink]="['contactos']"></app-day-card>
-      <app-night-card [routerLink]="[]"></app-night-card>
+      <app-day-card></app-day-card>
+      <app-night-card></app-night-card>
       <ion-list> </ion-list>
     </ion-content>
   `,
