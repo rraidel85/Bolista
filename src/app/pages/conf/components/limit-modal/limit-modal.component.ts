@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { AddModalComponent } from '../add-modal/add-modal.component';
 
 @Component({
   selector: 'app-limit-modal',
@@ -25,6 +26,12 @@ import { IonicModule, ModalController } from '@ionic/angular';
     
     </ion-item>
   </ion-list>
+
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" (click)="openAddModal()">
+  <ion-fab-button>
+    <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
 </ion-content>
 `,
   styleUrls: ['./limit-modal.component.scss'],
@@ -38,6 +45,14 @@ export class LimitModalComponent  implements OnInit {
   constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {}
+
+  async openAddModal() {
+    const modal = await this.modalCtrl.create({
+      component: AddModalComponent,
+      cssClass: 'add-modal-css'
+    });
+    return await modal.present();
+  }
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
