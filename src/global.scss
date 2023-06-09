@@ -54,8 +54,8 @@ cdk-virtual-scroll-viewport {
   }
   
   .add-modal-css{
-    --height: 20%; /* Set the height of the modal to 50% of the screen */
-  --width: 65%; /* Set the width of the modal to 50% of the screen */
+  --height: 150px; /* Set the height of the modal to 50% of the screen */
+  --width: 230px; /* Set the width of the modal to 50% of the screen */
   --border-radius: 10px; /* Set the border radius of the modal to 10px */
   --background: rgba(85, 78, 78, 0.4); /* Set the background color of the modal to a transparent black */
   --backdrop-filter: blur(10px); /* Apply a blur effect to the background */

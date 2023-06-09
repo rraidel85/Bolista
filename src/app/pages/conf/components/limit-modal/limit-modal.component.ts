@@ -23,7 +23,6 @@ import { AddModalComponent } from '../add-modal/add-modal.component';
         <ion-select-option value="mediodia">Mediodía</ion-select-option>
         <ion-select-option value="noche">Noche</ion-select-option>
       </ion-select>
-    
     </ion-item>
 
     
@@ -38,22 +37,8 @@ import { AddModalComponent } from '../add-modal/add-modal.component';
     </div>
   </ion-card-content>
   </ion-card>
-   
   </ion-list>
 
-  <ion-card class="card">
-  <ion-card-header>
-    <ion-card-title class="card-number">23</ion-card-title>
-  </ion-card-header>
-  <ion-card-content>
-    <div class="card-content">
-      <ion-checkbox class="card-checkbox"></ion-checkbox>
-    </div>
-  </ion-card-content>
-</ion-card>
-
-
- 
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end" (click)="openAddModal()">
   <ion-fab-button>
