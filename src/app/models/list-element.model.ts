@@ -4,4 +4,5 @@ export class ListElement {
   price!: number;
   amount!: number;
   corrido?: number;
+  pase?:number
 }
