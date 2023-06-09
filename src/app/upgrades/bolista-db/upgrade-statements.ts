@@ -7,7 +7,9 @@ export const bolistaDbVersionUpgrades = [
           pick varchar(20) NOT NULL UNIQUE,
           price integer NOT NULL,
           amount integer NOT NULL,
-          corrido integer
+          corrido integer,
+          pase integer,
+          grupo integer
         );`
     ]
   }
