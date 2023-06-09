@@ -29,7 +29,7 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
             (ionChange)="cambio()"
           ></ion-toggle>
         </ion-item>
-        <ion-item class="list-option">
+        <ion-item class="list-option" (click)="openLimitModal()">
           <ion-icon
             slot="start"
             ios="stopwatch-outline"
@@ -37,7 +37,8 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
           ></ion-icon>
           <ion-label>Limitados</ion-label>
         </ion-item>
-        <ion-item class="list-option" expand="block" (click)="openModal()">
+
+        <ion-item class="list-option" expand="block" (click)="openPayModal()">
           <ion-icon slot="start" ios="cash-outline" md="cash-sharp"></ion-icon>
           <ion-label>Pagos</ion-label>
         </ion-item>
@@ -65,7 +66,7 @@ export class ConfComponent  implements OnInit {
     document.body.classList.toggle('dark');
   }
 
-   async openModal() {
+   async openPayModal() {
     const modal = await this.modalCtrl.create({
       component: PayModalComponent,
     });
