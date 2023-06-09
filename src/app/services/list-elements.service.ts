@@ -8,7 +8,7 @@ import { DbnameVersionService } from './dbname-version.service';
 // import { MOCK_EMPLOYEES, MOCK_DEPARTMENTS } from '../mock-data/employees-depts';
 // import { Employee, EmployeeData, Department } from '../models/employee-dept';
 import { BolistaDbService } from './bolista-db.service';
-import { ListElement } from 'old/models/list-element.model';
+import { ListElement } from 'src/app/models/list-element.model';
 
 @Injectable({
   providedIn:'root'

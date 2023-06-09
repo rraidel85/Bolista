@@ -138,7 +138,7 @@ export class ListsService {
     await this.listElementsService.createMany(this.numbers);
   }
 
-  private validateList(message: string): string[] {
+  public validateList(message: string): string[] {
     const badBets: BetError[] = [];
     let unprocessedBets: string[] = [];
     let bets: string[] = [];
