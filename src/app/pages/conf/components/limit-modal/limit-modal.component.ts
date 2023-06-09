@@ -63,7 +63,10 @@ export class LimitModalComponent  implements OnInit {
   async openAddModal() {
     const modal = await this.modalCtrl.create({
       component: AddModalComponent,
-      cssClass: 'add-modal-css'
+      cssClass: 'add-modal-css',
+      componentProps:{
+        data:this
+      }
     });
     return await modal.present();
   }

@@ -2,9 +2,9 @@ import { SQLiteDBConnection } from '@capacitor-community/sqlite';
 import { Injectable } from '@angular/core';
 
 import { SQLiteService } from './sqlite.service';
-import { DbnameVersionService } from './dbname-version.service';
 import { BolistaDbService } from './bolista-db.service';
 import { ListElement } from '../models/list-element.model';
+import { Detail } from '../shared/interfaces/picks.interface';
 
 @Injectable()
 export class ListElementsService {
@@ -27,7 +27,7 @@ export class ListElementsService {
   }
   async createMany(list: ListElement[], grupo: number) {
     try {
-      const elements: ListElement[] = await this.getAll();
+      const elements: ListElement[] = await this.getAll(grupo);
       const picks: string[] = elements.map((element) => {
         return element.pick;
       });
@@ -82,31 +82,36 @@ export class ListElementsService {
               }
             });
 
-            statement = statement + values.join(' ') + ` ELSE ${field} END ` ;
+            statement = statement + values.join(' ') + ` ELSE ${field} END `;
             return statement;
           })
           .filter((x) => x !== undefined);
-        uStmt += updateValues.join(',\n')+`WHERE grupo = ${grupo}`;
+        uStmt += updateValues.join(',\n') + `WHERE grupo = ${grupo}`;
         await this.mDb.execute(uStmt);
       }
-      if (values.length!==0){
-      stmt += values.join(',');
-      await this.mDb.execute(stmt);
+      if (values.length !== 0) {
+        stmt += values.join(',');
+        await this.mDb.execute(stmt);
       }
     } catch (error) {
       console.log(error);
     }
   }
-  async getAll(): Promise<ListElement[]> {
+  async getAll(
+    grupo: number
+    ): Promise<ListElement[]> {
     try {
       const elements: ListElement[] = (
-        await this.mDb.query(`select * from ${this.tableName}`)
+        await this.mDb.query(
+          `select * from ${this.tableName} WHERE grupo=${grupo}`
+        )
       ).values as ListElement[];
       return elements;
+      
     } catch (error) {
       console.log(error);
     }
-    return [];
+    return []
   }
 
   async findOneById(id: number) {

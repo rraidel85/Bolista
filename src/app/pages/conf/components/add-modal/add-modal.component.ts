@@ -38,10 +38,10 @@ export class AddModalComponent {
     return this.modalCtrl.dismiss(null, 'cancel');
   }
 
-  saveNumber(){
-    const modal = this.modalCtrl.getTop();
-    if (modal) {
-      const limitModal: LimitModalComponent = modal.data;
+  async saveNumber(){
+    const modal = await this.modalCtrl.getTop();
+    if (modal?.componentProps) {
+      const limitModal: LimitModalComponent = modal.componentProps['data'];      
       limitModal.addCard(this.number);
     }
     this.closeModal(); 
