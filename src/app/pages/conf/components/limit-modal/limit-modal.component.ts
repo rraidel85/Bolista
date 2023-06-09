@@ -25,6 +25,17 @@ import { AddModalComponent } from '../add-modal/add-modal.component';
       </ion-select>
     
     </ion-item>
+
+    <ion-item>
+    <ion-card *ngFor="let card of cards">
+    <ion-card-header>
+      {{ card }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-checkbox></ion-checkbox>
+    </ion-card-content>
+  </ion-card>
+  </ion-item>
   </ion-list>
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end" (click)="openAddModal()">
@@ -32,6 +43,8 @@ import { AddModalComponent } from '../add-modal/add-modal.component';
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
 </ion-fab>
+
+
 </ion-content>
 `,
   styleUrls: ['./limit-modal.component.scss'],
@@ -41,7 +54,8 @@ import { AddModalComponent } from '../add-modal/add-modal.component';
 export class LimitModalComponent  implements OnInit {
 
   tiro!: string;
-  
+  cards: number[] = [];
+
   constructor(private modalCtrl: ModalController) { }
 
   ngOnInit() {}
@@ -52,6 +66,14 @@ export class LimitModalComponent  implements OnInit {
       cssClass: 'add-modal-css'
     });
     return await modal.present();
+  }
+
+  async addCard(number: number) {
+    this.cards.push(number); // Add the number to the cards array
+    const modal = await this.modalCtrl.getTop(); // Get the topmost modal
+    if (modal) {
+      modal.dismiss(); // Dismiss the modal to trigger a re-render
+    }
   }
 
   cancel() {

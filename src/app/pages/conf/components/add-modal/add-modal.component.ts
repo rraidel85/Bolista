@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
+import { LimitModalComponent } from '../limit-modal/limit-modal.component';
 
 @Component({
   selector: 'app-add-modal',
@@ -29,6 +30,8 @@ import { IonicModule, ModalController } from '@ionic/angular';
 })
 export class AddModalComponent {
 
+  number!: number;
+  
   constructor(private modalCtrl: ModalController){}
 
   closeModal() {
@@ -36,6 +39,12 @@ export class AddModalComponent {
   }
 
   saveNumber(){
+    const modal = this.modalCtrl.getTop();
+    if (modal) {
+      const limitModal: LimitModalComponent = modal.data;
+      limitModal.addCard(this.number);
+    }
+    this.closeModal(); 
 
   }
 }
