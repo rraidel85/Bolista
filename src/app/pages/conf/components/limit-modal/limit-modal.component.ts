@@ -26,17 +26,34 @@ import { AddModalComponent } from '../add-modal/add-modal.component';
     
     </ion-item>
 
-    <ion-item>
-    <ion-card *ngFor="let card of cards">
-    <ion-card-header>
-      {{ card }}
-    </ion-card-header>
-    <ion-card-content>
-      <ion-checkbox></ion-checkbox>
-    </ion-card-content>
+    
+   
+  <ion-card class="card"  *ngFor="let card of cards">
+  <ion-card-header>
+    <ion-card-title class="card-number">{{card}}</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="card-content">
+      <ion-checkbox class="card-checkbox"></ion-checkbox>
+    </div>
+  </ion-card-content>
   </ion-card>
-  </ion-item>
+   
   </ion-list>
+
+  <ion-card class="card">
+  <ion-card-header>
+    <ion-card-title class="card-number">23</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+    <div class="card-content">
+      <ion-checkbox class="card-checkbox"></ion-checkbox>
+    </div>
+  </ion-card-content>
+</ion-card>
+
+
+ 
 
   <ion-fab slot="fixed" vertical="bottom" horizontal="end" (click)="openAddModal()">
   <ion-fab-button>
@@ -63,16 +80,19 @@ export class LimitModalComponent  implements OnInit {
   async openAddModal() {
     const modal = await this.modalCtrl.create({
       component: AddModalComponent,
-      cssClass: 'add-modal-css'
+      cssClass: 'add-modal-css',
+      componentProps: {
+        data: this // Pasar la instancia del LimitModalComponent al AddModalComponent
+      },
     });
     return await modal.present();
   }
 
   async addCard(number: number) {
-    this.cards.push(number); // Add the number to the cards array
-    const modal = await this.modalCtrl.getTop(); // Get the topmost modal
-    if (modal) {
-      modal.dismiss(); // Dismiss the modal to trigger a re-render
+    this.cards.push(number);
+    const modal = await this.modalCtrl.getTop(); 
+    if (modal && modal.component === LimitModalComponent) {
+      modal.dismiss(); 
     }
   }
 
