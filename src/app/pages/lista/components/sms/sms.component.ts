@@ -20,7 +20,10 @@ import { EventEmitter } from '@angular/core';
         <ion-text class="sms-body">
           {{ sms }}
         </ion-text>
-        <ion-label class="sms-date"> 14/04/2023 13:49 </ion-label>
+        <div class="ion-card-content-footer">
+          <ion-label class="sms-date"> 14/04/2023 13:49 </ion-label>
+          <ion-icon name="warning-outline"></ion-icon>
+        </div>
       </ion-card-content>
     </ion-card>
   `,
