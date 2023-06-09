@@ -3,4 +3,10 @@ export interface Pick{
       price:number
       amount:number
       corrido?:number
+      pase?:boolean
    }
+ export interface Bet{
+      bet:string
+      start:number
+      end:number
+ }
