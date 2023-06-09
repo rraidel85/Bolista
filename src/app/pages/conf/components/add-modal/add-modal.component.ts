@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { LimitModalComponent } from '../limit-modal/limit-modal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-add-modal',
   standalone: true,
-  imports: [CommonModule, IonicModule],
+  imports: [CommonModule, IonicModule, FormsModule],
   template: `
     <ion-header>
       <ion-toolbar>
@@ -16,7 +17,7 @@ import { LimitModalComponent } from '../limit-modal/limit-modal.component';
     <ion-content>
       <ion-item>
         <ion-label>No.</ion-label>
-        <ion-input type="number"></ion-input>
+        <ion-input [(ngModel)]="number" type="number"></ion-input>
       </ion-item>
       <div class="modal-buttons">
         <ion-button fill="clear" color="danger" (click)="closeModal()"
