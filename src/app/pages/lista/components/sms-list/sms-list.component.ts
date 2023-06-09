@@ -82,7 +82,6 @@ import { SmsComponent } from '../sms/sms.component';
             <ion-item>
               <ion-input
                 type="text"
-                [value]="currentEditingText"
                 [(ngModel)]="currentEditingText"
               ></ion-input>
             </ion-item>
@@ -160,9 +159,9 @@ export class SmsListComponent implements OnInit {
 
   openEditModal(smsText: string, smsIndex: number) {
     this.isModalOpen = true;
-    this.currentEditingIndex = smsIndex;
-    this.oldSmsText = smsText;
-    this.currentEditingText = smsText;
+    this.currentEditingIndex = smsIndex;  //Index for edit smsList array with change from editInputModal
+    this.oldSmsText = smsText;  //Old text in case user press Cancel button on modal
+    this.currentEditingText = smsText; //Text to populate modal input value
   }
 
   cancel() {
@@ -180,8 +179,9 @@ export class SmsListComponent implements OnInit {
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<ModalSmsDataDismiss>>;
     if (ev.detail.role === 'confirm') {
+      // If press Confirm button on modal change the text of the corresponding sms
       this.smsPruebaR[ev.detail.data!.smsIndex] = ev.detail.data!.smsText;
-      this.oldSmsText = ev.detail.data!.smsText;
+      this.oldSmsText = ev.detail.data!.smsText; // Update oldText with new text
     }
     this.isModalOpen = false;
   }

@@ -64,11 +64,10 @@ export class SmsComponent {
       try {
         this.listService.validateMessage(this.sms);
       } catch (error: any) {
+        // If there is error on the sms disable checkbox and add error styles 
         this.isChecked = false;
         this.validationError = true;
         this.smsErrors = error.badBets;
-        console.log(this.smsErrors);
-
       }
     }
   }
