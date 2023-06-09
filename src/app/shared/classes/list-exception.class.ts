@@ -9,5 +9,6 @@ export class ListException extends Error {
 
 export interface BetError{
     message:string
-    bet:string
+    start:number
+    end:number
 }
