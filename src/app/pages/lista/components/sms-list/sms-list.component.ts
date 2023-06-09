@@ -124,7 +124,11 @@ export class SmsListComponent implements OnInit {
   constructor(private smsService: SmsService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.smsPruebaR = ['45', '89', '97'];
+    this.smsPruebaR = [
+      '45',
+      '89',
+      '17-25,21-30,27-,77-100,72,38,83,82,21,22,60,06,23-20,00a99-16,70a79-100,08-100,00a99-50,01-300,01a91-50,77-100,62-30,60a69-5,00a99-5,33-10,66-5,16-5,10,19,07,72,37,70,69,71,17,06,65-10,89,62,34,33-5,98-20,60a69-6,33,82-50,00a99-20,62,08-',
+    ];
     this.smsPruebaE = [
       'Esto es un mensaje de prueba',
       'Este es otro',

@@ -19,7 +19,7 @@ export class ListsService {
 
   constructor(private listElementsService: ListElementsService) {}
 
-  validateMessage(message: string): void {
+  validateMessage(message: any): void {
     const badBets: BetError[] = [];
 
     const matches = message.match(this.listRegExp);
@@ -166,7 +166,7 @@ export class ListsService {
           }
         }
       }
-      console.log(bets);
+      // console.log(bets);
       if (badBets.length !== 0) {
         throw new ListException('Se encontraron errores', badBets);
       }
@@ -233,7 +233,7 @@ export class ListsService {
         });
       }
     });
-    console.log(this.list_elements);
+    // console.log(this.list_elements);
     of(this.listElementsService.createMany(this.list_elements)).subscribe();
     return of();
   }
