@@ -5,6 +5,8 @@ import { ContactPayload } from '@capacitor-community/contacts';
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { HoraService } from 'src/app/services/hora.service';
+import { HoraPipe } from 'src/app/pipes/hora.pipe';
 
 @Component({
   selector: 'app-contact-list',
@@ -15,6 +17,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Contactos</ion-title>
+        <ion-text class="hour" slot="end">{{ horaActual | hora }}</ion-text>
       </ion-toolbar>
     </ion-header>
 
@@ -85,14 +88,30 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
   `,
   styleUrls: ['./contact-list.component.scss'],
   standalone: true,
-  imports: [IonicModule, JsonPipe, NgFor, NgIf, RouterLink, ScrollingModule],
+  imports: [
+    IonicModule,
+    JsonPipe,
+    NgFor,
+    NgIf,
+    RouterLink,
+    ScrollingModule,
+    HoraPipe,
+  ],
 })
 export class ContactListComponent implements OnInit {
   contacts!: ContactPayload[];
+  horaActual!: string;
 
-  constructor(private contactsService: ContactsService) {}
+  constructor(
+    private contactsService: ContactsService,
+    private horaService: HoraService
+  ) {}
 
   ngOnInit() {
+    this.horaService
+      .obtenerHoraActual()
+      .subscribe((hora) => (this.horaActual = hora));
+
     this.contactsService
       .getAllContacts()
       .then((contacts) => (this.contacts = contacts))

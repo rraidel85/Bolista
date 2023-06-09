@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { HoraService } from 'src/app/services/hora.service';
 import { ListsService } from 'src/app/shared/services/lists.service';
 import { ListElementsService } from 'src/app/services/list-elements.service';
+import { HoraPipe } from 'src/app/pipes/hora.pipe';
 
 @Component({
   selector: 'app-inicio',
@@ -16,6 +17,7 @@ import { ListElementsService } from 'src/app/services/list-elements.service';
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Lista</ion-title>
+        <ion-text class="hour" slot="end">{{ horaActual | hora }}</ion-text>
       </ion-toolbar>
     </ion-header>
 
@@ -43,18 +45,22 @@ import { ListElementsService } from 'src/app/services/list-elements.service';
         </ion-label>
       </ion-item>
 
-      <app-day-card [routerLink]="['contactos']"></app-day-card>
-      <app-night-card [routerLink]="[]"></app-night-card>
+      <app-day-card></app-day-card>
+      <app-night-card></app-night-card>
       <ion-list> </ion-list>
     </ion-content>
   `,
   styleUrls: ['./list.component.scss'],
   standalone: true,
-  imports: [IonicModule, RouterLink, DayCardComponent, NightCardComponent],
-  providers:[ListsService,ListElementsService]
+  imports: [
+    IonicModule,
+    RouterLink,
+    HoraPipe,
+    DayCardComponent,
+    NightCardComponent,
+  ],
 })
-export class ListComponent  implements OnInit {
-
+export class ListComponent implements OnInit {
   horaActual!: string;
  
   constructor(private horaService: HoraService,private listsService:ListsService,private listElementService:ListElementsService) {}
@@ -82,5 +88,4 @@ export class ListComponent  implements OnInit {
       
     }
   }
-
 }
