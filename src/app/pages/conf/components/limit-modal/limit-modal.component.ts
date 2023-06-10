@@ -87,7 +87,11 @@ import { FormsModule } from '@angular/forms';
         slot="fixed"
         vertical="bottom"
         horizontal="start"
-        *ngIf="showTrashButton"
+        *ngIf="
+          selectedOption === 'mediodia'
+            ? showTrashButtonDay
+            : showTrashButtonNight
+        "
       >
         <ion-fab-button (click)="removeSelectedCards()">
           <ion-icon name="trash"></ion-icon>
@@ -99,11 +103,10 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, IonicModule, FormsModule],
 })
-
 export class LimitModalComponent implements OnInit {
   selectedOption: string = 'mediodia';
-  showTrashButton: boolean = false;
-  cards: { number: number; isChecked: boolean; tiro: string }[] = [];
+  showTrashButtonDay: boolean = false;
+  showTrashButtonNight: boolean = false;
   dayCards: { number: number; isChecked: boolean; tiro: string }[] = [];
   nightCards: { number: number; isChecked: boolean; tiro: string }[] = [];
 
@@ -128,7 +131,6 @@ export class LimitModalComponent implements OnInit {
 
   addCard(number: number, tiro: string) {
     const newCard = { number: number, isChecked: false, tiro: tiro };
-    this.cards.push(newCard);
 
     if (tiro === 'mediodia') {
       this.dayCards.push(newCard);
@@ -140,26 +142,27 @@ export class LimitModalComponent implements OnInit {
   }
 
   checkCheckbox() {
-    this.showTrashButton = this.cards.some((card) => card.isChecked);
+    this.showTrashButtonDay = this.dayCards.some((card) => card.isChecked);
+    this.showTrashButtonNight = this.nightCards.some((card) => card.isChecked);
   }
 
   removeSelectedCards() {
-    this.cards = this.cards.filter((card) => !card.isChecked);
     this.dayCards = this.dayCards.filter((card) => !card.isChecked);
     this.nightCards = this.nightCards.filter((card) => !card.isChecked);
     this.filterCards();
-    this.showTrashButton = false;
+    this.showTrashButtonDay = false;
+    this.showTrashButtonNight = false;
   }
 
   filterCards() {
     if (this.selectedOption === 'mediodia') {
-      this.showTrashButton = this.dayCards.some((card) => card.isChecked);
+      this.showTrashButtonDay = this.showTrashButtonDay;
     } else if (this.selectedOption === 'noche') {
-      this.showTrashButton = this.nightCards.some((card) => card.isChecked);
+      this.showTrashButtonNight = this.showTrashButtonNight;
     }
   }
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
-  } 
- }
+  }
+}
