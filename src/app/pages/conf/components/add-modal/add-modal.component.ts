@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { IonicModule, ModalController, NavParams } from '@ionic/angular';
 import { LimitModalComponent } from '../limit-modal/limit-modal.component';
 import { FormsModule } from '@angular/forms';
 
@@ -33,19 +33,20 @@ import { FormsModule } from '@angular/forms';
 })
 export class AddModalComponent {
   number!: number;
-
-  constructor(private modalCtrl: ModalController) {}
-
+  limitModalComponent: LimitModalComponent | undefined;
+  
+  constructor(private modalCtrl: ModalController, private navParams: NavParams) {
+    this.limitModalComponent = this.navParams.get('limitModalComponent');
+  }
   closeModal() {
-    return this.modalCtrl.dismiss(null, 'cancel');
+    if (this.limitModalComponent) {
+      this.limitModalComponent.checkCheckbox(); // Verificar los checkboxes al cerrar el modal de añadir
+    }
+    this.modalCtrl.dismiss();
   }
 
   async saveNumber() {
-    const modal = await this.modalCtrl.getTop();
-    if (modal?.componentProps) {
-      const limitModal: LimitModalComponent = modal.componentProps['data'];
-      limitModal.addCard(this.number);
-    }
-    this.closeModal(); 
+    await this.modalCtrl.dismiss({ number: this.number });
+    
   }
 }

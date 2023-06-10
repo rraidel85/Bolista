@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { AddModalComponent } from '../add-modal/add-modal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-limit-modal',
@@ -29,20 +30,27 @@ import { AddModalComponent } from '../add-modal/add-modal.component';
    
   <ion-card class="card"  *ngFor="let card of cards">
   <ion-card-header>
-    <ion-card-title class="card-number">{{card}}</ion-card-title>
+    <ion-card-title class="card-number">{{card.number}}</ion-card-title>
   </ion-card-header>
   <ion-card-content>
     <div class="card-content">
-      <ion-checkbox class="card-checkbox"></ion-checkbox>
+    <ion-checkbox class="card-checkbox" [(ngModel)]="card.isChecked" (ionChange)="checkCheckbox()"></ion-checkbox>
     </div>
   </ion-card-content>
   </ion-card>
   </ion-list>
 
-
+<!-- Botón Flotante de Adicionar Número -->
   <ion-fab slot="fixed" vertical="bottom" horizontal="end" (click)="openAddModal()">
   <ion-fab-button>
     <ion-icon name="add"></ion-icon>
+  </ion-fab-button>
+</ion-fab>
+
+<!-- Botón Flotante de Eliminar Número -->
+<ion-fab slot="fixed" vertical="bottom" horizontal="start" *ngIf="showTrashButton">
+  <ion-fab-button>
+    <ion-icon name="trash"></ion-icon>
   </ion-fab-button>
 </ion-fab>
 
@@ -51,39 +59,44 @@ import { AddModalComponent } from '../add-modal/add-modal.component';
 `,
   styleUrls: ['./limit-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule]
+  imports: [CommonModule, IonicModule,FormsModule]
 })
-export class LimitModalComponent  implements OnInit {
-
+export class LimitModalComponent implements OnInit {
   tiro!: string;
-  cards: number[] = [];
+  cards: { number: number; isChecked: boolean }[] = [];
+  showTrashButton: boolean = false;
 
-  constructor(private modalCtrl: ModalController) { }
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
 
   async openAddModal() {
     const modal = await this.modalCtrl.create({
       component: AddModalComponent,
-      cssClass: 'add-modal-css',
-      componentProps: {
-        data: this // Pasar la instancia del LimitModalComponent al AddModalComponent
-      },
+      cssClass: 'add-modal-css'
     });
+
+    modal.onDidDismiss().then((result) => {
+      if (result && result.data) {
+        this.addCard(result.data.number);
+        this.checkCheckbox();
+      }
+    });
+
     return await modal.present();
   }
 
-  async addCard(number: number) {
-    this.cards.push(number);
-    const modal = await this.modalCtrl.getTop(); 
-    if (modal && modal.component === LimitModalComponent) {
-      modal.dismiss(); 
-    }
+  addCard(number: number) {
+    this.cards.push({ number: number, isChecked: false });
+    this.checkCheckbox(); // Verificar los checkboxes al agregar una tarjeta
+  }
+
+  checkCheckbox() {
+    const checkedCards = this.cards.filter((card) => card.isChecked);
+    this.showTrashButton = checkedCards.length > 0;
   }
 
   cancel() {
     return this.modalCtrl.dismiss(null, 'cancel');
   }
-
-
 }
