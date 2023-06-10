@@ -166,14 +166,13 @@ export class ListsService {
           }
         }
       }
-      // console.log(bets);
       if (badBets.length !== 0) {
         throw new ListException('Se encontraron errores', badBets);
       }
     }
   }
 
-  processMessage(messages: string[]): void {
+  processMessage(messages: string[],grupo:number): void {
     let list: ListElement[] = [];
     let allMessages: string = messages
       .map((message) => {
@@ -184,9 +183,9 @@ export class ListsService {
 
     const bets = this.tansformMessage(allMessages);
 
-    this.addList(bets).subscribe();
+    this.addList(bets,grupo).subscribe();
   }
-  private addList(bets: Bet[]): Observable<void> {
+  private addList(bets: Bet[],grupo:number): Observable<void> {
     let currentPrice: string = '';
     bets.forEach((betObj) => {
       const bet = betObj.bet;
@@ -233,8 +232,7 @@ export class ListsService {
         });
       }
     });
-    // console.log(this.list_elements);
-    of(this.listElementsService.createMany(this.list_elements)).subscribe();
+    of(this.listElementsService.createMany(this.list_elements, grupo)).subscribe();
     return of();
   }
 

@@ -44,22 +44,30 @@ ion-segment {
 ion-card-content {
   display: flex;
   font-size: 16px;
+  justify-content: space-between;
 
   ion-text {
     display: inline-block;
   }
   .first {
-    width: 10%;
+    width: 25%;
   }
   .second {
-    width: 20%;
+    width: 60%;
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     color: #208302;
+
+    ion-text{
+      margin-right: 10%;
+    }
   }
   .checkbox {
-    width: 70%;
-    display: flex;
-    flex-direction: row-reverse;
+    width: 8%;
   }
+}
+.hr {
+  border-bottom: 1px solid #ccc;
+  margin: 10px 0;
+  width: 100%;
 }
