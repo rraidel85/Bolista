@@ -81,7 +81,7 @@ export class ListComponent implements OnInit {
       // console.log(this.listsService.validateList(message));
       this.listsService.validateMessage(message)
       this.listsService.processMessage([message],1)
-      console.log(this.listElementService.getAll(1));
+      // console.log(this.listElementService.getAll());
       
     } catch (error:any) {
       console.log(error);

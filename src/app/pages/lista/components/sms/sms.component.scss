@@ -19,4 +19,15 @@ ion-card-header {
       display: block;
       margin-top: 6px;
     }
+
+    .ion-card-content-footer{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      ion-icon{
+        color: red;
+        font-size: 22px;
+      }
+    }
   }

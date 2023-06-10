@@ -16,7 +16,7 @@
 @import "@ionic/angular/css/normalize.css";
 @import "@ionic/angular/css/structure.css";
 @import "@ionic/angular/css/typography.css";
-@import '@ionic/angular/css/display.css';
+@import "@ionic/angular/css/display.css";
 
 /* Optional CSS utils that can be commented out */
 @import "@ionic/angular/css/padding.css";
@@ -25,16 +25,15 @@
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
 
-
 //Estilos Globales
 
-ion-toolbar{
-    --background: var(--ion-color-appmenu);
+ion-toolbar {
+  --background: var(--ion-color-appmenu);
 }
 
-ion-title{
-    color: white;
-    justify-content: center;
+ion-title {
+  color: white;
+  justify-content: center;
 }
 
 ion-menu-button {
@@ -45,17 +44,17 @@ cdk-virtual-scroll-viewport {
   height: 100%;
   width: 100%;
 }
-//Estilo de Hora 
+//Estilo de Hora
 .hour {
-    margin-right: 10px;
-    font-size: 20px;
-    color: white;
-    position: relative;
-  }
-  
+  margin-right: 10px;
+  font-size: 20px;
+  color: white;
+  position: relative;
+}
+
   .add-modal-css{
     --height: 150px; /* Set the height of the modal to 50% of the screen */
-  --width: 65%; /* Set the width of the modal to 50% of the screen */
+  --width: 230px; /* Set the width of the modal to 50% of the screen */
   --border-radius: 10px; /* Set the border radius of the modal to 10px */
   --background: rgba(85, 78, 78, 0.4); /* Set the background color of the modal to a transparent black */
   --backdrop-filter: blur(10px); /* Apply a blur effect to the background */
@@ -63,3 +62,8 @@ cdk-virtual-scroll-viewport {
   justify-content: center;
   align-items: center;
   }
+ion-toast.error-toast {
+  --background: #f15555;
+  --color: #fff;
+  font-size: 18px;
+}

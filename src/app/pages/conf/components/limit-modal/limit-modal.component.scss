@@ -27,19 +27,20 @@ ion-list {
 }
 }
 
-.add-button {
-    width: 40px;
-    height: 40px;
-    --background: white;
-    --border-radius: 50%;
-    margin-right: 5px;
-  
-    ion-icon {
-      color: var(--ion-color-appmenu);
-      font-size: 13px;
-      transform: scale(1.9)
-      
-    }
-  }
- 
- 
+.card {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 10px;
+}
+
+.card-content {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.card-checkbox {
+    margin-top: 16px;
+}

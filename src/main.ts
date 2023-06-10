@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom, APP_INITIALIZER, ENVIRONMENT_INITIALIZER } from '@angular/core';
+import { enableProdMode, importProvidersFrom, LOCALE_ID, ENVIRONMENT_INITIALIZER } from '@angular/core';
 
 import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
@@ -12,6 +12,10 @@ import { InitializeAppService } from './app/services/initialize.app.service';
 import { DbnameVersionService } from './app/services/dbname-version.service';
 import { BolistaDbService } from './app/services/bolista-db.service';
 import { SQLiteService } from './app/services/sqlite.service';
+import localeEs from "@angular/common/locales/es";
+import { registerLocaleData } from "@angular/common";
+
+registerLocaleData(localeEs, "es");
 
 if (environment.production) {
   enableProdMode();
@@ -31,6 +35,7 @@ bootstrapApplication(AppComponent, {
       useFactory: initializeFactory,
       deps: [InitializeAppService],
       multi: true
-    }
+    },
+    { provide: LOCALE_ID, useValue: "es" }
   ],
 }).catch((err) => console.log(err));

@@ -9,6 +9,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
 import { FormsModule } from '@angular/forms';
 import { SmsComponent } from '../sms/sms.component';
+import { ErrorDirective } from '../../directives/sms-error.directive';
 
 @Component({
   selector: 'app-sms-list',
@@ -37,11 +38,13 @@ import { SmsComponent } from '../sms/sms.component';
           Importar
         </ion-button>
         <ion-list>
-          <app-sms
-            (modalOpen)="openEditModal(sms, i)"
-            *ngFor="let sms of smsPruebaR; index as i"
-            [sms]="sms"
-          ></app-sms>
+          <ng-container *ngIf="(receivedSMS$ | async) as receivedSMS">
+            <app-sms
+              (modalOpen)="openEditModal(sms.body, i)"
+              *ngFor="let sms of receivedSMS.smsList; index as i"
+              [sms]="sms"
+            ></app-sms>
+          </ng-container>
         </ion-list>
       </ng-container>
 
@@ -50,11 +53,13 @@ import { SmsComponent } from '../sms/sms.component';
           Importar
         </ion-button>
         <ion-list>
-          <app-sms
-            (modalOpen)="openEditModal(sms, i)"
-            *ngFor="let sms of smsPruebaR; index as i"
-            [sms]="sms"
-          ></app-sms>
+        <ng-container *ngIf="(sentSMS$ | async) as sentSMS">
+            <app-sms
+              (modalOpen)="openEditModal(sms.body, i)"
+              *ngFor="let sms of sentSMS.smsList; index as i"
+              [sms]="sms"
+            ></app-sms>
+          </ng-container>
         </ion-list>
       </ng-container>
 
@@ -80,11 +85,8 @@ import { SmsComponent } from '../sms/sms.component';
           </ion-header>
           <ion-content class="ion-padding">
             <ion-item>
-              <ion-input
-                type="text"
-                [value]="currentEditingText"
-                [(ngModel)]="currentEditingText"
-              ></ion-input>
+              <ion-input type="text" [(ngModel)]="currentEditingText">
+              </ion-input>
             </ion-item>
           </ion-content>
         </ng-template>
@@ -107,6 +109,7 @@ import { SmsComponent } from '../sms/sms.component';
     NgIf,
     FormsModule,
     SmsComponent,
+    ErrorDirective,
   ],
 })
 export class SmsListComponent implements OnInit {
@@ -124,13 +127,18 @@ export class SmsListComponent implements OnInit {
   constructor(private smsService: SmsService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.smsPruebaR = ['45', '89', '97'];
+    this.smsPruebaR = [
+      '45',
+      '89',
+      '17-25,21-30,27-,77-100,72,38,83,82,21,22,60,06,23-20,00a99-16,70a79-100,08-100,00a99-50,01-300,01a91-50,77-100,62-30,60a69-5,00a99-5,33-10,66-5,16-5,10,19,07,72,37,70,69,71,17,06,65-10,89,62,34,33-5,98-20,60a69-6,33,82-50,00a99-20,62,08-',
+    ];
     this.smsPruebaE = [
       'Esto es un mensaje de prueba',
       'Este es otro',
       'y este es otro',
     ];
 
+    // Received SMS
     this.receivedSMS$ = this.route.paramMap.pipe(
       switchMap((params) => {
         const contactPhone = this.smsService.checkCountryCode(
@@ -142,6 +150,7 @@ export class SmsListComponent implements OnInit {
       })
     );
 
+    // Sent SMS
     this.sentSMS$ = this.route.paramMap.pipe(
       switchMap((params) => {
         const contactPhone = params.get('phone')!;
@@ -156,9 +165,9 @@ export class SmsListComponent implements OnInit {
 
   openEditModal(smsText: string, smsIndex: number) {
     this.isModalOpen = true;
-    this.currentEditingIndex = smsIndex;
-    this.oldSmsText = smsText;
-    this.currentEditingText = smsText;
+    this.currentEditingIndex = smsIndex; //Index for edit smsList array with change from editInputModal
+    this.oldSmsText = smsText; //Old text in case user press Cancel button on modal
+    this.currentEditingText = smsText; //Text to populate modal input value
   }
 
   cancel() {
@@ -176,8 +185,9 @@ export class SmsListComponent implements OnInit {
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<ModalSmsDataDismiss>>;
     if (ev.detail.role === 'confirm') {
+      // If press Confirm button on modal change the text of the corresponding sms
       this.smsPruebaR[ev.detail.data!.smsIndex] = ev.detail.data!.smsText;
-      this.oldSmsText = ev.detail.data!.smsText;
+      this.oldSmsText = ev.detail.data!.smsText; // Update oldText with new text
     }
     this.isModalOpen = false;
   }
