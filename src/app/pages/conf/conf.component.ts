@@ -3,6 +3,7 @@ import { ModalController, IonicModule } from '@ionic/angular';
 import { PayModalComponent } from './components/pay-modal/pay-modal.component';
 import { LimitModalComponent } from './components/limit-modal/limit-modal.component';
 import { HoraService } from 'src/app/services/hora.service';
+import { HoraPipe } from 'src/app/pipes/hora.pipe';
 
 @Component({
   selector: 'app-conf',
@@ -13,6 +14,7 @@ import { HoraService } from 'src/app/services/hora.service';
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Configuración</ion-title>
+        <ion-text class="hour" slot="end">{{ horaActual | hora }}</ion-text>
       </ion-toolbar>
     </ion-header>
 
@@ -27,7 +29,7 @@ import { HoraService } from 'src/app/services/hora.service';
             (ionChange)="cambio()"
           ></ion-toggle>
         </ion-item>
-        <ion-item class="list-option">
+        <ion-item class="list-option" (click)="openLimitModal()">
           <ion-icon
             slot="start"
             ios="stopwatch-outline"
@@ -35,7 +37,8 @@ import { HoraService } from 'src/app/services/hora.service';
           ></ion-icon>
           <ion-label>Limitados</ion-label>
         </ion-item>
-        <ion-item class="list-option" expand="block" (click)="openModal()">
+
+        <ion-item class="list-option" expand="block" (click)="openPayModal()">
           <ion-icon slot="start" ios="cash-outline" md="cash-sharp"></ion-icon>
           <ion-label>Pagos</ion-label>
         </ion-item>
@@ -44,7 +47,7 @@ import { HoraService } from 'src/app/services/hora.service';
   `,
   styleUrls: ['./conf.component.scss'],
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule, HoraPipe],
 })
 
 export class ConfComponent  implements OnInit {
@@ -63,7 +66,7 @@ export class ConfComponent  implements OnInit {
     document.body.classList.toggle('dark');
   }
 
-   async openModal() {
+   async openPayModal() {
     const modal = await this.modalCtrl.create({
       component: PayModalComponent,
     });
