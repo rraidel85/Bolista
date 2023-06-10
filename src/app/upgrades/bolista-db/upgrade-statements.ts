@@ -31,6 +31,18 @@ export const bolistaDbVersionUpgrades = [
           candado integer NOT NULL UNIQUE,
           centena_c integer NOT NULL UNIQUE
         );`,
+      
+    ]
+  },
+  {
+    toVersion: 3,
+    statements: [
+      `CREATE TABLE IF NOT EXISTS pases (
+        id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+        pase integer default 0,
+        pase_plus integer default 0
+      );`,
+      `INSERT INTO pases (pase,pase_plus) VALUES (0,0)`
     ]
   }
 ];

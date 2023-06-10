@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
 import { HoraService } from 'src/app/services/hora.service';
 import { ListElementsService } from 'src/app/services/list-elements.service';
-import { Detail } from 'src/app/shared/interfaces/picks.interface';
+import { Detail, Details } from '../../interfaces/details.interface';
+import { AddModalComponent } from '../add-modal/add-modal.component';
+import { BolistaDbService } from 'src/app/services/bolista-db.service';
 
 @Component({
   selector: 'app-detail-option',
@@ -33,7 +35,7 @@ import { Detail } from 'src/app/shared/interfaces/picks.interface';
       </ion-segment>
 
       <!-- Detalles -->
-      <ng-container *ngIf="tabSeleccionado === 'Detalles'">
+      <ng-container>
         <div class="page-tab-header">
           <div class="page-tab-header-date">
             <ion-icon id="day-icon" name="sunny"></ion-icon>
@@ -41,35 +43,37 @@ import { Detail } from 'src/app/shared/interfaces/picks.interface';
           </div>
           <ion-label style="flex-grow: 1;">Todos</ion-label>
         </div>
-        <ion-card *ngFor="let number of paseList">
-          <ion-card-content>
-            <ion-text class="first">{{ number.pick }}</ion-text>
-            <div class="second">
-              <ion-text >{{ number.price }}</ion-text>
-              <ion-text *ngIf="number.corrido">{{
-                number.corrido
-              }}c</ion-text>
-            </div>
-            <div class="checkbox">
-              <ion-checkbox slot="end"></ion-checkbox>
-            </div>
-          </ion-card-content>
-        </ion-card>
-        <ion-segment *ngIf="paseList.length!==0">-------------------------------------</ion-segment>
-        <ion-card *ngFor="let number of numberList">
-          <ion-card-content>
-            <ion-text class="first">{{ number.pick }}</ion-text>
-            <div class="second">
-              <ion-text >{{ number.price }}</ion-text>
-              <ion-text *ngIf="number.corrido">{{
-                number.corrido
-              }}c</ion-text>
-            </div>
-            <div class="checkbox">
-              <ion-checkbox slot="end"></ion-checkbox>
-            </div>
-          </ion-card-content>
-        </ion-card>
+        <div>
+          <ion-card *ngFor="let number of paseList">
+            <ion-card-content>
+              <ion-text class="first">{{ number.pick }}</ion-text>
+              <div class="second">
+                <ion-text>{{ number.price }}</ion-text>
+                <ion-text *ngIf="number.corrido"
+                  >{{ number.corrido }}c</ion-text
+                >
+              </div>
+              <div class="checkbox">
+                <ion-checkbox slot="end"></ion-checkbox>
+              </div>
+            </ion-card-content>
+          </ion-card>
+          <ion-segment>-------------------------------------</ion-segment>
+          <ion-card *ngFor="let number of numberList">
+            <ion-card-content>
+              <ion-text class="first">{{ number.pick }}</ion-text>
+              <div class="second">
+                <ion-text>{{ number.price }}</ion-text>
+                <ion-text *ngIf="number.corrido"
+                  >{{ number.corrido }}c</ion-text
+                >
+              </div>
+              <div class="checkbox">
+                <ion-checkbox slot="end"></ion-checkbox>
+              </div>
+            </ion-card-content>
+          </ion-card>
+        </div>
       </ng-container>
 
       <ion-fab slot="fixed" vertical="bottom" horizontal="end">
@@ -80,7 +84,7 @@ import { Detail } from 'src/app/shared/interfaces/picks.interface';
           <ion-fab-button>
             <ion-icon name="copy"></ion-icon>
           </ion-fab-button>
-          <ion-fab-button>
+          <ion-fab-button (click)="openAddModal()">
             <ion-icon name="send"></ion-icon>
           </ion-fab-button>
           <ion-fab-button>
@@ -97,71 +101,204 @@ import { Detail } from 'src/app/shared/interfaces/picks.interface';
 export class DetailOptionComponent implements OnInit {
   horaActual!: string;
   tabSeleccionado: string = 'Detalles';
+  pase = 0;
+  pasePlus = 0;
   numberList: Detail[] = [];
   paseList: Detail[] = [];
+  numberDetails: Details = {
+    original:[],
+    details: [],
+    pase: [],
+    pasePlus: [],
+  };
+  paseDetails: Details = {
+    original:[],
+    details: [],
+    pase: [],
+    pasePlus: [],
+  };
 
   constructor(
     private horaService: HoraService,
-    private listElementService: ListElementsService
-  ) {
-    
-  }
+    private listElementService: ListElementsService,
+    private db: BolistaDbService,
+    private modalCtrl: ModalController
+  ) {}
 
   ngOnInit() {
     this.horaService
       .obtenerHoraActual()
       .subscribe((hora) => (this.horaActual = hora));
-      this.listElementService.getAll(1).then((ret) => {
-        ret.forEach((element) => {
-          let obj: Detail = {
-            pick: element.pick,
-            price: element.price,
-            amount: element.amount,
-          };
-          if (element.corrido) {
-            obj.corrido = element.corrido;
-          }
-          if (element.price !== 0) {
-            this.numberList.push({ ...obj, pase: false });
-          }
-          if (element.pase) {
-            obj.price = element.pase;
-            this.paseList.push({ ...obj, pase: true });
-          }
-        });
-        const order = [2, 7, 10, 3];
-        this.numberList.sort((a, b) => {
-          if (order.indexOf(a.pick.length) === order.indexOf(b.pick.length)) {
-            const nameA = a.pick.toUpperCase();
-            const nameB = b.pick.toUpperCase();
-            if (nameA < nameB) {
-              return -1;
-            }
-            if (nameA > nameB) {
-              return 1;
-            }
-            return 0;
-          }
-          return order.indexOf(a.pick.length) - order.indexOf(b.pick.length);
-        });
-        this.paseList.sort((a, b) => {
-          if (order.indexOf(a.pick.length) === order.indexOf(b.pick.length)) {
-            const nameA = a.pick.toUpperCase();
-            const nameB = b.pick.toUpperCase();
-            if (nameA < nameB) {
-              return -1;
-            }
-            if (nameA > nameB) {
-              return 1;
-            }
-            return 0;
-          }
-          return order.indexOf(a.pick.length) - order.indexOf(b.pick.length);
-        });
+    this.listElementService.getAll(1).then((ret) => {
+      console.log(ret);
+      
+      ret.forEach((element) => {
+        let obj: Detail = {
+          pick: element.pick,
+          price: element.price,
+          amount: element.amount,
+        };
+        if (element.corrido) {
+          obj.corrido = element.corrido;
+        }
+        if (element.price !== 0) {
+          this.numberDetails.original.push({ ...obj, pase: false });
+        }
+        if (element.pase) {
+          obj.price = element.pase;
+          this.paseDetails.original.push({ ...obj, pase: true });
+        }
       });
+      const order = [2, 7, 10, 3];
+      this.numberDetails.original.sort((a, b) => {
+        if (order.indexOf(a.pick.length) === order.indexOf(b.pick.length)) {
+          const nameA = a.pick.toUpperCase();
+          const nameB = b.pick.toUpperCase();
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0;
+        }
+        return order.indexOf(a.pick.length) - order.indexOf(b.pick.length);
+      });
+      this.paseDetails.original.sort((a, b) => {
+        if (order.indexOf(a.pick.length) === order.indexOf(b.pick.length)) {
+          const nameA = a.pick.toUpperCase();
+          const nameB = b.pick.toUpperCase();
+          if (nameA < nameB) {
+            return -1;
+          }
+          if (nameA > nameB) {
+            return 1;
+          }
+          return 0;
+        }
+        return order.indexOf(a.pick.length) - order.indexOf(b.pick.length);
+      });
+      this.paseDetails.details=[...this.paseDetails.original]
+      this.numberDetails.details=[...this.numberDetails.original]
+      this.numberList = this.numberDetails.original;
+      this.paseList = this.paseDetails.original
+
+    });
+    this.db.mDb.query(`SELECT * FROM pases`).then((ret) => {
+      this.pase = ret.values![0].pase;
+      this.pasePlus = ret.values![0].pase_plus;
+      console.log(ret.values);
+      // this.setPase();
+    });
   }
 
+  async openAddModal() {
+    const modal = await this.modalCtrl.create({
+      component: AddModalComponent,
+      cssClass: 'add-modal-css',
+    });
+    modal.onDidDismiss().then((result) => {
+      if (result.data) {
+        console.log(result.data);
+        
+        this.addPase(result.data.value); 
+      }
+    });
+    return await modal.present();
+  }
   segmentChanged(event: any) {
     this.tabSeleccionado = event.target.value;
+
+    if (this.tabSeleccionado === 'Detalles') {
+      this.numberList = this.numberDetails.details;
+      this.paseList = this.paseDetails.details;
+    } else if (this.tabSeleccionado === 'Pase') {
+      this.numberList = this.numberDetails.pase;
+      this.paseList = this.paseDetails.pase;
+    } else if (this.tabSeleccionado === 'Pase+') {
+      this.numberList = this.numberDetails.pasePlus;
+      this.paseList = this.paseDetails.pasePlus;
+    }
+  }
+  addPase(pase: number) {
+    if (this.tabSeleccionado === 'Detalles') {
+      this.pase = pase;
+      this.db.mDb.execute(`UPDATE pases SET pase=${pase}`).then((ret) => {
+        this.setPase();
+      });
+    } else if (this.tabSeleccionado === 'Pase') {
+      this.pasePlus = pase;
+      this.db.mDb.execute(`UPDATE pases SET pase_plus=${pase}`).then((ret) => {
+        this.setPase();
+      });
+    }
+  }
+  private setPase() {
+    if (this.pase !== 0) {
+      this.paseDetails.pase=[]
+      this.numberDetails.pase=[]
+      this.paseDetails.pasePlus=[]
+        this.numberDetails.pasePlus=[]
+      
+      this.paseDetails.details = this.paseDetails.original.map((obj) => {
+        let newObj = { ...obj };
+        let newObj2 = { ...obj };
+        if (newObj2.price > this.pase) {
+          newObj.price -= this.pase;
+          newObj2.price = this.pase;
+          this.paseDetails.pase.push(newObj);
+        }
+        return newObj2;
+      });
+      this.numberDetails.details = this.numberDetails.original.map((obj) => {
+        let newObj = { ...obj };
+        let newObj2 = { ...obj };
+        if (newObj2.price > this.pase) {
+          newObj.price -= this.pase;
+          newObj2.price = this.pase;
+          this.numberDetails.pase.push(newObj);
+        }
+        return newObj2;
+      });
+      if (this.pasePlus !== 0) {
+        
+        
+        
+        this.paseDetails.pase = this.paseDetails.pase.map((obj) => {
+          let newObj = { ...obj };
+          let newObj2 = { ...obj };
+          if (obj.price > this.pasePlus) {
+            newObj.price -= this.pasePlus;
+            newObj2.price = this.pasePlus;
+            this.numberDetails.pasePlus.push(newObj);
+          }
+          return newObj2;
+        });
+        this.numberDetails.pase = this.numberDetails.pase.map((obj) => {
+          let newObj = { ...obj };
+          let newObj2 = { ...obj };
+          if (newObj2.price > this.pasePlus) {
+            newObj.price -= this.pasePlus;
+            newObj2.price = this.pasePlus;
+            this.numberDetails.pasePlus.push(newObj);
+          }
+          return newObj2;
+        }); 
+      }
+    }else{      
+      this.paseDetails.pase=[]
+      this.numberDetails.pase=[]
+      this.paseDetails.pasePlus=[]
+      this.numberDetails.pasePlus=[]
+      this.paseDetails.details=[...this.paseDetails.original]
+      this.numberDetails.details=[...this.numberDetails.original]
+    }
+    if (this.tabSeleccionado === 'Detalles') {
+      this.numberList = this.numberDetails.details;
+      this.paseList = this.paseDetails.details;
+    } else if (this.tabSeleccionado === 'Pase') {
+      this.numberList = this.numberDetails.pase;
+      this.paseList = this.paseDetails.pase;
+    }
   }
 }
