@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChildren } from '@angular/core';
+import { IonCheckbox, IonicModule, ModalController } from '@ionic/angular';
+import { Clipboard } from '@capacitor/clipboard';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
 import { HoraService } from 'src/app/services/hora.service';
 import { ListElementsService } from 'src/app/services/list-elements.service';
 import { Detail, Details } from '../../interfaces/details.interface';
 import { AddModalComponent } from '../add-modal/add-modal.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
+import { ListsService } from 'src/app/shared/services/lists.service';
 
 @Component({
   selector: 'app-detail-option',
@@ -54,7 +56,7 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
                 >
               </div>
               <div class="checkbox">
-                <ion-checkbox slot="end"></ion-checkbox>
+                <ion-checkbox #paseCheckbox [value]="number.pick" slot="end"></ion-checkbox>
               </div>
             </ion-card-content>
           </ion-card>
@@ -69,7 +71,7 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
                 >
               </div>
               <div class="checkbox">
-                <ion-checkbox slot="end"></ion-checkbox>
+                <ion-checkbox #numberCheckbox [value]="number.pick" slot="end"></ion-checkbox>
               </div>
             </ion-card-content>
           </ion-card>
@@ -81,7 +83,7 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
           <ion-icon name="share-social"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
-          <ion-fab-button>
+          <ion-fab-button (click)="getChecked()">
             <ion-icon name="copy"></ion-icon>
           </ion-fab-button>
           <ion-fab-button (click)="openAddModal()">
@@ -96,7 +98,7 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
   styleUrls: ['./detail-option.component.scss'],
 
   imports: [CommonModule, IonicModule, HoraPipe],
-  providers: [ListElementsService],
+  providers: [ListElementsService,ListsService],
 })
 export class DetailOptionComponent implements OnInit {
   horaActual!: string;
@@ -118,9 +120,13 @@ export class DetailOptionComponent implements OnInit {
     pasePlus: [],
   };
 
+  @ViewChildren('paseCheckbox') paseCheckboxes!: IonCheckbox[]
+  @ViewChildren('numberCheckbox') numberCheckboxes!: IonCheckbox[]
+
   constructor(
     private horaService: HoraService,
     private listElementService: ListElementsService,
+    private listsService: ListsService,
     private db: BolistaDbService,
     private modalCtrl: ModalController
   ) {}
@@ -130,7 +136,6 @@ export class DetailOptionComponent implements OnInit {
       .obtenerHoraActual()
       .subscribe((hora) => (this.horaActual = hora));
     this.listElementService.getAll(1).then((ret) => {
-      console.log(ret);
       
       ret.forEach((element) => {
         let obj: Detail = {
@@ -187,7 +192,6 @@ export class DetailOptionComponent implements OnInit {
     this.db.mDb.query(`SELECT * FROM pases`).then((ret) => {
       this.pase = ret.values![0].pase;
       this.pasePlus = ret.values![0].pase_plus;
-      console.log(ret.values);
       // this.setPase();
     });
   }
@@ -198,9 +202,7 @@ export class DetailOptionComponent implements OnInit {
       cssClass: 'add-modal-css',
     });
     modal.onDidDismiss().then((result) => {
-      if (result.data) {
-        console.log(result.data);
-        
+      if (result.data) {        
         this.addPase(result.data.value); 
       }
     });
@@ -241,7 +243,7 @@ export class DetailOptionComponent implements OnInit {
         this.numberDetails.pasePlus=[]
       
       this.paseDetails.details = this.paseDetails.original.map((obj) => {
-        let newObj = { ...obj };
+        let newObj = { ...obj,corrido:undefined };
         let newObj2 = { ...obj };
         if (newObj2.price > this.pase) {
           newObj.price -= this.pase;
@@ -251,7 +253,7 @@ export class DetailOptionComponent implements OnInit {
         return newObj2;
       });
       this.numberDetails.details = this.numberDetails.original.map((obj) => {
-        let newObj = { ...obj };
+        let newObj = { ...obj,corrido:undefined };
         let newObj2 = { ...obj };
         if (newObj2.price > this.pase) {
           newObj.price -= this.pase;
@@ -265,7 +267,7 @@ export class DetailOptionComponent implements OnInit {
         
         
         this.paseDetails.pase = this.paseDetails.pase.map((obj) => {
-          let newObj = { ...obj };
+          let newObj = { ...obj};
           let newObj2 = { ...obj };
           if (obj.price > this.pasePlus) {
             newObj.price -= this.pasePlus;
@@ -300,5 +302,24 @@ export class DetailOptionComponent implements OnInit {
       this.numberList = this.numberDetails.pase;
       this.paseList = this.paseDetails.pase;
     }
+  }
+  getChecked(){
+    const copyPase:Detail[]=[]
+    const copyNumber:Detail[]=[]
+    this.paseCheckboxes.forEach(box=>{
+      if (box.checked){
+        const element:Detail =this.paseList.filter(x=>x.pick===box.value)[0]
+        copyPase.push(element)
+      }
+    })
+    this.numberCheckboxes.forEach(box=>{
+      if (box.checked){
+        const element:Detail =this.numberList.filter(x=>x.pick===box.value)[0]
+        copyNumber.push(element)
+      }
+    })
+    const message= this.listsService.listToText(copyPase,copyNumber)
+    // console.log(message);
+    Clipboard.write({string: message})
   }
 }
