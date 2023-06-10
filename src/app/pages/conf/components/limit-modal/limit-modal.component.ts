@@ -49,7 +49,7 @@ import { FormsModule } from '@angular/forms';
 
 <!-- Botón Flotante de Eliminar Número -->
 <ion-fab slot="fixed" vertical="bottom" horizontal="start" *ngIf="showTrashButton">
-  <ion-fab-button>
+  <ion-fab-button (click)="removeSelectedCards()">
     <ion-icon name="trash"></ion-icon>
   </ion-fab-button>
 </ion-fab>
@@ -64,6 +64,7 @@ import { FormsModule } from '@angular/forms';
 export class LimitModalComponent implements OnInit {
   tiro!: string;
   cards: { number: number; isChecked: boolean }[] = [];
+  selectedCards: { number: number, isChecked: boolean }[] = [];
   showTrashButton: boolean = false;
 
   constructor(private modalCtrl: ModalController) {}
@@ -92,8 +93,14 @@ export class LimitModalComponent implements OnInit {
   }
 
   checkCheckbox() {
-    const checkedCards = this.cards.filter((card) => card.isChecked);
-    this.showTrashButton = checkedCards.length > 0;
+    this.showTrashButton = this.cards.some(card => card.isChecked);
+    this.selectedCards = this.cards.filter(card => card.isChecked);
+  }
+
+  removeSelectedCards() {
+    this.cards = this.cards.filter(card => !card.isChecked);
+    this.selectedCards = [];
+    this.showTrashButton = false;
   }
 
   cancel() {
