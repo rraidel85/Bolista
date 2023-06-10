@@ -6,7 +6,9 @@ import { BolistaDbService } from './bolista-db.service';
 import { ListElement } from '../models/list-element.model';
 import { Detail } from '../shared/interfaces/picks.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ListElementsService {
   private tableName = 'list_elements';
   private fields: string[] = ['pick', 'price', 'amount', 'corrido', 'pase'];
