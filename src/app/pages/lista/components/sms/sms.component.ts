@@ -1,4 +1,4 @@
-import { Component, Input, Output, inject } from '@angular/core';
+import { Component, Input, Output, inject, Injectable } from '@angular/core';
 import { AsyncPipe, NgFor, NgIf, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
@@ -7,6 +7,7 @@ import { EventEmitter } from '@angular/core';
 import { ListsService } from 'src/app/shared/services/lists.service';
 import { ErrorDirective } from '../../directives/sms-error.directive';
 import { BetError } from 'src/app/shared/classes/list-exception.class';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-sms',
@@ -47,6 +48,7 @@ import { BetError } from 'src/app/shared/classes/list-exception.class';
 })
 export class SmsComponent {
   listService = inject(ListsService);
+  toastController = inject(ToastController);
 
   @Input() sms!: { smsList: SMSObject[] };
   @Output() modalOpen = new EventEmitter<undefined>();
@@ -54,6 +56,18 @@ export class SmsComponent {
   isChecked!: boolean;
   validationError: boolean = false;
   smsErrors: BetError[] = [];
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'Error: Revise la apuesta',
+      duration: 2000,
+      position: 'top',
+      cssClass: 'error-toast',
+      icon: "warning-outline"
+    });
+
+    await toast.present();
+  }
 
   openModal() {
     this.modalOpen.emit();
@@ -67,6 +81,8 @@ export class SmsComponent {
         // If there is error on the sms disable checkbox and add error styles 
         this.isChecked = false;
         this.validationError = true;
+        this.presentToast();
+        console.log(error.badBets)
         this.smsErrors = error.badBets;
       }
     }
