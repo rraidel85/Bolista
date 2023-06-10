@@ -75,8 +75,7 @@ export class LimitModalComponent  implements OnInit {
 
   async addCard(number: number) {
     this.cards.push(number);
-    const modal = await this.modalCtrl.getTop();
-    console.log(this.cards) 
+    const modal = await this.modalCtrl.getTop(); 
     if (modal && modal.component === LimitModalComponent) {
       modal.dismiss(); 
     }
