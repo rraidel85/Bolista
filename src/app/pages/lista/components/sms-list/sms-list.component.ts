@@ -9,6 +9,7 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
 import { FormsModule } from '@angular/forms';
 import { SmsComponent } from '../sms/sms.component';
+import { ErrorDirective } from '../../directives/sms-error.directive';
 
 @Component({
   selector: 'app-sms-list',
@@ -80,10 +81,11 @@ import { SmsComponent } from '../sms/sms.component';
           </ion-header>
           <ion-content class="ion-padding">
             <ion-item>
-              <ion-input
+              <ion-input 
                 type="text"
                 [(ngModel)]="currentEditingText"
-              ></ion-input>
+              >
+            </ion-input>
             </ion-item>
           </ion-content>
         </ng-template>
@@ -106,6 +108,7 @@ import { SmsComponent } from '../sms/sms.component';
     NgIf,
     FormsModule,
     SmsComponent,
+    ErrorDirective
   ],
 })
 export class SmsListComponent implements OnInit {

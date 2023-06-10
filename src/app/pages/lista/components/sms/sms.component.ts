@@ -24,9 +24,9 @@ import { BetError } from 'src/app/shared/classes/list-exception.class';
         </div>
       </ion-card-header>
       <ion-card-content (click)="openModal()">
-        <p class="sms-body" appError [badBets]="this.smsErrors">
+        <ion-text class="sms-body" appError [badBets]="this.smsErrors">
           {{ sms }}
-        </p>
+        </ion-text>
         <div class="ion-card-content-footer">
           <ion-label class="sms-date"> 14/04/2023 13:49 </ion-label>
           <ion-icon *ngIf="validationError" name="warning-outline"></ion-icon>
