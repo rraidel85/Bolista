@@ -77,7 +77,7 @@ export class SmsComponent {
   onCheckboxChange(event: any) {
     if (event.target.checked) {
       try {
-        this.listService.validateMessage(this.sms);
+        this.listService.validateMessage(this.sms.body);
       } catch (error: any) {
         // If there is error on the sms disable checkbox and add error styles 
         this.isChecked = false;

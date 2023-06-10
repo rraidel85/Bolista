@@ -4,7 +4,7 @@ import { SmsService } from '../../services/sms.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { SMSObject } from 'capacitor-sms-inbox';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, switchMap } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
 import { FormsModule } from '@angular/forms';
@@ -38,7 +38,7 @@ import { ErrorDirective } from '../../directives/sms-error.directive';
           Importar
         </ion-button>
         <ion-list>
-          <ng-container *ngIf="(receivedSMS$ | async) as receivedSMS">
+          <ng-container *ngIf="receivedSMS$ | async as receivedSMS">
             <app-sms
               (modalOpen)="openEditModal(sms.body, i)"
               *ngFor="let sms of receivedSMS.smsList; index as i"
@@ -53,7 +53,7 @@ import { ErrorDirective } from '../../directives/sms-error.directive';
           Importar
         </ion-button>
         <ion-list>
-        <ng-container *ngIf="(sentSMS$ | async) as sentSMS">
+          <ng-container *ngIf="sentSMS$ | async as sentSMS">
             <app-sms
               (modalOpen)="openEditModal(sms.body, i)"
               *ngFor="let sms of sentSMS.smsList; index as i"
@@ -127,7 +127,7 @@ export class SmsListComponent implements OnInit {
   constructor(private smsService: SmsService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.smsPruebaR = [
+    /* this.smsPruebaR = [
       '45',
       '89',
       '17-25,21-30,27-,77-100,72,38,83,82,21,22,60,06,23-20,00a99-16,70a79-100,08-100,00a99-50,01-300,01a91-50,77-100,62-30,60a69-5,00a99-5,33-10,66-5,16-5,10,19,07,72,37,70,69,71,17,06,65-10,89,62,34,33-5,98-20,60a69-6,33,82-50,00a99-20,62,08-',
@@ -136,7 +136,7 @@ export class SmsListComponent implements OnInit {
       'Esto es un mensaje de prueba',
       'Este es otro',
       'y este es otro',
-    ];
+    ]; */
 
     // Received SMS
     this.receivedSMS$ = this.route.paramMap.pipe(
@@ -186,8 +186,19 @@ export class SmsListComponent implements OnInit {
     const ev = event as CustomEvent<OverlayEventDetail<ModalSmsDataDismiss>>;
     if (ev.detail.role === 'confirm') {
       // If press Confirm button on modal change the text of the corresponding sms
-      this.smsPruebaR[ev.detail.data!.smsIndex] = ev.detail.data!.smsText;
-      this.oldSmsText = ev.detail.data!.smsText; // Update oldText with new text
+      // if (this.selectedSegment === 'recived') {
+        this.receivedSMS$.subscribe((ret) => {
+          ret.smsList[ev.detail.data!.smsIndex].body = ev.detail.data!.smsText;
+          this.oldSmsText = ev.detail.data!.smsText; // Update oldText with new text
+          this.receivedSMS$ = of(ret); // Update oldText with new text
+        });
+      // }else if (this.selectedSegment === 'sent') {
+      //   this.sentSMS$.subscribe((ret) => {
+      //     ret.smsList[ev.detail.data!.smsIndex].body = ev.detail.data!.smsText;
+      //     this.oldSmsText = ev.detail.data!.smsText; // Update oldText with new text
+      //     this.sentSMS$ = of(ret); // Update oldText with new text
+      //   });
+      // }
     }
     this.isModalOpen = false;
   }
