@@ -38,11 +38,13 @@ import { ErrorDirective } from '../../directives/sms-error.directive';
           Importar
         </ion-button>
         <ion-list>
-          <app-sms
-            (modalOpen)="openEditModal(sms, i)"
-            *ngFor="let sms of smsPruebaR; index as i"
-            [sms]="sms"
-          ></app-sms>
+          <ng-container *ngIf="(receivedSMS$ | async) as receivedSMS">
+            <app-sms
+              (modalOpen)="openEditModal(sms.body, i)"
+              *ngFor="let sms of receivedSMS.smsList; index as i"
+              [sms]="sms"
+            ></app-sms>
+          </ng-container>
         </ion-list>
       </ng-container>
 
@@ -51,11 +53,13 @@ import { ErrorDirective } from '../../directives/sms-error.directive';
           Importar
         </ion-button>
         <ion-list>
-          <app-sms
-            (modalOpen)="openEditModal(sms, i)"
-            *ngFor="let sms of smsPruebaR; index as i"
-            [sms]="sms"
-          ></app-sms>
+        <ng-container *ngIf="(sentSMS$ | async) as sentSMS">
+            <app-sms
+              (modalOpen)="openEditModal(sms.body, i)"
+              *ngFor="let sms of sentSMS.smsList; index as i"
+              [sms]="sms"
+            ></app-sms>
+          </ng-container>
         </ion-list>
       </ng-container>
 
@@ -81,11 +85,8 @@ import { ErrorDirective } from '../../directives/sms-error.directive';
           </ion-header>
           <ion-content class="ion-padding">
             <ion-item>
-              <ion-input 
-                type="text"
-                [(ngModel)]="currentEditingText"
-              >
-            </ion-input>
+              <ion-input type="text" [(ngModel)]="currentEditingText">
+              </ion-input>
             </ion-item>
           </ion-content>
         </ng-template>
@@ -108,7 +109,7 @@ import { ErrorDirective } from '../../directives/sms-error.directive';
     NgIf,
     FormsModule,
     SmsComponent,
-    ErrorDirective
+    ErrorDirective,
   ],
 })
 export class SmsListComponent implements OnInit {
@@ -137,6 +138,7 @@ export class SmsListComponent implements OnInit {
       'y este es otro',
     ];
 
+    // Received SMS
     this.receivedSMS$ = this.route.paramMap.pipe(
       switchMap((params) => {
         const contactPhone = this.smsService.checkCountryCode(
@@ -148,6 +150,7 @@ export class SmsListComponent implements OnInit {
       })
     );
 
+    // Sent SMS
     this.sentSMS$ = this.route.paramMap.pipe(
       switchMap((params) => {
         const contactPhone = params.get('phone')!;
@@ -162,8 +165,8 @@ export class SmsListComponent implements OnInit {
 
   openEditModal(smsText: string, smsIndex: number) {
     this.isModalOpen = true;
-    this.currentEditingIndex = smsIndex;  //Index for edit smsList array with change from editInputModal
-    this.oldSmsText = smsText;  //Old text in case user press Cancel button on modal
+    this.currentEditingIndex = smsIndex; //Index for edit smsList array with change from editInputModal
+    this.oldSmsText = smsText; //Old text in case user press Cancel button on modal
     this.currentEditingText = smsText; //Text to populate modal input value
   }
 

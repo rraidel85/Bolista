@@ -1,5 +1,5 @@
 import { Component, Input, Output, inject, Injectable } from '@angular/core';
-import { AsyncPipe, NgFor, NgIf, NgStyle } from '@angular/common';
+import { AsyncPipe, DatePipe, NgFor, NgIf, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { SMSObject } from 'capacitor-sms-inbox';
@@ -16,7 +16,7 @@ import { ToastController } from '@ionic/angular';
     <ion-card [ngStyle]="{'border': validationError ? '1px solid red' : ''}">
       <ion-card-header>
         <div class="card-header">
-          <ion-text color="primary">+5355565758</ion-text>
+          <ion-text color="primary">{{ sms.address }}</ion-text>
           <ion-checkbox
             [checked]="isChecked"
             [disabled]="validationError"
@@ -26,10 +26,10 @@ import { ToastController } from '@ionic/angular';
       </ion-card-header>
       <ion-card-content (click)="openModal()">
         <ion-text class="sms-body" appError [badBets]="this.smsErrors">
-          {{ sms }}
+          {{ sms.body }}
         </ion-text>
         <div class="ion-card-content-footer">
-          <ion-label class="sms-date"> 14/04/2023 13:49 </ion-label>
+          <ion-label class="sms-date"> {{ sms.date | date:"d \'de\' MMMM, y h:mm a" }}</ion-label>
           <ion-icon *ngIf="validationError" name="warning-outline"></ion-icon>
         </div>
       </ion-card-content>
@@ -44,13 +44,14 @@ import { ToastController } from '@ionic/angular';
     NgFor,
     NgStyle,
     ErrorDirective,
+    DatePipe
   ],
 })
 export class SmsComponent {
   listService = inject(ListsService);
   toastController = inject(ToastController);
 
-  @Input() sms!: { smsList: SMSObject[] };
+  @Input() sms!: SMSObject;
   @Output() modalOpen = new EventEmitter<undefined>();
 
   isChecked!: boolean;
