@@ -1,5 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ApplicationRef } from '@angular/core';
+import { App } from '@capacitor/app';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
@@ -75,13 +75,13 @@ export class AppComponent {
   public selectedPage!: string;
   public horaActual!: string;
   
-  constructor(private appRef: ApplicationRef, private http:HttpClient) {
+  constructor(private http:HttpClient) {
 
   }
 
-
-  close() {
-    // Close the application
-    this.appRef.destroy();
+  
+//Cerrar la aplicación con capacitor 
+  close() {  
+    App.exitApp();
   }
 }
