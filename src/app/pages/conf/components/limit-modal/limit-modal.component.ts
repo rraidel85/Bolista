@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { IonicModule, ModalController } from '@ionic/angular';
+import { Component, OnInit, ViewChildren } from '@angular/core';
+import { IonCheckbox, IonicModule, ModalController } from '@ionic/angular';
 import { AddModalComponent } from '../add-modal/add-modal.component';
 import { FormsModule } from '@angular/forms';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
@@ -23,7 +23,7 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
           <ion-select
             [(ngModel)]="selectedOption"
             interface="popover"
-            (ionChange)="filterCards()"
+            (ionChange)="changeCards()"
           >
             <ion-select-option value="mediodia">Mediodía</ion-select-option>
             <ion-select-option value="noche">Noche</ion-select-option>
@@ -41,7 +41,8 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
                 <ion-checkbox
                   #checkboxDay
                   class="card-checkbox"
-                  (ionChange)="checkCheckbox($event)"
+                  (ionChange)="checkCheckbox()"
+                  [value]="pick"
                 ></ion-checkbox>
               </div>
             </ion-card-content>
@@ -59,7 +60,8 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
                 <ion-checkbox
                   #checkboxNight
                   class="card-checkbox"
-                  (ionChange)="checkCheckbox($event)"
+                  (ionChange)="checkCheckbox()"
+                  [value]="pick"
                 ></ion-checkbox>
               </div>
             </ion-card-content>
@@ -84,11 +86,7 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
         slot="fixed"
         vertical="bottom"
         horizontal="start"
-        *ngIf="
-          selectedOption === 'mediodia'
-            ? showTrashButtonDay
-            : showTrashButtonNight
-        "
+        *ngIf="this.showTrashButton"
       >
         <ion-fab-button (click)="removeSelectedCards()">
           <ion-icon name="trash"></ion-icon>
@@ -102,10 +100,11 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
 })
 export class LimitModalComponent implements OnInit {
   selectedOption: string = 'mediodia';
-  showTrashButtonDay: boolean = false;
-  showTrashButtonNight: boolean = false;
+  showTrashButton: boolean = false;
   dayCards: string[] = [];
   nightCards: string[] = [];
+  @ViewChildren('checkboxDay') checkBoxesDay!:IonCheckbox[]
+  @ViewChildren('checkboxNight') checkBoxesNight!:IonCheckbox[]
 
   constructor(
     private modalCtrl: ModalController,
@@ -113,7 +112,7 @@ export class LimitModalComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.dbService.mDb.query(`select all from limits`).then((ret) => {
+    this.dbService.mDb.query(`select * from limits`).then((ret) => {
       ret.values?.forEach((limit) => {
         if (limit.grupo === 1) {
           this.dayCards.push(limit.pick);
@@ -132,54 +131,90 @@ export class LimitModalComponent implements OnInit {
 
     modal.onDidDismiss().then((result) => {
       if (result && result.data) {
-        if (this.selectedOption === 'mediodia') {
-          this.dbService.mDb.execute(
-            `insert into limits (pick,grupo) values (${result.data.number},1)`
-          );
-        } else if (this.selectedOption === 'noche') {
-          this.dbService.mDb.execute(
-            `insert into limits (pick,grupo) values (${result.data.number},2)`
-          );
-        }
-        this.addCard(result.data.number, this.selectedOption);
+        
+        this.addCard(result.data.number);
       }
     });
 
     return await modal.present();
   }
-
-  addCard(number: string, tiro: string) {
-    const newCard = { number: number, isChecked: false, tiro: tiro };
-
-    if (tiro === 'mediodia') {
-      // this.dayCards.push(newCard);
-    } else if (tiro === 'noche') {
-      // this.nightCards.push(newCard);
+  
+  addCard(number: string) {
+    if (this.selectedOption === 'mediodia') {
+      this.dbService.mDb.execute(
+        `insert into limits (pick,grupo) values (${number},1)`
+      );
+    } else if (this.selectedOption === 'noche') {
+      this.dbService.mDb.execute(
+        `insert into limits (pick,grupo) values (${number},2)`
+        );
     }
-
-    this.filterCards();
+    
+    this.refreshCards()
   }
 
-  checkCheckbox(event: any) {
-    /* this.showTrashButtonDay = this.dayCards.some((card) => );
-    this.showTrashButtonNight = this.nightCards.some((card) => card.isChecked); */
-    console.log(event.target.checked);
+  checkCheckbox() {
+    let checked=false
+    if (this.selectedOption==='mediodia') {
+      for (const cbox of this.checkBoxesDay) {
+        if(cbox.checked){
+          checked=true;
+          break;
+        }
+      }
+      
+    } else if(this.selectedOption==='noche') {
+      
+      for (const cbox of this.checkBoxesNight) {
+        if(cbox.checked){
+          checked=true;
+          break;
+        }
+      }
+    }
+    if(checked) {this.showTrashButton=true}
+    else {this.showTrashButton=false}
   }
 
   removeSelectedCards() {
-    // this.dayCards = this.dayCards.filter((card) => !card.isChecked);
-    // this.nightCards = this.nightCards.filter((card) => !card.isChecked);
-    this.filterCards();
-    this.showTrashButtonDay = false;
-    this.showTrashButtonNight = false;
+    if (this.selectedOption==='mediodia') {
+      for (const cbox of this.checkBoxesDay) {
+        if(cbox.checked){
+          this.dbService.mDb.execute(`delete from limits where pick=${cbox.value} and grupo=1`)
+          
+        }
+      }
+      
+    } else if(this.selectedOption==='noche') {
+      
+      for (const cbox of this.checkBoxesNight) {
+        if(cbox.checked){
+          this.dbService.mDb.execute(`delete from limits where pick=${cbox.value} and grupo=2`)
+          
+        }
+      }
+    }
+    this.refreshCards()
   }
 
-  filterCards() {
-    if (this.selectedOption === 'mediodia') {
-      this.showTrashButtonDay = this.showTrashButtonDay;
-    } else if (this.selectedOption === 'noche') {
-      this.showTrashButtonNight = this.showTrashButtonNight;
-    }
+  refreshCards() {
+    this.dbService.mDb.query(`select * from limits`).then((ret) => {
+      let newList:string[]=[]
+      let newList2:string[]=[]
+      ret.values?.forEach((limit) => {
+        if (limit.grupo === 1) {
+          newList.push(limit.pick);
+        } else if (limit.grupo === 2) {
+          newList2.push(limit.pick);
+        }
+      });
+      this.dayCards=newList
+      this.nightCards=newList2
+    });
+    this.showTrashButton=false
+  }
+  changeCards(){
+    this.showTrashButton=false
   }
 
   cancel() {

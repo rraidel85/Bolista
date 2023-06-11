@@ -32,6 +32,8 @@ export const bolistaDbVersionUpgrades = [
           centena_c integer NOT NULL default 0,
           tema varchar NOT NULL default "light"
         );`,
+      `insert into config (pick3,pick4,limitado,centena,parle,candado,centena_c) 
+      values (0,0,0,0,0,0,0);`,
       
     ]
   },
