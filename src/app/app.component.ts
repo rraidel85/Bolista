@@ -48,7 +48,7 @@ import { HttpClient } from '@angular/common/http';
           <ion-menu-toggle auto-hide="false">
          
 
-          <ion-item routerLink="/about" detail="false" routerLinkActive="selected" lines="none">
+          <ion-item routerLink="/acerca de" detail="false" routerLinkActive="selected" lines="none">
             <ion-icon slot="start" ios="help-circle-outline" md="help-circle-sharp"></ion-icon>
             <ion-label>Acerca de ...</ion-label>
           </ion-item>
