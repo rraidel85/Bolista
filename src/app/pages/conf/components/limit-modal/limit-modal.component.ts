@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { AddModalComponent } from '../add-modal/add-modal.component';
 import { FormsModule } from '@angular/forms';
+import { BolistaDbService } from 'src/app/services/bolista-db.service';
 
 @Component({
   selector: 'app-limit-modal',
@@ -31,18 +32,16 @@ import { FormsModule } from '@angular/forms';
 
         <!-- Mediodía -->
         <ng-container *ngIf="selectedOption === 'mediodia'">
-          <ion-card class="card" *ngFor="let card of dayCards">
+          <ion-card class="card" *ngFor="let pick of dayCards">
             <ion-card-header>
-              <ion-card-title class="card-number">{{
-                card.number
-              }}</ion-card-title>
+              <ion-card-title class="card-number">{{ pick }}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <div class="card-content">
                 <ion-checkbox
+                  #checkboxDay
                   class="card-checkbox"
-                  [(ngModel)]="card.isChecked"
-                  (ionChange)="checkCheckbox()"
+                  (ionChange)="checkCheckbox($event)"
                 ></ion-checkbox>
               </div>
             </ion-card-content>
@@ -51,18 +50,16 @@ import { FormsModule } from '@angular/forms';
 
         <!-- Noche -->
         <ng-container *ngIf="selectedOption === 'noche'">
-          <ion-card class="card" *ngFor="let card of nightCards">
+          <ion-card class="card" *ngFor="let pick of nightCards">
             <ion-card-header>
-              <ion-card-title class="card-number">{{
-                card.number
-              }}</ion-card-title>
+              <ion-card-title class="card-number">{{ pick }}</ion-card-title>
             </ion-card-header>
             <ion-card-content>
               <div class="card-content">
                 <ion-checkbox
+                  #checkboxNight
                   class="card-checkbox"
-                  [(ngModel)]="card.isChecked"
-                  (ionChange)="checkCheckbox()"
+                  (ionChange)="checkCheckbox($event)"
                 ></ion-checkbox>
               </div>
             </ion-card-content>
@@ -107,12 +104,25 @@ export class LimitModalComponent implements OnInit {
   selectedOption: string = 'mediodia';
   showTrashButtonDay: boolean = false;
   showTrashButtonNight: boolean = false;
-  dayCards: { number: string; isChecked: boolean; tiro: string }[] = [];
-  nightCards: { number: string; isChecked: boolean; tiro: string }[] = [];
+  dayCards: string[] = [];
+  nightCards: string[] = [];
 
-  constructor(private modalCtrl: ModalController) {}
+  constructor(
+    private modalCtrl: ModalController,
+    private dbService: BolistaDbService
+  ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.dbService.mDb.query(`select all from limits`).then((ret) => {
+      ret.values?.forEach((limit) => {
+        if (limit.grupo === 1) {
+          this.dayCards.push(limit.pick);
+        } else if (limit.grupo === 2) {
+          this.nightCards.push(limit.pick);
+        }
+      });
+    });
+  }
 
   async openAddModal() {
     const modal = await this.modalCtrl.create({
@@ -122,6 +132,15 @@ export class LimitModalComponent implements OnInit {
 
     modal.onDidDismiss().then((result) => {
       if (result && result.data) {
+        if (this.selectedOption === 'mediodia') {
+          this.dbService.mDb.execute(
+            `insert into limits (pick,grupo) values (${result.data.number},1)`
+          );
+        } else if (this.selectedOption === 'noche') {
+          this.dbService.mDb.execute(
+            `insert into limits (pick,grupo) values (${result.data.number},2)`
+          );
+        }
         this.addCard(result.data.number, this.selectedOption);
       }
     });
@@ -133,22 +152,23 @@ export class LimitModalComponent implements OnInit {
     const newCard = { number: number, isChecked: false, tiro: tiro };
 
     if (tiro === 'mediodia') {
-      this.dayCards.push(newCard);
+      // this.dayCards.push(newCard);
     } else if (tiro === 'noche') {
-      this.nightCards.push(newCard);
+      // this.nightCards.push(newCard);
     }
 
     this.filterCards();
   }
 
-  checkCheckbox() {
-    this.showTrashButtonDay = this.dayCards.some((card) => card.isChecked);
-    this.showTrashButtonNight = this.nightCards.some((card) => card.isChecked);
+  checkCheckbox(event: any) {
+    /* this.showTrashButtonDay = this.dayCards.some((card) => );
+    this.showTrashButtonNight = this.nightCards.some((card) => card.isChecked); */
+    console.log(event.target.checked);
   }
 
   removeSelectedCards() {
-    this.dayCards = this.dayCards.filter((card) => !card.isChecked);
-    this.nightCards = this.nightCards.filter((card) => !card.isChecked);
+    // this.dayCards = this.dayCards.filter((card) => !card.isChecked);
+    // this.nightCards = this.nightCards.filter((card) => !card.isChecked);
     this.filterCards();
     this.showTrashButtonDay = false;
     this.showTrashButtonNight = false;
