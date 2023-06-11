@@ -33,18 +33,24 @@ import { SmsComponent } from '../sms/sms.component';
       </ion-segment>
 
       <ng-container *ngIf="selectedSegment === 'received'">
-        <ion-button class="ion-margin-top importar-button" expand="block">
-          Importar
-        </ion-button>
-        <ion-list>
-          <ng-container *ngIf="receivedSMS$ | async as receivedSMS">
-            <app-sms
-              (modalOpen)="openEditModal(sms.body, i)"
-              *ngFor="let sms of receivedSMS.smsList; index as i"
-              [sms]="sms"
-            ></app-sms>
+        <ng-container *ngIf="receivedSMS$ | async as receivedSMS">
+          <ion-button
+            *ngIf="receivedSMS.smsList.length !== 0"
+            class="ion-margin-top importar-button"
+            expand="block"
+          >
+            Importar
+          </ion-button>
+          <ng-container *ngIf="receivedSMS.smsList.length !== 0; else noSms">
+            <ion-list>
+              <app-sms
+                (modalOpen)="openEditModal(sms.body, i)"
+                *ngFor="let sms of receivedSMS.smsList; index as i"
+                [sms]="sms"
+              ></app-sms>
+            </ion-list>
           </ng-container>
-        </ion-list>
+        </ng-container>
       </ng-container>
 
       <ng-container *ngIf="selectedSegment === 'sent'">
@@ -91,11 +97,11 @@ import { SmsComponent } from '../sms/sms.component';
         </ng-template>
       </ion-modal>
 
-      <!-- <h1>Recibidos</h1>
-      {{ receivedSMS$ | async | json }}
-      <hr />
-      <h1>Enviados</h1>
-      {{ sentSMS$ | async | json }} -->
+      <ng-template #noSms>
+        <div class="no-sms">
+          <ion-text>No tienes mensajes de este contacto</ion-text>
+        </div>
+      </ng-template>
     </ion-content>
   `,
   styleUrls: ['./sms-list.component.scss'],
@@ -185,11 +191,11 @@ export class SmsListComponent implements OnInit {
     if (ev.detail.role === 'confirm') {
       // If press Confirm button on modal change the text of the corresponding sms
       // if (this.selectedSegment === 'recived') {
-        this.receivedSMS$.subscribe((ret) => {
-          ret.smsList[ev.detail.data!.smsIndex].body = ev.detail.data!.smsText;
-          this.oldSmsText = ev.detail.data!.smsText; // Update oldText with new text
-          this.receivedSMS$ = of(ret); // Update oldText with new text
-        });
+      this.receivedSMS$.subscribe((ret) => {
+        ret.smsList[ev.detail.data!.smsIndex].body = ev.detail.data!.smsText;
+        this.oldSmsText = ev.detail.data!.smsText; // Update oldText with new text
+        this.receivedSMS$ = of(ret); // Update oldText with new text
+      });
       // }else if (this.selectedSegment === 'sent') {
       //   this.sentSMS$.subscribe((ret) => {
       //     ret.smsList[ev.detail.data!.smsIndex].body = ev.detail.data!.smsText;
