@@ -4,6 +4,7 @@ import { BetError, ListException } from '../classes/list-exception.class';
 import { ListElementsService } from 'src/app/services/list-elements.service';
 import { ListElement } from 'src/app/models/list-element.model';
 import { Observable, of } from 'rxjs';
+import { Detail } from 'src/app/pages/lista/interfaces/details.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +20,7 @@ export class ListsService {
 
   constructor(private listElementsService: ListElementsService) {}
 
-  validateMessage(message: any): void {
+  validateMessage(message: string): void {
     const badBets: BetError[] = [];
 
     const matches = message.match(this.listRegExp);
@@ -184,6 +185,27 @@ export class ListsService {
     const bets = this.tansformMessage(allMessages);
 
     this.addList(bets,grupo).subscribe();
+  }
+
+  listToText(pases:Detail[],numbers:Detail[]):string{
+    let message=''
+      pases.forEach(element=>{
+        message+=`Pase ${element.pick}-${element.price}`
+        if(element.corrido){
+          message+=`-${element.corrido}c`
+        }
+        message+=','
+      })
+      numbers.forEach(element=>{
+        message+=`${element.pick}-${element.price}`
+        if(element.corrido){
+          message+=`-${element.corrido}c`
+        }
+        message+=','
+      })
+
+
+    return message
   }
   private addList(bets: Bet[],grupo:number): Observable<void> {
     let currentPrice: string = '';

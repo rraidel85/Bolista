@@ -4,7 +4,6 @@ import { Injectable } from '@angular/core';
 import { SQLiteService } from './sqlite.service';
 import { BolistaDbService } from './bolista-db.service';
 import { ListElement } from '../models/list-element.model';
-import { Detail } from '../shared/interfaces/picks.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +18,7 @@ export class ListElementsService {
     private bolistaDbService: BolistaDbService
   ) {
     this.mDb = this.bolistaDbService.mDb;
+    
   }
   async create(listElement: ListElement) {
     try {
@@ -66,14 +66,16 @@ export class ListElementsService {
             const values: string[] = [];
             list.forEach((element) => {
               if (picks.includes(element.pick)) {
-                if (element[field as keyof ListElement]) {
+                if (element) {
                   if (typeof element[field as keyof ListElement] === 'number') {
+                    
                     values.push(
                       `WHEN '${
                         element[this.fields[0] as keyof ListElement]
                       }' THEN ${field}+${element[field as keyof ListElement]}\n`
                     );
                   } else {
+                    
                     values.push(
                       `WHEN '${
                         element[this.fields[0] as keyof ListElement]
