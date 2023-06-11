@@ -27,11 +27,12 @@ export class BolistaDbService {
       database: this.databaseName,
       upgrade: this.versionUpgrades,
     });
+    console.log('asd')
     // create and/or open the database
     await this.openDatabase();
 
     this.dbVerService.set(this.databaseName, this.loadToVersion);
-    const isData = await this.mDb.query('select * from sqlite_sequence');
+    // const isData = await this.mDb.query('select * from sqlite_sequence');
     console.log('tablas',(await this.mDb.getTableList()).values)
   }
   async openDatabase() {
