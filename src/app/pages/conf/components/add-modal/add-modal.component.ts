@@ -18,7 +18,7 @@ import { Toast } from '@capacitor/toast';
     <ion-content>
       <ion-item>
         <ion-label>No.</ion-label>
-        <ion-input [(ngModel)]="number" type="number" inputmode="numeric" pattern="[0-9]*"></ion-input>
+        <ion-input [(ngModel)]="number" type="text" inputmode="numeric" pattern="^[0-9]{2,3}$"></ion-input>
       </ion-item>
       <div class="modal-buttons">
         <ion-button fill="clear" color="danger" (click)="closeModal()">Cancelar</ion-button>
@@ -29,7 +29,7 @@ import { Toast } from '@capacitor/toast';
   styleUrls: ['./add-modal.component.scss'],
 })
 export class AddModalComponent {
-  number: number | undefined;
+  number: string | undefined;
   limitModalComponent: LimitModalComponent | undefined;
   
   constructor(private modalCtrl: ModalController, private navParams: NavParams) {
@@ -38,13 +38,13 @@ export class AddModalComponent {
   
   closeModal() {
     if (this.limitModalComponent) {
-      this.limitModalComponent.checkCheckbox(); // Verificar los checkboxes al cerrar el modal de añadir
+      this.limitModalComponent.checkCheckbox();
     }
     this.modalCtrl.dismiss();
   }
 
   async saveNumber() {
-    if (this.number && this.number >= 0 && Number.isInteger(this.number)) {
+    if (this.number && +this.number >= 0 && +this.number <= 999) {
       await this.modalCtrl.dismiss({ number: this.number });
     } else {
       await Toast.show({
@@ -54,4 +54,4 @@ export class AddModalComponent {
       });
     }
   }
-}
+  } 
