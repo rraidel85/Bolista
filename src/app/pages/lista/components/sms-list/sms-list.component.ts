@@ -9,7 +9,6 @@ import { OverlayEventDetail } from '@ionic/core/components';
 import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
 import { FormsModule } from '@angular/forms';
 import { SmsComponent } from '../sms/sms.component';
-import { ErrorDirective } from '../../directives/sms-error.directive';
 
 @Component({
   selector: 'app-sms-list',
@@ -109,7 +108,6 @@ import { ErrorDirective } from '../../directives/sms-error.directive';
     NgIf,
     FormsModule,
     SmsComponent,
-    ErrorDirective,
   ],
 })
 export class SmsListComponent implements OnInit {
