@@ -5,6 +5,7 @@ import { LimitModalComponent } from '../limit-modal/limit-modal.component';
 import { FormsModule } from '@angular/forms';
 import { Toast } from '@capacitor/toast';
 
+
 @Component({
   selector: 'app-add-modal',
   standalone: true,
@@ -38,7 +39,7 @@ export class AddModalComponent {
   
   closeModal() {
     if (this.limitModalComponent) {
-      this.limitModalComponent.checkCheckbox();
+      // this.limitModalComponent.checkCheckbox();
     }
     this.modalCtrl.dismiss();
   }
