@@ -1,5 +1,5 @@
 import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { ApplicationRef } from '@angular/core';
+import { App } from '@capacitor/app';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
@@ -48,7 +48,7 @@ import { HttpClient } from '@angular/common/http';
           <ion-menu-toggle auto-hide="false">
          
 
-          <ion-item routerLink="/about" detail="false" routerLinkActive="selected" lines="none">
+          <ion-item routerLink="/acerca de" detail="false" routerLinkActive="selected" lines="none">
             <ion-icon slot="start" ios="help-circle-outline" md="help-circle-sharp"></ion-icon>
             <ion-label>Acerca de ...</ion-label>
           </ion-item>
@@ -75,13 +75,13 @@ export class AppComponent {
   public selectedPage!: string;
   public horaActual!: string;
   
-  constructor(private appRef: ApplicationRef, private http:HttpClient) {
+  constructor(private http:HttpClient) {
 
   }
 
-
-  close() {
-    // Close the application
-    this.appRef.destroy();
+  
+//Cerrar la aplicación con capacitor 
+  close() {  
+    App.exitApp();
   }
 }

@@ -32,7 +32,7 @@ ion-list {
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    margin-top: 10px;
+    margin-top: 15px;
 }
 
 .card-content {
@@ -42,5 +42,15 @@ ion-list {
 }
 
 .card-checkbox {
-    margin-top: 16px;
+    margin-top: 15px;
+    --size: 25px;
+    --checkbox-background-checked: #3880ff;
+
+    ion-checkbox::part(container) {
+        border-radius: 6px;
+        border: 2px solid #3880ff;
+      }
 }
+
+  
+  
