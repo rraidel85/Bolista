@@ -4,6 +4,8 @@ import { PayModalComponent } from './components/pay-modal/pay-modal.component';
 import { LimitModalComponent } from './components/limit-modal/limit-modal.component';
 import { HoraService } from 'src/app/services/hora.service';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
+import { BolistaDbService } from 'src/app/services/bolista-db.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-conf',
@@ -25,7 +27,7 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
           <ion-label>Activar Modo Oscuro</ion-label>
           <ion-toggle
             slot="end"
-            (ngModel)="(darkMode)"
+            [checked]="darkMode"
             (ionChange)="cambio()"
           ></ion-toggle>
         </ion-item>
@@ -47,15 +49,17 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
   `,
   styleUrls: ['./conf.component.scss'],
   standalone: true,
-  imports: [IonicModule, HoraPipe],
+  imports: [IonicModule, HoraPipe, FormsModule],
 })
-
-export class ConfComponent  implements OnInit {
-
-  public darkMode:boolean = false;
+export class ConfComponent implements OnInit {
+  public darkMode: boolean = false;
   horaActual!: string;
- 
-  constructor(private modalCtrl: ModalController, private horaService: HoraService) {
+
+  constructor(
+    private modalCtrl: ModalController,
+    private horaService: HoraService,
+    private dbService: BolistaDbService
+  ) {
     const prefersDark = window.matchMedia('(prefers-color-scheme: light)');
     this.darkMode = prefersDark.matches;
   }
@@ -63,10 +67,15 @@ export class ConfComponent  implements OnInit {
   cambio() {
     //const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
     this.darkMode = !this.darkMode;
-    document.body.classList.toggle('dark');
+    const tema = this.darkMode ? 'dark' : 'light';
+    this.dbService.mDb
+      .execute(`update config set tema='${tema}'`)
+      .then((ret) => {
+        document.body.classList.toggle('dark');
+      });
   }
 
-   async openPayModal() {
+  async openPayModal() {
     const modal = await this.modalCtrl.create({
       component: PayModalComponent,
     });
@@ -78,12 +87,21 @@ export class ConfComponent  implements OnInit {
       component: LimitModalComponent,
     });
     modal.present();
-
   }
 
-  ngOnInit() { this.horaService.obtenerHoraActual().subscribe(
-    hora => this.horaActual = hora
-  );}
-
-
+  ngOnInit() {
+    this.horaService
+      .obtenerHoraActual()
+      .subscribe((hora) => (this.horaActual = hora));
+    this.dbService.mDb.query(`select tema from config`).then((ret) => {
+      const tema = ret.values![0].tema;
+      if (tema === 'dark') {
+        this.darkMode = true;
+        document.body.classList.add('dark');
+      } else {
+        this.darkMode = false;
+        document.body.classList.remove('dark');
+      }
+    });
+  }
 }
