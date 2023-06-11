@@ -107,8 +107,8 @@ export class LimitModalComponent implements OnInit {
   selectedOption: string = 'mediodia';
   showTrashButtonDay: boolean = false;
   showTrashButtonNight: boolean = false;
-  dayCards: { number: number; isChecked: boolean; tiro: string }[] = [];
-  nightCards: { number: number; isChecked: boolean; tiro: string }[] = [];
+  dayCards: { number: string; isChecked: boolean; tiro: string }[] = [];
+  nightCards: { number: string; isChecked: boolean; tiro: string }[] = [];
 
   constructor(private modalCtrl: ModalController) {}
 
@@ -129,7 +129,7 @@ export class LimitModalComponent implements OnInit {
     return await modal.present();
   }
 
-  addCard(number: number, tiro: string) {
+  addCard(number: string, tiro: string) {
     const newCard = { number: number, isChecked: false, tiro: tiro };
 
     if (tiro === 'mediodia') {
