@@ -69,6 +69,8 @@ testem.log
 .DS_Store
 Thumbs.db
 
+#Database
+bolistaSQLite.db
 
 # Mobile compiled output
 /android

@@ -17,6 +17,10 @@ export const APP_ROUTES: Routes = [
   {
     path: 'ganadores',
     loadComponent: () =>import('./pages/winners/winners.component').then(c => c.WinnersComponent)
+  },
+  {
+    path: 'acerca de',
+    loadComponent: () =>import('./pages/about/about.component').then(c => c.AboutComponent)
   }
 ];
 
