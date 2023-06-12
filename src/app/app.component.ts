@@ -122,7 +122,9 @@ export class AppComponent implements OnInit {
       } else {
         document.body.classList.remove('dark');
       }
-    });
+    })
+    .catch(err => console.log);
+
   }
 
   //Cerrar la aplicación con capacitor

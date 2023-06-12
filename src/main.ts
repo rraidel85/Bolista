@@ -1,4 +1,4 @@
-import { enableProdMode, importProvidersFrom, LOCALE_ID, ENVIRONMENT_INITIALIZER } from '@angular/core';
+import { enableProdMode, importProvidersFrom, LOCALE_ID, ENVIRONMENT_INITIALIZER, APP_INITIALIZER } from '@angular/core';
 
 import { environment } from './environments/environment';
 import { AppComponent } from './app/app.component';
@@ -31,7 +31,7 @@ bootstrapApplication(AppComponent, {
     BolistaDbService,
     DbnameVersionService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: ENVIRONMENT_INITIALIZER,
+    { provide: APP_INITIALIZER,
       useFactory: initializeFactory,
       deps: [InitializeAppService],
       multi: true
