@@ -13,9 +13,9 @@ import { FormsModule } from '@angular/forms';
     </button>
     <ion-popover [trigger]="buttonId">
       <ng-template>
-        <ion-content class="ion-padding">
+        <ion-content class="ion-padding" scrolleable="false">
           <ion-item fill="outline">
-            <ion-label position="floating">Porcentaje</ion-label>
+            <ion-label position="stacked">Porcentaje</ion-label>
             <ion-input
               type="number"
               min="0"

@@ -2,8 +2,8 @@
 
  .porcent-button{
     font-size: 25px;
-    height: 20px;
-    width: 10px;
+    height: 15px;
+    width: 8px;
     color: white;
     background: transparent;
   }
@@ -15,4 +15,21 @@
 
   ion-content{
     --background: var(--ion-color-light);
+  }
+
+
+  ion-popover {
+    --background: rgba(40, 173, 218, 0.6);
+    --backdrop-opacity: 0.6;
+    --box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.6);
+    --color: white;
+    --height: 115px;
+  }
+  
+  ion-popover ion-content {
+    --background: rgba(14, 14, 14, 0.6);
+  }
+  
+  ion-popover::part(backdrop) {
+    background-color: rgb(54, 58, 102);
   }
