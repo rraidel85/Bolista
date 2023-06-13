@@ -62,6 +62,16 @@ export class ConfComponent implements OnInit {
   ) {
     const prefersDark = window.matchMedia('(prefers-color-scheme: light)');
     this.darkMode = prefersDark.matches;
+    this.dbService.mDb.query(`select tema from config`).then((ret) => {
+      const tema = ret.values![0].tema;
+      if (tema === 'dark') {
+        this.darkMode = true;
+        document.body.classList.add('dark');
+      } else {
+        this.darkMode = false;
+        document.body.classList.remove('dark');
+      }
+    });
   }
 
   cambio() {
@@ -93,15 +103,5 @@ export class ConfComponent implements OnInit {
     this.horaService
       .obtenerHoraActual()
       .subscribe((hora) => (this.horaActual = hora));
-    this.dbService.mDb.query(`select tema from config`).then((ret) => {
-      const tema = ret.values![0].tema;
-      if (tema === 'dark') {
-        this.darkMode = true;
-        document.body.classList.add('dark');
-      } else {
-        this.darkMode = false;
-        document.body.classList.remove('dark');
-      }
-    });
   }
 }
