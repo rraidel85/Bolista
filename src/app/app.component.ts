@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
 import { App } from '@capacitor/app';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { BolistaDbService } from './services/bolista-db.service';
 import { TrialService } from './shared/services/trial.service';
 import { InfoModalComponent } from './shared/components/add-modal/info-modal.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -111,9 +112,10 @@ import { InfoModalComponent } from './shared/components/add-modal/info-modal.com
   imports: [IonicModule, RouterLink, RouterLinkActive],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit,OnDestroy {
   public selectedPage!: string;
   public horaActual!: string;
+  private sub!:Subscription
 
   constructor(
     private http: HttpClient,
@@ -133,16 +135,18 @@ export class AppComponent implements OnInit {
         }
       })
       .catch((err) => console.log);
-    this.trialService.onTrial()!.subscribe({
+    this.sub=this.trialService.onTrial()!.subscribe({
       next:({trial,timeout})=>{
-        if(timeout){
+        /* if(timeout){
           this.openInfoModal('Conectese a Internet e intente nuevamente')
           
-        }else if (trial===false) {
+        }else */ 
+        if (trial===false) {
           this.openInfoModal('Su tiempo de prueba se ha agotado')
-        }else if (trial===true) {
-          this.dbService.mDb.execute(`update trial set tries=0`);
         }
+        /* else if (trial===true) {
+          this.dbService.mDb.execute(`update trial set tries=0`);
+        } */
       },
       complete:()=>{
 
@@ -152,6 +156,9 @@ export class AppComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.sub.unsubscribe()
+  }
   //Cerrar la aplicación con capacitor
   async openInfoModal(message:string) {
     const modal = await this.modalCtrl.create({
@@ -170,4 +177,5 @@ export class AppComponent implements OnInit {
   close() {
     App.exitApp();
   }
+
 }

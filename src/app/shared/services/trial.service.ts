@@ -24,7 +24,7 @@ export class TrialService {
       .pipe(
         mergeMap(() => this.http.get(environment.trialUrl)),
 
-        catchError((error) => {
+        /* catchError((error) => {
           //
           if (this.maxTries < this.tries) {
             return of({ timeout: true });
@@ -33,7 +33,7 @@ export class TrialService {
             this.dbService.mDb.execute(`update trial set tries=${this.tries}`);
             return throwError(() => new Error());
           }
-        }),
+        }), */
         retry({ delay: intervalTime })
         // map((respuesta: any) => respuesta.trial)
       );

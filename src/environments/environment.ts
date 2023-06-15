@@ -8,6 +8,7 @@ export const environment = {
   trialUrl:'http://192.168.1.103:3000/users/trial',
   maxTries: 20,
   intervalTime: 60*60*1000,
+  // intervalTime: 1000,
 };
 
 /*
