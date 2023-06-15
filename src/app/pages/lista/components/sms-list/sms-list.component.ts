@@ -1,4 +1,12 @@
-import { Component, OnInit, ViewChild, inject, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  inject,
+  OnDestroy,
+  DoCheck,
+  AfterViewChecked,
+} from '@angular/core';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { SmsService } from '../../services/sms.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
@@ -43,6 +51,7 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
             *ngIf="receivedSMS.smsList.length !== 0"
             class="ion-margin-top importar-button"
             expand="block"
+            [disabled]="smsToImport.length === 0"
           >
             Importar
           </ion-button>
@@ -61,7 +70,11 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
       </ng-container>
 
       <ng-container *ngIf="selectedSegment === 'sent'">
-        <ion-button class="ion-margin-top importar-button" expand="block">
+        <ion-button
+          class="ion-margin-top importar-button"
+          expand="block"
+          [disabled]="smsToImport.length === 0"
+        >
           Importar
         </ion-button>
         <ion-list>
@@ -136,7 +149,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
   oldSms!: SMSObject; // Old sms before editing in case user cancel edit
   isModalOpen: boolean = false;
   smsSubscription!: Subscription;
-  smsToImport: SMSObject[] = []; 
+  smsToImport: SMSObject[] = [];
   @ViewChild(IonModal) modal!: IonModal;
 
   ngOnInit(): void {
@@ -160,8 +173,8 @@ export class SmsListComponent implements OnInit, OnDestroy {
             if (index !== -1) {
               smsPhoneList.smsList[index].body = smsDb.body;
             }
-          });     
-        }      
+          });
+        }
         return smsPhoneList;
       })
     );
@@ -220,12 +233,14 @@ export class SmsListComponent implements OnInit, OnDestroy {
     this.isModalOpen = false;
   }
 
-  onCheckedSms(sms: SMSObject){
+  onCheckedSms(sms: SMSObject) {
     this.smsToImport = [...this.smsToImport, sms];
   }
 
-  onUnCheckedSms(sms: SMSObject){
-    const newSmsList = this.smsToImport.filter(element => sms.id != element.id);
+  onUnCheckedSms(sms: SMSObject) {
+    const newSmsList = this.smsToImport.filter(
+      (element) => sms.id != element.id
+    );
     this.smsToImport = [...newSmsList];
   }
 
