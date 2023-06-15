@@ -1,4 +1,4 @@
-import { Component, Input, Output, inject, Injectable } from '@angular/core';
+import { Component, Input, Output, inject } from '@angular/core';
 import { AsyncPipe, DatePipe, NgFor, NgIf, NgStyle } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,7 @@ import { ListsService } from 'src/app/shared/services/lists.service';
 import { ErrorDirective } from '../../directives/sms-error.directive';
 import { BetError } from 'src/app/shared/classes/list-exception.class';
 import { ToastController } from '@ionic/angular';
+import { BolistaDbService } from 'src/app/services/bolista-db.service';
 
 @Component({
   selector: 'app-sms',
@@ -50,6 +51,7 @@ import { ToastController } from '@ionic/angular';
 export class SmsComponent {
   listService = inject(ListsService);
   toastController = inject(ToastController);
+  dbService = inject(BolistaDbService);
 
   @Input() sms!: SMSObject;
   @Output() modalOpen = new EventEmitter<undefined>();
@@ -74,10 +76,12 @@ export class SmsComponent {
     this.modalOpen.emit();
   }
 
-  onCheckboxChange(event: any) {
+  async onCheckboxChange(event: any) {
     if (event.target.checked) {
       try {
-        this.listService.validateMessage(this.sms.body);
+        await this.listService.validateMessage(this.sms.body);
+        // There is no error in message validation
+        console.log(this.sms)
       } catch (error: any) {
         // If there is error on the sms disable checkbox and add error styles 
         this.isChecked = false;

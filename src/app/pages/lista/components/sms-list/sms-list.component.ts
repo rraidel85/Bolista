@@ -1,14 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject, OnDestroy } from '@angular/core';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { SmsService } from '../../services/sms.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { SMSObject } from 'capacitor-sms-inbox';
 import { ActivatedRoute } from '@angular/router';
-import { Observable, of, switchMap } from 'rxjs';
+import { Observable, Subscription, map, of, switchMap } from 'rxjs';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
 import { FormsModule } from '@angular/forms';
 import { SmsComponent } from '../sms/sms.component';
+import { BolistaDbService } from 'src/app/services/bolista-db.service';
 
 @Component({
   selector: 'app-sms-list',
@@ -23,7 +24,11 @@ import { SmsComponent } from '../sms/sms.component';
     </ion-header>
 
     <ion-content [fullscreen]="true">
-      <ion-segment value="received" (ionChange)="segmentChanged($event)">
+      <ion-segment
+        [swipeGesture]="true"
+        value="received"
+        (ionChange)="segmentChanged($event)"
+      >
         <ion-segment-button value="received">
           <ion-label>Recibidos</ion-label>
         </ion-segment-button>
@@ -44,7 +49,7 @@ import { SmsComponent } from '../sms/sms.component';
           <ng-container *ngIf="receivedSMS.smsList.length !== 0; else noSms">
             <ion-list>
               <app-sms
-                (modalOpen)="openEditModal(sms.body, i)"
+                (modalOpen)="openEditModal(sms, i)"
                 *ngFor="let sms of receivedSMS.smsList; index as i"
                 [sms]="sms"
               ></app-sms>
@@ -60,8 +65,8 @@ import { SmsComponent } from '../sms/sms.component';
         <ion-list>
           <ng-container *ngIf="sentSMS$ | async as sentSMS">
             <app-sms
-              (modalOpen)="openEditModal(sms.body, i)"
               *ngFor="let sms of sentSMS.smsList; index as i"
+              (modalOpen)="openEditModal(sms, i)"
               [sms]="sms"
             ></app-sms>
           </ng-container>
@@ -90,7 +95,7 @@ import { SmsComponent } from '../sms/sms.component';
           </ion-header>
           <ion-content class="ion-padding">
             <ion-item>
-              <ion-input type="text" [(ngModel)]="currentEditingText">
+              <ion-input type="text" [(ngModel)]="currentEditingSms.body">
               </ion-input>
             </ion-item>
           </ion-content>
@@ -116,41 +121,45 @@ import { SmsComponent } from '../sms/sms.component';
     SmsComponent,
   ],
 })
-export class SmsListComponent implements OnInit {
+export class SmsListComponent implements OnInit, OnDestroy {
+  dbService = inject(BolistaDbService);
+  smsService = inject(SmsService);
+  route = inject(ActivatedRoute);
+
   selectedSegment: string = 'received';
   receivedSMS$!: Observable<{ smsList: SMSObject[] }>;
   sentSMS$!: Observable<{ smsList: SMSObject[] }>;
-  smsPruebaR: any[] = [];
-  smsPruebaE: any[] = [];
   currentEditingIndex!: number;
-  currentEditingText!: string; // Current sms text in editing input and value saved after done edit
-  oldSmsText!: string; // Old sms text before editing in case user cancel edit
+  currentEditingSms!: SMSObject; // Current sms in editing input and value saved after done edit
+  oldSms!: SMSObject; // Old sms before editing in case user cancel edit
   isModalOpen: boolean = false;
   @ViewChild(IonModal) modal!: IonModal;
-
-  constructor(private smsService: SmsService, private route: ActivatedRoute) {}
+  smsSubscription!: Subscription;
 
   ngOnInit(): void {
-    /* this.smsPruebaR = [
-      '45',
-      '89',
-      '17-25,21-30,27-,77-100,72,38,83,82,21,22,60,06,23-20,00a99-16,70a79-100,08-100,00a99-50,01-300,01a91-50,77-100,62-30,60a69-5,00a99-5,33-10,66-5,16-5,10,19,07,72,37,70,69,71,17,06,65-10,89,62,34,33-5,98-20,60a69-6,33,82-50,00a99-20,62,08-',
-    ];
-    this.smsPruebaE = [
-      'Esto es un mensaje de prueba',
-      'Este es otro',
-      'y este es otro',
-    ]; */
-
     // Received SMS
     this.receivedSMS$ = this.route.paramMap.pipe(
       switchMap((params) => {
         const contactPhone = this.smsService.checkCountryCode(
           params.get('phone')!
         );
-        const sms = this.smsService.getReceivedSMS(contactPhone);
-        sms.then((s) => console.log(s));
-        return this.smsService.getReceivedSMS(contactPhone);
+        return Promise.all([
+          this.smsService.getReceivedSMS(contactPhone),
+          this.smsService.getAllSmsFromDB(),
+        ]);
+      }),
+      map(([smsPhoneList, smsDbList]) => {
+        if (smsDbList) {
+          smsDbList.values!.forEach((smsDb) => {
+            const index = smsPhoneList.smsList.findIndex(
+              (smsPhone) => smsPhone.id === smsDb.sms_id
+            );
+            if (index !== -1) {
+              smsPhoneList.smsList[index].body = smsDb.body;
+            }
+          });     
+        }      
+        return smsPhoneList;
       })
     );
 
@@ -167,11 +176,11 @@ export class SmsListComponent implements OnInit {
     this.selectedSegment = event.target.value;
   }
 
-  openEditModal(smsText: string, smsIndex: number) {
+  openEditModal(sms: SMSObject, smsIndex: number) {
     this.isModalOpen = true;
     this.currentEditingIndex = smsIndex; //Index for edit smsList array with change from editInputModal
-    this.oldSmsText = smsText; //Old text in case user press Cancel button on modal
-    this.currentEditingText = smsText; //Text to populate modal input value
+    this.oldSms = { ...sms }; //Old sms in case user press Cancel button on modal
+    this.currentEditingSms = { ...sms }; //sms to populate modal input value
   }
 
   cancel() {
@@ -180,7 +189,7 @@ export class SmsListComponent implements OnInit {
 
   confirm() {
     const dismissData: ModalSmsDataDismiss = {
-      smsText: this.currentEditingText,
+      sms: this.currentEditingSms,
       smsIndex: this.currentEditingIndex,
     };
     this.modal.dismiss(dismissData, 'confirm');
@@ -189,11 +198,11 @@ export class SmsListComponent implements OnInit {
   onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<ModalSmsDataDismiss>>;
     if (ev.detail.role === 'confirm') {
-      // If press Confirm button on modal change the text of the corresponding sms
-      // if (this.selectedSegment === 'recived') {
-      this.receivedSMS$.subscribe((ret) => {
-        ret.smsList[ev.detail.data!.smsIndex].body = ev.detail.data!.smsText;
-        this.oldSmsText = ev.detail.data!.smsText; // Update oldText with new text
+      this.smsService.saveOrUpdate(ev.detail.data!.sms);
+
+      this.smsSubscription = this.receivedSMS$.subscribe((ret) => {
+        ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
+        this.oldSms = ev.detail.data!.sms; // Update oldText with new text
         this.receivedSMS$ = of(ret); // Update oldText with new text
       });
       // }else if (this.selectedSegment === 'sent') {
@@ -203,7 +212,14 @@ export class SmsListComponent implements OnInit {
       //     this.sentSMS$ = of(ret); // Update oldText with new text
       //   });
       // }
+      // this.dbService.mDb.query()
     }
     this.isModalOpen = false;
+  }
+
+  ngOnDestroy(): void {
+    if (this.smsSubscription) {
+      this.smsSubscription.unsubscribe();
+    }
   }
 }

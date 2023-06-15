@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { DBSQLiteValues } from '@capacitor-community/sqlite';
 import {
   MessageType,
   Projection,
@@ -6,6 +7,7 @@ import {
   SMSInboxReader,
   SMSObject,
 } from 'capacitor-sms-inbox';
+import { BolistaDbService } from 'src/app/services/bolista-db.service';
 
 export interface SmsOptions {
   projection?: Projection;
@@ -16,17 +18,17 @@ export interface SmsOptions {
   providedIn: 'root',
 })
 export class SmsService {
+  dbService = inject(BolistaDbService);
+
+  tableName = 'sms';
 
   private smsProjection: Projection = {
-    id: false,
     threadId: false,
   };
 
   private smsFilters: SMSFilter = {
     maxCount: 10,
-  }
-
-  constructor() {}
+  };
 
   getReceivedSMS(contactPhone: string): Promise<{ smsList: SMSObject[] }> {
     const smsOptions: SmsOptions = {
@@ -34,7 +36,7 @@ export class SmsService {
       filter: {
         ...this.smsFilters,
         type: MessageType.INBOX,
-        address: contactPhone
+        address: contactPhone,
       },
     };
     return SMSInboxReader.getSMSList(smsOptions);
@@ -46,7 +48,7 @@ export class SmsService {
       filter: {
         ...this.smsFilters,
         type: MessageType.SENT,
-        address: contactPhone
+        address: contactPhone,
       },
     };
     return SMSInboxReader.getSMSList(smsOptions);
@@ -58,17 +60,56 @@ export class SmsService {
       filter: {
         ...this.smsFilters,
         type: MessageType.ALL,
-        address: contactPhone
+        address: contactPhone,
       },
     };
     return SMSInboxReader.getSMSList(smsOptions);
   }
 
-  checkCountryCode(phoneNumber: string): string{
+  checkCountryCode(phoneNumber: string): string {
     if (phoneNumber.startsWith('+')) {
       return phoneNumber;
     } else {
       return '+53' + phoneNumber;
+    }
+  }
+
+  
+  // Database Operations -------------------------
+
+  async getAllSmsFromDB(): Promise<DBSQLiteValues | null> {
+    try {
+      const smsList = await this.dbService.mDb.query(
+        `select * from ${this.tableName}`
+      );
+      return smsList;
+    } catch (error) {
+      console.log(error);
+      return null;
+    }
+  }
+
+  async saveOrUpdate(sms: SMSObject) {
+    try {
+      const smsId = await this.dbService.mDb.query(
+        `select * from ${this.tableName} WHERE sms_id=${sms.id}`
+      );
+
+      if (smsId.values?.length === 0) {
+        // CREATE
+        await this.dbService.mDb.execute(
+          `INSERT INTO ${this.tableName} (sms_id,body,timestamp ) VALUES (${sms.id}, '${sms.body}', ${sms.date})`
+        );
+      } else {
+        // UPDATE
+        await this.dbService.mDb.query(
+          `UPDATE sms SET body = '${sms.body}' WHERE ID = ${
+            smsId.values![0].id
+          };`
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
   }
 }

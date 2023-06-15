@@ -55,9 +55,7 @@ export const bolistaDbVersionUpgrades = [
         id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
         sms_id integer NOT NULL UNIQUE,
         body varchar NOT NULL UNIQUE,
-        time_stamps varchar NOT NULL UNIQUE,
-        edited integer NOT NULL default 0,
-        saved integer NOT NULL default 0
+        timestamp varchar NOT NULL UNIQUE
       );`,
       `INSERT INTO pases (pase,pase_plus) VALUES (0,0)`
     ]
