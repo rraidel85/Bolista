@@ -32,6 +32,11 @@ import { IonicModule } from '@ionic/angular';
         </ion-card-content>
       </ion-card>
     </ion-content>
+    <ion-footer style="color: yellow;">
+  <ion-toolbar >
+    <ion-title slot="end" class="version-tittle"> v 1.0.0 </ion-title>
+  </ion-toolbar>
+</ion-footer>
   `,
   styleUrls: ['./about.component.scss'],
   imports: [CommonModule, IonicModule],

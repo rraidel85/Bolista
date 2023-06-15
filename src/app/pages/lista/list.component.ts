@@ -47,7 +47,6 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
 
       <app-day-card></app-day-card>
       <app-night-card></app-night-card>
-      <ion-list> </ion-list>
     </ion-content>
   `,
   styleUrls: ['./list.component.scss'],
