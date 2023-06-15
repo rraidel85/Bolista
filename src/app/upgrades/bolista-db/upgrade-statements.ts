@@ -61,5 +61,15 @@ export const bolistaDbVersionUpgrades = [
       );`,
       `INSERT INTO pases (pase,pase_plus) VALUES (0,0)`
     ]
+  },
+  {
+    toVersion: 5,
+    statements: [
+      `CREATE TABLE IF NOT EXISTS trial (
+        id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+        tries integer NOT NULL
+      );`,
+      `INSERT INTO trial (tries) VALUES (0)`
+    ]
   }
 ];

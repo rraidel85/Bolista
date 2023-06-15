@@ -5,6 +5,9 @@
 export const environment = {
   production: false,
   databaseName: 'bolista',
+  trialUrl:'http://192.168.1.103:3000/users/trial',
+  maxTries: 20,
+  intervalTime: 60*60*1000,
 };
 
 /*
