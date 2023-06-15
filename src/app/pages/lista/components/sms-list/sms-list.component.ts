@@ -50,6 +50,8 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
             <ion-list>
               <app-sms
                 (modalOpen)="openEditModal(sms, i)"
+                (checkedSms)="onCheckedSms($event)"
+                (uncheckedSms)="onUnCheckedSms($event)"
                 *ngFor="let sms of receivedSMS.smsList; index as i"
                 [sms]="sms"
               ></app-sms>
@@ -133,8 +135,9 @@ export class SmsListComponent implements OnInit, OnDestroy {
   currentEditingSms!: SMSObject; // Current sms in editing input and value saved after done edit
   oldSms!: SMSObject; // Old sms before editing in case user cancel edit
   isModalOpen: boolean = false;
-  @ViewChild(IonModal) modal!: IonModal;
   smsSubscription!: Subscription;
+  smsToImport: SMSObject[] = []; 
+  @ViewChild(IonModal) modal!: IonModal;
 
   ngOnInit(): void {
     // Received SMS
@@ -215,6 +218,15 @@ export class SmsListComponent implements OnInit, OnDestroy {
       // this.dbService.mDb.query()
     }
     this.isModalOpen = false;
+  }
+
+  onCheckedSms(sms: SMSObject){
+    this.smsToImport = [...this.smsToImport, sms];
+  }
+
+  onUnCheckedSms(sms: SMSObject){
+    const newSmsList = this.smsToImport.filter(element => sms.id != element.id);
+    this.smsToImport = [...newSmsList];
   }
 
   ngOnDestroy(): void {

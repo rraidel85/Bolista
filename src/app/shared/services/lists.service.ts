@@ -20,7 +20,7 @@ export class ListsService {
 
   constructor(private listElementsService: ListElementsService) {}
 
-  validateMessage(message: string): void {
+  validateMessage(message: string): Promise<any> {
     const badBets: BetError[] = [];
 
     const matches = message.match(this.listRegExp);
@@ -171,6 +171,7 @@ export class ListsService {
         throw new ListException('Se encontraron errores', badBets);
       }
     }
+    return new Promise((resolve, reject) => resolve(null));
   }
 
   processMessage(messages: string[],grupo:number): void {

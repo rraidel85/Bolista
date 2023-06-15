@@ -14,7 +14,7 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
   selector: 'app-sms',
   standalone: true,
   template: `
-    <ion-card [ngStyle]="{'border': validationError ? '1px solid red' : ''}">
+    <ion-card [ngStyle]="{ border: validationError ? '1px solid red' : '' }">
       <ion-card-header>
         <div class="card-header">
           <ion-text color="primary">{{ sms.address }}</ion-text>
@@ -30,7 +30,9 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
           {{ sms.body }}
         </ion-text>
         <div class="ion-card-content-footer">
-          <ion-label class="sms-date"> {{ sms.date | date:"d \'de\' MMMM, y h:mm a" }}</ion-label>
+          <ion-label class="sms-date">
+            {{ sms.date | date : "d 'de' MMMM, y h:mm a" }}</ion-label
+          >
           <ion-icon *ngIf="validationError" name="warning-outline"></ion-icon>
         </div>
       </ion-card-content>
@@ -45,7 +47,7 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
     NgFor,
     NgStyle,
     ErrorDirective,
-    DatePipe
+    DatePipe,
   ],
 })
 export class SmsComponent {
@@ -55,6 +57,8 @@ export class SmsComponent {
 
   @Input() sms!: SMSObject;
   @Output() modalOpen = new EventEmitter<undefined>();
+  @Output() checkedSms = new EventEmitter<SMSObject>();
+  @Output() uncheckedSms = new EventEmitter<SMSObject>();
 
   isChecked!: boolean;
   validationError: boolean = false;
@@ -66,7 +70,7 @@ export class SmsComponent {
       duration: 2000,
       position: 'top',
       cssClass: 'error-toast',
-      icon: "warning-outline"
+      icon: 'warning-outline',
     });
 
     await toast.present();
@@ -81,15 +85,16 @@ export class SmsComponent {
       try {
         await this.listService.validateMessage(this.sms.body);
         // There is no error in message validation
-        console.log(this.sms)
+        this.checkedSms.emit(this.sms);
       } catch (error: any) {
-        // If there is error on the sms disable checkbox and add error styles 
+        // If there is error on the sms disable checkbox and add error styles
         this.isChecked = false;
         this.validationError = true;
-        this.presentToast();
-        console.log(error.badBets)
         this.smsErrors = error.badBets;
+        this.presentToast();
       }
+    } else{
+      this.uncheckedSms.emit(this.sms);
     }
   }
 }
