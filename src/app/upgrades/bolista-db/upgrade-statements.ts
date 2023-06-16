@@ -67,9 +67,9 @@ export const bolistaDbVersionUpgrades = [
     statements: [
       `CREATE TABLE IF NOT EXISTS trial (
         id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-        tries integer NOT NULL
+        active integer NOT NULL
       );`,
-      `INSERT INTO trial (tries) VALUES (0)`
+      `INSERT INTO trial (active) VALUES (0)`
     ]
   }
 ];

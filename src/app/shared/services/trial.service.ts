@@ -9,13 +9,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class TrialService {
-  private maxTries = environment.maxTries;
-  private tries!: number;
-  constructor(private http: HttpClient, private dbService: BolistaDbService) {
-    this.dbService.mDb.query(`select tries from trial`).then((ret) => {
-      this.tries = ret.values![0].tries;
-    });
-  }
+  constructor(private http: HttpClient, private dbService: BolistaDbService) { }
 
   onTrial(): Observable<any> {
     const intervalTime = environment.intervalTime;
@@ -24,16 +18,17 @@ export class TrialService {
       .pipe(
         mergeMap(() => this.http.get(environment.trialUrl)),
 
-        /* catchError((error) => {
+        catchError(() => {
           //
-          if (this.maxTries < this.tries) {
-            return of({ timeout: true });
+          /* if (this.maxTries < this.tries) {
           } else {
             this.tries++;
             this.dbService.mDb.execute(`update trial set tries=${this.tries}`);
             return throwError(() => new Error());
-          }
-        }), */
+          } */
+          return of({ timeout: true });
+          
+        }),
         retry({ delay: intervalTime })
         // map((respuesta: any) => respuesta.trial)
       );
