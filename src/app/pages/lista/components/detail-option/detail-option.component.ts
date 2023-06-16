@@ -9,6 +9,7 @@ import { Detail, Details } from '../../interfaces/details.interface';
 import { AddModalComponent } from '../add-modal/add-modal.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { ListsService } from 'src/app/shared/services/lists.service';
+import { Toast } from '@capacitor/toast';
 
 @Component({
   selector: 'app-detail-option',
@@ -38,16 +39,21 @@ import { ListsService } from 'src/app/shared/services/lists.service';
 
       <!-- Detalles -->
       <ng-container>
-        <div class="page-tab-header">
-          <div class="page-tab-header-date">
-            <ion-icon id="day-icon" name="sunny"></ion-icon>
-            <!-- <ion-text>{{ horaActual | date }}</ion-text> -->
+        <div class="page-tab-header detalles-header">
+          <div class="page-tab-header-date detalles-date">
+            <!-- <ion-icon id="day-icon" name="sunny"></ion-icon> -->
+            <ion-text>{{ fecha }}</ion-text>
           </div>
-          <ion-label style="flex-grow: 1;"
-            >Todos
+          <div class="detalles-todos">
+            <ion-label>Todos </ion-label>
             <div class="checkbox">
-              <ion-checkbox #todosCheckbox slot="end" (click)='checkAll()'></ion-checkbox></div
-          ></ion-label>
+              <ion-checkbox
+                #todosCheckbox
+                slot="end"
+                (click)="checkAll()"
+              ></ion-checkbox>
+            </div>
+          </div>
         </div>
         <div>
           <ion-card *ngFor="let number of paseList">
@@ -64,7 +70,7 @@ import { ListsService } from 'src/app/shared/services/lists.service';
                   #paseCheckbox
                   [value]="number.pick"
                   slot="end"
-                  (ionChange)='checkOne()'
+                  (ionChange)="checkOne()"
                 ></ion-checkbox>
               </div>
             </ion-card-content>
@@ -115,6 +121,7 @@ import { ListsService } from 'src/app/shared/services/lists.service';
 })
 export class DetailOptionComponent implements OnInit {
   horaActual!: string;
+  fecha!: string;
   tabSeleccionado: string = 'Detalles';
   pase = 0;
   pasePlus = 0;
@@ -146,11 +153,10 @@ export class DetailOptionComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    
-
-    this.horaService
-      .obtenerHoraActual()
-      .subscribe((hora) => (this.horaActual = hora));
+    this.horaService.obtenerHoraActual().subscribe((hora) => {
+      this.horaActual = hora;
+      this.fecha = hora.split(',')[0];
+    });
     this.listElementService.getAll(1).then((ret) => {
       ret.forEach((element) => {
         let obj: Detail = {
@@ -336,31 +342,36 @@ export class DetailOptionComponent implements OnInit {
     const message = this.listsService.listToText(copyPase, copyNumber);
     // console.log(message);
     Clipboard.write({ string: message });
+    Toast.show({
+      text: `Lista copiada`,
+      duration: 'long',
+    });
   }
-  checkAll(){
-    console.log(this.todosCheckbox.checked);
-    this.paseCheckboxes=this.paseCheckboxes.map(cbox=>{
-      cbox.checked=!this.todosCheckbox.checked
-      return cbox
-    })
-    
+  checkAll() {
+    this.paseCheckboxes = this.paseCheckboxes.map((cbox) => {
+      cbox.checked = !this.todosCheckbox.checked;
+      return cbox;
+    });
+    this.numberCheckboxes = this.numberCheckboxes.map((cbox) => {
+      cbox.checked = !this.todosCheckbox.checked;
+      return cbox;
+    });
   }
-  checkOne(){
+  checkOne() {
     console.log(this.todosCheckbox.checked);
-    const checkedP=this.paseCheckboxes.filter(x=>x.checked)
-    const checkedN=this.numberCheckboxes.filter(x=>x.checked)
-    if (checkedP.length+checkedN.length===this.paseCheckboxes.length+this.numberCheckboxes.length){
-
-      this.todosCheckbox.checked=true
-    }else if(checkedP.length+checkedN.length===0){
-      this.todosCheckbox.indeterminate=false
-      this.todosCheckbox.checked=false
+    const checkedP = this.paseCheckboxes.filter((x) => x.checked);
+    const checkedN = this.numberCheckboxes.filter((x) => x.checked);
+    if (
+      checkedP.length + checkedN.length ===
+      this.paseCheckboxes.length + this.numberCheckboxes.length
+    ) {
+      this.todosCheckbox.checked = true;
+    } else if (checkedP.length + checkedN.length === 0) {
+      this.todosCheckbox.indeterminate = false;
+      this.todosCheckbox.checked = false;
+    } else {
+      this.todosCheckbox.checked = false;
+      this.todosCheckbox.indeterminate = true;
     }
-    else{
-      this.todosCheckbox.checked=false
-      this.todosCheckbox.indeterminate=true
-      
-    }
-    
   }
 }

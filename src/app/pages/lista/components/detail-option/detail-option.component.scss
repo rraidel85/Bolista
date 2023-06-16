@@ -71,3 +71,18 @@ ion-card-content {
   margin: 10px 0;
   width: 100%;
 }
+.detalles-header{
+  display: flex;
+  justify-content: space-between;
+  ion-text{
+    margin-left: 10px;
+  }
+  .detalles-todos{
+    display: flex;
+    margin-right: 20px;
+    .checkbox{
+      margin-left: 10px;
+    }
+  }
+  
+}
