@@ -1,4 +1,6 @@
+import { SMSObject } from "capacitor-sms-inbox";
+
 export interface ModalSmsDataDismiss {
-    smsText: string,
+    sms: SMSObject,
     smsIndex: number;
 }

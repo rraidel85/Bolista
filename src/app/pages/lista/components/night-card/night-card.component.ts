@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
-import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.component';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { PorcentModalComponent } from '../porcent-modal/porcent-modal.component';
 
 @Component({
   selector: 'app-night-card',
@@ -22,7 +22,7 @@ import { FormsModule } from '@angular/forms';
         <div class="cash-button">$ 0.00</div>
         <div class="cash">$ 0.00</div>
       </div>
-      <app-porcent-popover [buttonId]="'pase-porcent'"></app-porcent-popover>
+      <ion-button fill="clear" id="pasePorcent2" (click)="openPorcentModal('pasePorcent2')">0 %</ion-button>
 
 <div class="divider"></div>
 
@@ -34,7 +34,7 @@ import { FormsModule } from '@angular/forms';
 
       <div class="card-end">
 
-        <app-porcent-popover [buttonId]="'list-porcent'"></app-porcent-popover>
+      <ion-button fill="clear" id="listPorcent2" (click)="openPorcentModal('listPorcent2')">0 %</ion-button>
         <div class="detail-button" [routerLink]="['detalles']" detail="false" routerLinkActive="selected">Detalles</div>
 
       </div>
@@ -44,10 +44,19 @@ import { FormsModule } from '@angular/forms';
   `,
   styleUrls: ['./night-card.component.scss'],
   standalone: true,
-  imports: [IonicModule, RouterLink,FormsModule, PorcentPopoverComponent],
+  imports: [IonicModule, RouterLink,FormsModule,PorcentModalComponent],
 })
 export class NightCardComponent implements OnInit {
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
+
+  async openPorcentModal(modalId: string) {
+    const modal = await this.modalCtrl.create({
+      component: PorcentModalComponent,
+      cssClass: 'porcentModal',
+      id: modalId 
+    });
+    modal.present();
+  }
 }

@@ -5,7 +5,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { BolistaDbService } from './services/bolista-db.service';
 import { TrialService } from './shared/services/trial.service';
-import { InfoModalComponent } from './shared/components/add-modal/info-modal.component';
+import { InfoModalComponent } from './shared/components/info-modal/info-modal.component';
 import { Subscription } from 'rxjs';
 
 @Component({

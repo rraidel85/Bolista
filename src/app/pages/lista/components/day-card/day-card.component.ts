@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { IonicModule} from '@ionic/angular';
-import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.component';
+import { IonicModule, ModalController} from '@ionic/angular';
+import { PorcentModalComponent } from '../porcent-modal/porcent-modal.component';
 
 @Component({
   selector: 'app-day-card',
@@ -20,7 +20,7 @@ import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.comp
             <div class="cash-button">$ 0.00</div>
             <div class="cash">$ 0.00</div>
           </div>
-          <app-porcent-popover [buttonId]="'pase-porcent2'"></app-porcent-popover>
+          <ion-button fill="clear" id="pasePorcent" (click)="openPorcentModal('pasePorcent')">0 %</ion-button>
 
           <div class="divider"></div>
 
@@ -39,7 +39,7 @@ import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.comp
 
           <div class="card-end">
           
-          <app-porcent-popover [buttonId]="'list-porcent2'"></app-porcent-popover>
+          <ion-button fill="clear" id="listPorcent" (click)="openPorcentModal('listPorcent')">0 %</ion-button>
             <div
               class="detail-button"
               [routerLink]="['detalles']"
@@ -55,15 +55,22 @@ import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.comp
   `,
   styleUrls: ['./day-card.component.scss'],
   standalone: true,
-  imports: [IonicModule, RouterLink, FormsModule,PorcentPopoverComponent],
+  imports: [IonicModule, RouterLink, FormsModule, PorcentModalComponent],
 })
 export class DayCardComponent implements OnInit {
 
-  constructor() {}
+  constructor(private modalCtrl: ModalController) {}
 
   ngOnInit() {}
 
-
+  async openPorcentModal(modalId: string) {
+    const modal = await this.modalCtrl.create({
+      component: PorcentModalComponent,
+      cssClass: 'porcentModal',
+      id: modalId 
+    });
+    modal.present();
+  }
   
   }
 
