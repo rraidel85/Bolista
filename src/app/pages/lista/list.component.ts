@@ -48,7 +48,7 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
       </ion-item>
 
       <app-day-card [group]="1"></app-day-card>
-      <app-night-card></app-night-card>
+      <app-night-card [group]="2"></app-night-card>
     </ion-content>
   `,
   styleUrls: ['./list.component.scss'],

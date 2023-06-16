@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
-import { BehaviorSubject, switchMap, from, tap } from 'rxjs';
+import { BehaviorSubject, switchMap, from } from 'rxjs';
 import { ListTotal } from '../interfaces/list-total.interface';
 
 @Injectable({
@@ -9,15 +9,23 @@ import { ListTotal } from '../interfaces/list-total.interface';
 export class ListCardService {
   dbService = inject(BolistaDbService);
 
-  private totalSubject = new BehaviorSubject<number>(0);
+  private totalDaySubject = new BehaviorSubject<number>(1);
+  private totalNightSubject = new BehaviorSubject<number>(2);
 
-  listTotal$ = this.totalSubject.asObservable().pipe(
+  listDayTotal$ = this.totalDaySubject.asObservable().pipe(
     switchMap((group: number) => from(this.getTotalLista(group))),
-    tap((value) => console.log(value))
   );
 
-  updateListTotal(group: number) {
-    this.totalSubject.next(group);
+  listNightTotal$ = this.totalNightSubject.asObservable().pipe(
+    switchMap((group: number) => from(this.getTotalLista(group))),
+  );
+
+  updateListDayTotal(group: number) {
+    this.totalDaySubject.next(group);
+  }
+
+  updateListNightTotal(group: number) {
+    this.totalNightSubject.next(group);
   }
 
   private async getTotalLista(group: number): Promise<ListTotal> {

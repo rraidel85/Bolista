@@ -251,7 +251,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
   async importSmsList() {
     const smsBodys: string[] = this.smsToImport.map((sms) => sms.body);
     await this.listService.processMessage(smsBodys, 1);
-    this.listCardService.updateListTotal(1);
+    this.listCardService.updateListDayTotal(1);
     this.router.navigate(['lista']);
   }
 

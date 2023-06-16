@@ -95,8 +95,8 @@ export class DayCardComponent implements OnInit {
   percentPases: number = 0;
 
   ngOnInit() {
-    this.listCardService.updateListTotal(this.group);
-    this.total$ = this.listCardService.listTotal$.pipe(
+    // this.listCardService.updateListTotal(this.group);
+    this.total$ = this.listCardService.listDayTotal$.pipe(
       tap(total => {
         this.totalMoney = total.totalMoney;
         this.totalPases = total.totalPases;
