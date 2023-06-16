@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { NightCardComponent } from './components/night-card/night-card.component';
 import { DayCardComponent } from './components/day-card/day-card.component';
 import { RouterLink } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { HoraService } from 'src/app/services/hora.service';
 import { ListsService } from 'src/app/shared/services/lists.service';
 import { ListElementsService } from 'src/app/services/list-elements.service';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
+import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
 
 @Component({
   selector: 'app-inicio',
@@ -28,7 +29,7 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
             <div class="card-mid" routerLink="">
               <div class="buttons">
                 <ion-button (click)="dbtest()" style="width: 99px">Cuadres</ion-button>
-                <ion-button>Patrones</ion-button>
+                <ion-button (click)="openInfoModal()" expand="block">Test-Jorge</ion-button>
               </div>
 
               <div class="buttons">
@@ -63,7 +64,7 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
 export class ListComponent implements OnInit {
   horaActual!: string;
  
-  constructor(private horaService: HoraService,private listsService:ListsService,private listElementService:ListElementsService) {}
+  constructor(private horaService: HoraService,private listsService:ListsService,private listElementService:ListElementsService, private modalCtrl: ModalController) {}
   
 
   ngOnInit() {
@@ -87,5 +88,13 @@ export class ListComponent implements OnInit {
       console.log(error.badBets);
       
     }
+  }
+
+  async openInfoModal() {
+    const modal = await this.modalCtrl.create({
+      component: InfoModalComponent,
+      cssClass: "info-modal",
+    });
+    modal.present();
   }
 }

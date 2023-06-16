@@ -9,14 +9,17 @@ import { IonicModule, ModalController } from '@ionic/angular';
   template: `
     <ion-header>
       <ion-toolbar>
-        <ion-title>Información</ion-title>
+     
+        <ion-title> <ion-icon class="warning-icon" name="warning" color="warning"></ion-icon>Información</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content>
-      <ion-text>{{ message }}</ion-text>
+      <div class="text-content">
+      <ion-text class="warning-text">Conéctese a <span class="web">Internet</span> e intente nuevamente</ion-text>
+      </div>
       <div class="modal-buttons">
-        <ion-button fill="clear" color="success" (click)="closeModal()"
-          >Guardar</ion-button
+        <ion-button fill="clear" shape="round" color="danger" style="font-weight: bold;" (click)="closeModal()"
+          >OK</ion-button
         >
       </div>
     </ion-content>
