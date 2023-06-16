@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { IonicModule} from '@ionic/angular';
+import { IonicModule } from '@ionic/angular';
 import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.component';
+import { BolistaDbService } from 'src/app/services/bolista-db.service';
+import { DecimalPipe } from '@angular/common';
 
 @Component({
   selector: 'app-day-card',
@@ -17,10 +19,12 @@ import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.comp
 
           <div class="pase-title">Pase</div>
           <div class="pase-section">
-            <div class="cash-button">$ 0.00</div>
-            <div class="cash">$ 0.00</div>
+            <div class="cash-button">$ {{ totalPases | number : '1.2-2' }}</div>
+            <div class="cash">$ {{ percentPases | number : '1.2-2' }}</div>
           </div>
-          <app-porcent-popover [buttonId]="'pase-porcent2'"></app-porcent-popover>
+          <app-porcent-popover
+            [buttonId]="'pase-porcent2'"
+          ></app-porcent-popover>
 
           <div class="divider"></div>
 
@@ -32,14 +36,16 @@ import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.comp
               detail="false"
               routerLinkActive="selected"
             >
-              $ 0.00
+              $ {{ totalMoney | number : '1.2-2' }}
             </div>
-            <div class="cash">$ 0.00</div>
+            <div class="cash">$ {{ percentMoney | number : '1.2-2' }}</div>
           </div>
 
           <div class="card-end">
-          
-          <app-porcent-popover [buttonId]="'list-porcent2'"></app-porcent-popover>
+            <app-porcent-popover
+              (emitPercent)="calculatePercentMoney($event)"
+              [buttonId]="'list-porcent2'"
+            ></app-porcent-popover>
             <div
               class="detail-button"
               [routerLink]="['detalles']"
@@ -55,15 +61,45 @@ import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.comp
   `,
   styleUrls: ['./day-card.component.scss'],
   standalone: true,
-  imports: [IonicModule, RouterLink, FormsModule,PorcentPopoverComponent],
+  imports: [
+    IonicModule,
+    RouterLink,
+    FormsModule,
+    PorcentPopoverComponent,
+    DecimalPipe,
+  ],
 })
 export class DayCardComponent implements OnInit {
+  dbService = inject(BolistaDbService);
 
-  constructor() {}
+  @Input() group!: number;
 
-  ngOnInit() {}
+  totalMoney: number = 0;
+  totalPases: number = 0;
+  percentMoney: number = 0;
+  percentPases: number = 0;
 
+  ngOnInit() {
+    this.dbService.mDb
+      .query(`select * from list_elements WHERE grupo=${this.group}`)
+      .then((list_elements) => {
+        this.totalMoney = list_elements.values
+          ?.map((obj) => obj.price)
+          .reduce((accumulator, price) => accumulator + price, 0);
 
-  
+        this.totalPases = list_elements.values
+          ?.filter((list_element) => !!list_element.pase)
+          .map((obj) => obj.pase)
+          .reduce((accumulator, price) => accumulator + price, 0);
+      })
+      .catch((err) => console.log(err));
   }
 
+  calculatePercentMoney(percent: number) {
+    this.percentMoney = (this.totalMoney * percent) / 100;
+  }
+
+  calculatePercentPase(percent: number) {
+    this.percentPases = (this.totalPases * percent) / 100;
+  }
+}

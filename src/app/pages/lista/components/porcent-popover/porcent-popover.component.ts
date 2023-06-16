@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   imports: [CommonModule, IonicModule, FormsModule],
   template: `
     <button ion-button fill="clear" class="porcent-button" [id]="buttonId">
-      {{ porcentajeSeleccionado || 0 }}%
+      {{ selectedPercent || 0 }}%
     </button>
     <ion-popover [trigger]="buttonId">
       <ng-template>
@@ -21,15 +21,18 @@ import { FormsModule } from '@angular/forms';
               min="0"
               max="100"
               inputmode="numeric"
-              [(ngModel)]="porcentajeSeleccionado"
               placeholder="Ingrese el %"
+              #percentInput
             ></ion-input>
           </ion-item>
           <div class="button-group">
             <ion-button fill="clear" color="danger" (click)="cancelPopover()"
               >Cancelar</ion-button
             >
-            <ion-button fill="clear" color="success" (click)="acceptPopover()"
+            <ion-button
+              fill="clear"
+              color="success"
+              (click)="acceptPopover(percentInput.value)"
               >Aceptar</ion-button
             >
           </div>
@@ -41,7 +44,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class PorcentPopoverComponent {
   @Input() buttonId!: string;
-  porcentajeSeleccionado: number = 0;
+  @Output() emitPercent = new EventEmitter<number>();
+
+  selectedPercent: number = 0;
 
   constructor(private popoverController: PopoverController) {}
 
@@ -49,11 +54,13 @@ export class PorcentPopoverComponent {
     await this.popoverController.dismiss();
   }
 
-  acceptPopover() {
-    const porcentButton = document.getElementById('porcent-button');
-    if (porcentButton) {
-      porcentButton.textContent = `${this.porcentajeSeleccionado}%`;
+  acceptPopover(percent: any) {
+    if (percent) {
+      this.selectedPercent = percent;  
+    } else {
+      this.selectedPercent = 0;
     }
+    this.emitPercent.emit(this.selectedPercent);
     this.popoverController.dismiss();
   }
 }
