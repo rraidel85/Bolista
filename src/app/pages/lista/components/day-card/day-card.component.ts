@@ -14,7 +14,11 @@ import { DecimalPipe } from '@angular/common';
         <ion-grid>
           <div class="card-top">
             <ion-icon id="day-icon" name="sunny"></ion-icon>
-            <ion-icon id="trash-icon" name="trash"></ion-icon>
+            <ion-icon
+              id="trash-icon"
+              name="trash"
+              (click)="deleteList()"
+            ></ion-icon>
           </div>
 
           <div class="pase-title">Pase</div>
@@ -23,6 +27,7 @@ import { DecimalPipe } from '@angular/common';
             <div class="cash">$ {{ percentPases | number : '1.2-2' }}</div>
           </div>
           <app-porcent-popover
+            (emitPercent)="calculatePercentPase($event)"
             [buttonId]="'pase-porcent2'"
           ></app-porcent-popover>
 
@@ -101,5 +106,15 @@ export class DayCardComponent implements OnInit {
 
   calculatePercentPase(percent: number) {
     this.percentPases = (this.totalPases * percent) / 100;
+  }
+
+  deleteList() {
+    this.dbService.mDb
+      .execute(`DELETE FROM list_elements WHERE grupo=${this.group}`)
+      .then((_) => {
+        this.totalMoney = 0;
+        this.totalPases = 0;
+      })
+      .catch((err) => console.log(err));
   }
 }
