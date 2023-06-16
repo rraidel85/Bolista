@@ -4,8 +4,6 @@ import {
   ViewChild,
   inject,
   OnDestroy,
-  DoCheck,
-  AfterViewChecked,
 } from '@angular/core';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { SmsService } from '../../services/sms.service';
@@ -18,6 +16,7 @@ import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
 import { FormsModule } from '@angular/forms';
 import { SmsComponent } from '../sms/sms.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
+import { ListsService } from '../../../../shared/services/lists.service';
 
 @Component({
   selector: 'app-sms-list',
@@ -52,19 +51,20 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
             class="ion-margin-top importar-button"
             expand="block"
             [disabled]="smsToImport.length === 0"
+            (click)="importSmsList()"
           >
             Importar
           </ion-button>
           <ng-container *ngIf="receivedSMS.smsList.length !== 0; else noSms">
-            <ion-list>
-              <app-sms
-                (modalOpen)="openEditModal(sms, i)"
-                (checkedSms)="onCheckedSms($event)"
-                (uncheckedSms)="onUnCheckedSms($event)"
-                *ngFor="let sms of receivedSMS.smsList; index as i"
-                [sms]="sms"
-              ></app-sms>
-            </ion-list>
+              <ion-list>
+                <app-sms
+                  (modalOpen)="openEditModal(sms, i)"
+                  (checkedSms)="onCheckedSms($event)"
+                  (uncheckedSms)="onUnCheckedSms($event)"
+                  *ngFor="let sms of receivedSMS.smsList; index as i; trackBy: trackByFn"
+                  [sms]="sms"
+                ></app-sms>
+              </ion-list>
           </ng-container>
         </ng-container>
       </ng-container>
@@ -140,6 +140,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
   dbService = inject(BolistaDbService);
   smsService = inject(SmsService);
   route = inject(ActivatedRoute);
+  listService = inject(ListsService);
 
   selectedSegment: string = 'received';
   receivedSMS$!: Observable<{ smsList: SMSObject[] }>;
@@ -242,6 +243,15 @@ export class SmsListComponent implements OnInit, OnDestroy {
       (element) => sms.id != element.id
     );
     this.smsToImport = [...newSmsList];
+  }
+
+  importSmsList() {
+    const smsBodys: string[] = this.smsToImport.map((sms) => sms.body);
+    this.listService.processMessage(smsBodys, 1);
+  }
+
+  trackByFn(index: number, item: SMSObject): number {
+    return item.id;
   }
 
   ngOnDestroy(): void {

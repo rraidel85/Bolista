@@ -27,7 +27,7 @@ export class SmsService {
   };
 
   private smsFilters: SMSFilter = {
-    maxCount: 10,
+    // maxCount: 10,
   };
 
   getReceivedSMS(contactPhone: string): Promise<{ smsList: SMSObject[] }> {
