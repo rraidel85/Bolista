@@ -4,7 +4,10 @@ import { RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
-import { DecimalPipe } from '@angular/common';
+import { AsyncPipe, DecimalPipe, NgIf } from '@angular/common';
+import { ListCardService } from '../../services/list-card.service';
+import { ListTotal } from '../../interfaces/list-total.interface';
+import { Observable, tap } from 'rxjs';
 
 @Component({
   selector: 'app-day-card',
@@ -20,46 +23,49 @@ import { DecimalPipe } from '@angular/common';
               (click)="deleteList()"
             ></ion-icon>
           </div>
-
-          <div class="pase-title">Pase</div>
-          <div class="pase-section">
-            <div class="cash-button">$ {{ totalPases | number : '1.2-2' }}</div>
-            <div class="cash">$ {{ percentPases | number : '1.2-2' }}</div>
-          </div>
-          <app-porcent-popover
-            (emitPercent)="calculatePercentPase($event)"
-            [buttonId]="'pase-porcent2'"
-          ></app-porcent-popover>
-
-          <div class="divider"></div>
-
-          <div class="list-title">Lista</div>
-          <div class="list-section" routerLink="">
-            <div
-              class="cash-button"
-              [routerLink]="['contactos']"
-              detail="false"
-              routerLinkActive="selected"
-            >
-              $ {{ totalMoney | number : '1.2-2' }}
+          <ng-container *ngIf="total$ | async as total">
+            <div class="pase-title">Pase</div>
+            <div class="pase-section">
+              <div class="cash-button">
+                $ {{ total.totalPases | number : '1.2-2' }}
+              </div>
+              <div class="cash">$ {{ percentPases | number : '1.2-2' }}</div>
             </div>
-            <div class="cash">$ {{ percentMoney | number : '1.2-2' }}</div>
-          </div>
-
-          <div class="card-end">
             <app-porcent-popover
-              (emitPercent)="calculatePercentMoney($event)"
-              [buttonId]="'list-porcent2'"
+              (emitPercent)="calculatePercentPase($event)"
+              [buttonId]="'pase-porcent2'"
             ></app-porcent-popover>
-            <div
-              class="detail-button"
-              [routerLink]="['detalles']"
-              detail="false"
-              routerLinkActive="selected"
-            >
-              Detalles
+
+            <div class="divider"></div>
+
+            <div class="list-title">Lista</div>
+            <div class="list-section" routerLink="">
+              <div
+                class="cash-button"
+                [routerLink]="['contactos']"
+                detail="false"
+                routerLinkActive="selected"
+              >
+                $ {{ total.totalMoney | number : '1.2-2' }}
+              </div>
+              <div class="cash">$ {{ percentMoney | number : '1.2-2' }}</div>
             </div>
-          </div>
+
+            <div class="card-end">
+              <app-porcent-popover
+                (emitPercent)="calculatePercentMoney($event)"
+                [buttonId]="'list-porcent2'"
+              ></app-porcent-popover>
+              <div
+                class="detail-button"
+                [routerLink]="['detalles']"
+                detail="false"
+                routerLinkActive="selected"
+              >
+                Detalles
+              </div>
+            </div>
+          </ng-container>
         </ion-grid>
       </ion-label>
     </ion-item>
@@ -72,32 +78,30 @@ import { DecimalPipe } from '@angular/common';
     FormsModule,
     PorcentPopoverComponent,
     DecimalPipe,
+    NgIf,
+    AsyncPipe
   ],
 })
 export class DayCardComponent implements OnInit {
   dbService = inject(BolistaDbService);
+  listCardService = inject(ListCardService);
 
   @Input() group!: number;
 
+  total$!: Observable<ListTotal>;
   totalMoney: number = 0;
   totalPases: number = 0;
   percentMoney: number = 0;
   percentPases: number = 0;
 
   ngOnInit() {
-    this.dbService.mDb
-      .query(`select * from list_elements WHERE grupo=${this.group}`)
-      .then((list_elements) => {
-        this.totalMoney = list_elements.values
-          ?.map((obj) => obj.price)
-          .reduce((accumulator, price) => accumulator + price, 0);
-
-        this.totalPases = list_elements.values
-          ?.filter((list_element) => !!list_element.pase)
-          .map((obj) => obj.pase)
-          .reduce((accumulator, price) => accumulator + price, 0);
+    this.listCardService.updateListTotal(this.group);
+    this.total$ = this.listCardService.listTotal$.pipe(
+      tap(total => {
+        this.totalMoney = total.totalMoney;
+        this.totalPases = total.totalPases;
       })
-      .catch((err) => console.log(err));
+    );
   }
 
   calculatePercentMoney(percent: number) {

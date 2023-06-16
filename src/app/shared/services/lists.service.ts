@@ -174,7 +174,7 @@ export class ListsService {
     return new Promise((resolve, reject) => resolve(null));
   }
 
-  processMessage(messages: string[],grupo:number): void {
+  async processMessage(messages: string[],grupo:number): Promise<void> {
     let list: ListElement[] = [];
     let allMessages: string = messages
       .map((message) => {
@@ -185,7 +185,7 @@ export class ListsService {
 
     const bets = this.tansformMessage(allMessages);
 
-    this.addList(bets,grupo).subscribe();
+    return await this.addList(bets,grupo);
   }
 
   listToText(pases:Detail[],numbers:Detail[]):string{
@@ -208,7 +208,7 @@ export class ListsService {
 
     return message
   }
-  private addList(bets: Bet[],grupo:number): Observable<void> {
+  private addList(bets: Bet[],grupo:number): Promise<void> {
     let currentPrice: string = '';
     bets.forEach((betObj) => {
       const bet = betObj.bet;
@@ -255,8 +255,8 @@ export class ListsService {
         });
       }
     });
-    of(this.listElementsService.createMany(this.list_elements, grupo)).subscribe();
-    return of();
+    return this.listElementsService.createMany(this.list_elements, grupo);
+    
   }
 
   private addToNumbers(pick: string, prices: string,pase:boolean, corrido?: string): void {

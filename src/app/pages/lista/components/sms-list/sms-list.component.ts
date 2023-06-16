@@ -9,7 +9,7 @@ import { IonModal, IonicModule } from '@ionic/angular';
 import { SmsService } from '../../services/sms.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { SMSObject } from 'capacitor-sms-inbox';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription, map, of, switchMap } from 'rxjs';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { SmsComponent } from '../sms/sms.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { ListsService } from '../../../../shared/services/lists.service';
+import { ListCardService } from '../../services/list-card.service';
 
 @Component({
   selector: 'app-sms-list',
@@ -141,6 +142,8 @@ export class SmsListComponent implements OnInit, OnDestroy {
   smsService = inject(SmsService);
   route = inject(ActivatedRoute);
   listService = inject(ListsService);
+  listCardService = inject(ListCardService);
+  router = inject(Router);
 
   selectedSegment: string = 'received';
   receivedSMS$!: Observable<{ smsList: SMSObject[] }>;
@@ -245,9 +248,11 @@ export class SmsListComponent implements OnInit, OnDestroy {
     this.smsToImport = [...newSmsList];
   }
 
-  importSmsList() {
+  async importSmsList() {
     const smsBodys: string[] = this.smsToImport.map((sms) => sms.body);
-    this.listService.processMessage(smsBodys, 1);
+    await this.listService.processMessage(smsBodys, 1);
+    this.listCardService.updateListTotal(1);
+    this.router.navigate(['lista']);
   }
 
   trackByFn(index: number, item: SMSObject): number {
