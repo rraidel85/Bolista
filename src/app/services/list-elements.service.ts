@@ -66,7 +66,7 @@ export class ListElementsService {
             const values: string[] = [];
             list.forEach((element) => {
               if (picks.includes(element.pick)) {
-                if (element) {
+                if (element[field as keyof ListElement]) {
                   if (typeof element[field as keyof ListElement] === 'number') {
                     
                     values.push(
