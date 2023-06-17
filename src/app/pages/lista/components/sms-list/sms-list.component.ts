@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  inject,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, ViewChild, inject, OnDestroy } from '@angular/core';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { SmsService } from '../../services/sms.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
@@ -58,15 +52,19 @@ import { ListsService } from '../../../../shared/services/lists.service';
             Importar
           </ion-button>
           <ng-container *ngIf="receivedSMS.smsList.length !== 0; else noSms">
-              <ion-list style="background:var(--ion-color-light);">
-                <app-sms
-                  (modalOpen)="openEditModal(sms, i)"
-                  (checkedSms)="onCheckedSms($event)"
-                  (uncheckedSms)="onUnCheckedSms($event)"
-                  *ngFor="let sms of receivedSMS.smsList; index as i; trackBy: trackByFn"
-                  [sms]="sms"
-                ></app-sms>
-              </ion-list>
+            <ion-list style="background:var(--ion-color-light);">
+              <app-sms
+                (modalOpen)="openEditModal(sms, i)"
+                (checkedSms)="onCheckedSms($event)"
+                (uncheckedSms)="onUnCheckedSms($event)"
+                *ngFor="
+                  let sms of receivedSMS.smsList;
+                  index as i;
+                  trackBy: trackByFn
+                "
+                [sms]="sms"
+              ></app-sms>
+            </ion-list>
           </ng-container>
         </ng-container>
       </ng-container>
@@ -90,24 +88,15 @@ import { ListsService } from '../../../../shared/services/lists.service';
         </ion-list>
       </ng-container>
 
-      <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
+      <ion-modal
+        [isOpen]="isModalOpen"
+        (willDismiss)="onWillDismiss($event)"
+        class="edit-modal"
+      >
         <ng-template>
           <ion-header>
             <ion-toolbar>
-              <ion-buttons slot="start">
-                <ion-button class="modal-button" (click)="cancel()"
-                  >Cancelar</ion-button
-                >
-              </ion-buttons>
               <ion-title class="modal-title">Editar</ion-title>
-              <ion-buttons slot="end">
-                <ion-button
-                  class="modal-button"
-                  (click)="confirm()"
-                  [strong]="true"
-                  >Aceptar</ion-button
-                >
-              </ion-buttons>
             </ion-toolbar>
           </ion-header>
           <ion-content class="ion-padding">
@@ -115,6 +104,16 @@ import { ListsService } from '../../../../shared/services/lists.service';
               <ion-input type="text" [(ngModel)]="currentEditingSms.body">
               </ion-input>
             </ion-item>
+
+            
+            <div class="modal-buttons">
+              <ion-button fill="clear" color="danger" slot="start" (click)="cancel()"
+                >Cancelar</ion-button
+              >
+              <ion-button fill="clear" color="success" slot="end" (click)="confirm()"
+                >Aceptar</ion-button
+              >
+            </div>
           </ion-content>
         </ng-template>
       </ion-modal>
