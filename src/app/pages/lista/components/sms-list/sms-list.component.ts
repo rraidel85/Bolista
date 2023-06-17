@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ViewChild,
-  inject,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, ViewChild, inject, OnDestroy } from '@angular/core';
 import { IonModal, IonicModule } from '@ionic/angular';
 import { SmsService } from '../../services/sms.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
@@ -57,38 +51,47 @@ import { ListCardService } from '../../services/list-card.service';
             Importar
           </ion-button>
           <ng-container *ngIf="receivedSMS.smsList.length !== 0; else noSms">
-              <ion-list>
-                <app-sms
-                  (modalOpen)="openEditModal(sms, i)"
-                  (checkedSms)="onCheckedSms($event)"
-                  (uncheckedSms)="onUnCheckedSms($event)"
-                  *ngFor="let sms of receivedSMS.smsList; index as i"
-                  [sms]="sms"
-                ></app-sms>
-              </ion-list>
+            <ion-list>
+              <app-sms
+                (modalOpen)="openEditModal(sms, i)"
+                (checkedSms)="onCheckedSms($event)"
+                (uncheckedSms)="onUnCheckedSms($event)"
+                *ngFor="let sms of receivedSMS.smsList; index as i"
+                [sms]="sms"
+              ></app-sms>
+            </ion-list>
           </ng-container>
         </ng-container>
       </ng-container>
 
       <ng-container *ngIf="selectedSegment === 'sent'">
-        <ion-button
-          class="ion-margin-top importar-button"
-          expand="block"
-          [disabled]="smsToImport.length === 0"
-        >
-          Importar
-        </ion-button>
-        <ion-list>
-          <ng-container *ngIf="sentSMS$ | async as sentSMS">
-            <app-sms
-              *ngFor="let sms of sentSMS.smsList; index as i"
-              (modalOpen)="openEditModal(sms, i)"
-              [sms]="sms"
-            ></app-sms>
+        <ng-container *ngIf="sentSMS$ | async as sentSMS">
+          <ion-button
+            *ngIf="sentSMS.smsList.length !== 0"
+            class="ion-margin-top importar-button"
+            expand="block"
+            [disabled]="smsToImport.length === 0"
+            (click)="importSmsList()"
+          >
+            Importar
+          </ion-button>
+          <ng-container *ngIf="sentSMS.smsList.length !== 0; else noSms">
+            <ion-list>
+              <ng-container *ngIf="sentSMS$ | async as sentSMS">
+                <app-sms
+                  (modalOpen)="openEditModal(sms, i)"
+                  (checkedSms)="onCheckedSms($event)"
+                  (uncheckedSms)="onUnCheckedSms($event)"
+                  *ngFor="let sms of sentSMS.smsList; index as i"
+                  [sms]="sms"
+                ></app-sms>
+              </ng-container>
+            </ion-list>
           </ng-container>
-        </ion-list>
+        </ng-container>
       </ng-container>
 
+      <!-- Modal -->
       <ion-modal [isOpen]="isModalOpen" (willDismiss)="onWillDismiss($event)">
         <ng-template>
           <ion-header>
@@ -188,14 +191,32 @@ export class SmsListComponent implements OnInit, OnDestroy {
     // Sent SMS
     this.sentSMS$ = this.route.paramMap.pipe(
       switchMap((params) => {
-        const contactPhone = params.get('phone')!;
-        return this.smsService.getSentSMS(contactPhone);
+        const contactPhone = this.smsService.checkCountryCode(
+          params.get('phone')!
+        );
+        return Promise.all([
+          this.smsService.getSentSMS(contactPhone),
+          this.smsService.getAllSmsFromDB(),
+        ]);
+      }),
+      map(([smsPhoneList, smsDbList]) => {
+        if (smsDbList) {
+          smsDbList.values!.forEach((smsDb) => {
+            const index = smsPhoneList.smsList.findIndex(
+              (smsPhone) => smsPhone.id === smsDb.sms_id
+            );
+            if (index !== -1) {
+              smsPhoneList.smsList[index].body = smsDb.body;
+            }
+          });
+        }
+        return smsPhoneList;
       })
     );
 
     this.groupSuscription = this.route.queryParams.subscribe((params) => {
       this.group = params['group'];
-    }); 
+    });
   }
 
   segmentChanged(event: any) {
@@ -257,10 +278,9 @@ export class SmsListComponent implements OnInit, OnDestroy {
   async importSmsList() {
     const smsBodys: string[] = this.smsToImport.map((sms) => sms.body);
     await this.listService.processMessage(smsBodys, this.group);
-    if(this.group === 1){
+    if (this.group === 1) {
       this.listCardService.updateListDayTotal(this.group);
-    }
-    else if(this.group === 2){
+    } else if (this.group === 2) {
       this.listCardService.updateListNightTotal(this.group);
     }
     this.router.navigate(['lista']);
