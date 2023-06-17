@@ -1,9 +1,12 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, OnDestroy, OnInit } from '@angular/core';
 import { App } from '@capacitor/app';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
 import { BolistaDbService } from './services/bolista-db.service';
+import { TrialService } from './shared/services/trial.service';
+import { InfoModalComponent } from './shared/components/info-modal/info-modal.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -109,26 +112,85 @@ import { BolistaDbService } from './services/bolista-db.service';
   imports: [IonicModule, RouterLink, RouterLinkActive],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit,OnDestroy {
   public selectedPage!: string;
   public horaActual!: string;
+  private sub!:Subscription
 
-  constructor(private http: HttpClient, private dbService: BolistaDbService) {}
+  constructor(
+    private http: HttpClient,
+    private dbService: BolistaDbService,
+    private trialService: TrialService,
+    private modalCtrl: ModalController
+  ) {}
   ngOnInit(): void {
-    this.dbService.mDb.query(`select tema from config`).then((ret) => {
-      const tema = ret.values![0].tema;
-      if (tema === 'dark') {
-        document.body.classList.add('dark');
-      } else {
-        document.body.classList.remove('dark');
-      }
-    })
-    .catch(err => console.log);
-
+    this.dbService.mDb
+      .query(`select tema from config`)
+      .then((ret) => {
+        const tema = ret.values![0].tema;
+        if (tema === 'dark') {
+          document.body.classList.add('dark');
+        } else {
+          document.body.classList.remove('dark');
+        }
+      })
+      .catch((err) => console.log);
+        /* if (active===0) {
+          this.openInfoModal('Su tiempo de prueba se ha agotado')
+        } else { */
+          this.sub=this.trialService.onTrial().subscribe({
+            next:({trial,timeout})=>{
+              if(timeout){
+                this.dbService.mDb.query(`select active from trial`).then(ret=>{
+                  const active= ret.values![0].active
+                  if (active===0) {
+                    this.openInfoModal('Su tiempo de prueba se ha agotado')
+                  }
+                })
+              }else if (trial===false) {
+                this.dbService.mDb.execute(`update trial set active=0`);
+                this.openInfoModal('Su tiempo de prueba se ha agotado')
+              }
+              /* else if (trial===true) {
+              } */
+              this.dbService.mDb.execute(`update trial set active=1`);
+            },
+            error:()=>{
+              console.log('asd');
+              
+            }
+            /* ,
+            complete:()=>{
+      
+              console.log('complete');
+              
+            } */
+          });
+          
+        // }
+      
   }
 
+  ngOnDestroy(): void {
+    this.sub.unsubscribe()
+  }
   //Cerrar la aplicación con capacitor
+  async openInfoModal(message:string) {
+    const modal = await this.modalCtrl.create({
+      component: InfoModalComponent,
+      cssClass: 'add-modal-css',
+      componentProps:{
+        message
+      }
+    });
+    modal.onDidDismiss().then((result) => {
+      this.close()
+      
+    });
+    return await modal.present();
+  }
   close() {
     App.exitApp();
   }
+
 }

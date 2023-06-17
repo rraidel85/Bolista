@@ -1,81 +1,82 @@
 //Estilos Tarjeta de Lista
-#list-card{
-    --background: var(--ion-color-success-shade);
-    --color: white;
-    padding: 0px;
-    border-radius: 3%;
-    margin: 5px;
-   
-    font-size: 25px;
-  }
-  
-  .card-top{
-    display: flex;
-    font-size: 25px;
-    flex-direction: row;
-    justify-content: space-between;
-   
-  }
-  
-    #day-icon {
-      color: yellow;
-      font-size: 35px;
-    }
-  
-    #trash-icon {
-      color: rgb(255, 255, 255);
-      font-size: 30px;
-    }
-  
-  
-  
-    .pase-title {
-      margin-top: 5px;
-      font-weight: bold;
-    }
-  
-    .pase-section {
-      margin-top: 5px;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
+#list-card {
+  --background: var(--ion-color-success-shade);
+  --color: white;
+  padding: 0px;
+  border-radius: 3%;
+  margin: 5px;
 
-    .pase-porcent{
-      margin-top: 5px;
-    }
+  font-size: 25px;
+}
 
-    .divider {
-      border-top: 1px solid rgb(255, 255, 255);
-      margin: 10px 0px 5px;
-      box-shadow: 5px #000;
-    }
+.card-top {
+  display: flex;
+  font-size: 25px;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
-    .list-title{
-      margin-top: 10px;
-      font-weight: bold;
-    }
-  
-    .list-section {
-      margin-top: 5px;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  
-  
-    .card-end {
-      margin-top: 5px;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-     
-  
-    }
+#day-icon {
+  color: yellow;
+  font-size: 35px;
+}
 
+#trash-icon {
+  color: rgb(255, 255, 255);
+  font-size: 30px;
+}
 
-    .detail-button{
-      font-weight: bold;
-    }
+.pase-title {
+  margin-top: 5px;
+  font-weight: bold;
+}
 
-   
+.pase-section {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.pase-porcent {
+  margin-top: 5px;
+}
+
+.divider {
+  border-top: 1px solid rgb(255, 255, 255);
+  margin: 10px 0px 5px;
+  box-shadow: 5px #000;
+}
+
+.list-title {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.list-section {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.card-end {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.detail-button {
+  font-weight: bold;
+}
+
+#listPorcent {
+  transform: scale(1.9);
+  color: white;
+}
+
+#pasePorcent {
+  transform: scale(1.9);
+  color: white;
+}

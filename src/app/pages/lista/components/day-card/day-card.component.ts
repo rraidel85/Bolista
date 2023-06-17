@@ -1,8 +1,8 @@
 import { Component, OnInit, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
-import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.component';
+import { IonicModule, ModalController } from '@ionic/angular';
+import { PorcentModalComponent } from '../porcent-modal/porcent-modal.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { AsyncPipe, DecimalPipe, NgIf } from '@angular/common';
 import { ListCardService } from '../../services/list-card.service';
@@ -31,10 +31,7 @@ import { Observable, tap } from 'rxjs';
               </div>
               <div class="cash">$ {{ percentPases | number : '1.2-2' }}</div>
             </div>
-            <app-porcent-popover
-              (emitPercent)="calculatePercentPase($event)"
-              [buttonId]="'pase-porcent2'"
-            ></app-porcent-popover>
+            <ion-button fill="clear" id="pasePorcent" (click)="openPorcentModal('pasePorcent')">0 %</ion-button>
 
             <div class="divider"></div>
 
@@ -52,10 +49,7 @@ import { Observable, tap } from 'rxjs';
             </div>
 
             <div class="card-end">
-              <app-porcent-popover
-                (emitPercent)="calculatePercentMoney($event)"
-                [buttonId]="'list-porcent2'"
-              ></app-porcent-popover>
+            <ion-button fill="clear" id="listPorcent" (click)="openPorcentModal('listPorcent')">0 %</ion-button>
               <div
                 class="detail-button"
                 [routerLink]="['detalles']"
@@ -76,7 +70,7 @@ import { Observable, tap } from 'rxjs';
     IonicModule,
     RouterLink,
     FormsModule,
-    PorcentPopoverComponent,
+     PorcentModalComponent,
     DecimalPipe,
     NgIf,
     AsyncPipe,
@@ -86,8 +80,8 @@ export class DayCardComponent implements OnInit {
   dbService = inject(BolistaDbService);
   listCardService = inject(ListCardService);
 
+  constructor(private modalCtrl: ModalController) {}
   @Input() group!: number;
-
   total$!: Observable<ListTotal>;
   totalMoney: number = 0;
   totalPases: number = 0;
@@ -103,7 +97,14 @@ export class DayCardComponent implements OnInit {
       })
     );
   }
-
+  async openPorcentModal(modalId: string) {
+    const modal = await this.modalCtrl.create({
+      component: PorcentModalComponent,
+      cssClass: 'porcentModal',
+      id: modalId 
+    });
+    modal.present();
+  }
   calculatePercentMoney(percent: number) {
     this.percentMoney = (this.totalMoney * percent) / 100;
   }

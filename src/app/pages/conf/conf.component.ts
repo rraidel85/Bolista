@@ -60,8 +60,8 @@ export class ConfComponent implements OnInit {
     private horaService: HoraService,
     private dbService: BolistaDbService
   ) {
-    const prefersDark = window.matchMedia('(prefers-color-scheme: light)');
-    this.darkMode = prefersDark.matches;
+    // const prefersDark = window.matchMedia('(prefers-color-scheme: light)');
+    // this.darkMode = prefersDark.matches;
     this.dbService.mDb.query(`select tema from config`).then((ret) => {
       const tema = ret.values![0].tema;
       if (tema === 'dark') {
@@ -103,5 +103,6 @@ export class ConfComponent implements OnInit {
     this.horaService
       .obtenerHoraActual()
       .subscribe((hora) => (this.horaActual = hora));
+    
   }
 }

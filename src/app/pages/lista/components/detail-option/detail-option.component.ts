@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { IonCheckbox, IonicModule, ModalController } from '@ionic/angular';
 import { Clipboard } from '@capacitor/clipboard';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
@@ -9,6 +9,7 @@ import { Detail, Details } from '../../interfaces/details.interface';
 import { AddModalComponent } from '../add-modal/add-modal.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { ListsService } from 'src/app/shared/services/lists.service';
+import { Toast } from '@capacitor/toast';
 
 @Component({
   selector: 'app-detail-option',
@@ -38,12 +39,21 @@ import { ListsService } from 'src/app/shared/services/lists.service';
 
       <!-- Detalles -->
       <ng-container>
-        <div class="page-tab-header">
-          <div class="page-tab-header-date">
-            <ion-icon id="day-icon" name="sunny"></ion-icon>
-            <ion-text>{{ horaActual | date }}</ion-text>
+        <div class="page-tab-header detalles-header">
+          <div class="page-tab-header-date detalles-date">
+            <!-- <ion-icon id="day-icon" name="sunny"></ion-icon> -->
+            <ion-text>{{ fecha }}</ion-text>
           </div>
-          <ion-label style="flex-grow: 1;">Todos</ion-label>
+          <div class="detalles-todos">
+            <ion-label>Todos </ion-label>
+            <div class="checkbox">
+              <ion-checkbox
+                #todosCheckbox
+                slot="end"
+                (click)="checkAll()"
+              ></ion-checkbox>
+            </div>
+          </div>
         </div>
         <div>
           <ion-card *ngFor="let number of paseList">
@@ -56,7 +66,12 @@ import { ListsService } from 'src/app/shared/services/lists.service';
                 >
               </div>
               <div class="checkbox">
-                <ion-checkbox #paseCheckbox [value]="number.pick" slot="end"></ion-checkbox>
+                <ion-checkbox
+                  #paseCheckbox
+                  [value]="number.pick"
+                  slot="end"
+                  (ionChange)="checkOne()"
+                ></ion-checkbox>
               </div>
             </ion-card-content>
           </ion-card>
@@ -71,7 +86,11 @@ import { ListsService } from 'src/app/shared/services/lists.service';
                 >
               </div>
               <div class="checkbox">
-                <ion-checkbox #numberCheckbox [value]="number.pick" slot="end"></ion-checkbox>
+                <ion-checkbox
+                  #numberCheckbox
+                  [value]="number.pick"
+                  slot="end"
+                ></ion-checkbox>
               </div>
             </ion-card-content>
           </ion-card>
@@ -98,30 +117,32 @@ import { ListsService } from 'src/app/shared/services/lists.service';
   styleUrls: ['./detail-option.component.scss'],
 
   imports: [CommonModule, IonicModule, HoraPipe],
-  providers: [ListElementsService,ListsService],
+  providers: [ListElementsService, ListsService],
 })
 export class DetailOptionComponent implements OnInit {
   horaActual!: string;
+  fecha!: string;
   tabSeleccionado: string = 'Detalles';
   pase = 0;
   pasePlus = 0;
   numberList: Detail[] = [];
   paseList: Detail[] = [];
   numberDetails: Details = {
-    original:[],
+    original: [],
     details: [],
     pase: [],
     pasePlus: [],
   };
   paseDetails: Details = {
-    original:[],
+    original: [],
     details: [],
     pase: [],
     pasePlus: [],
   };
 
-  @ViewChildren('paseCheckbox') paseCheckboxes!: IonCheckbox[]
-  @ViewChildren('numberCheckbox') numberCheckboxes!: IonCheckbox[]
+  @ViewChild('todosCheckbox') todosCheckbox!: IonCheckbox;
+  @ViewChildren('paseCheckbox') paseCheckboxes!: IonCheckbox[];
+  @ViewChildren('numberCheckbox') numberCheckboxes!: IonCheckbox[];
 
   constructor(
     private horaService: HoraService,
@@ -132,11 +153,11 @@ export class DetailOptionComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.horaService
-      .obtenerHoraActual()
-      .subscribe((hora) => (this.horaActual = hora));
+    this.horaService.obtenerHoraActual().subscribe((hora) => {
+      this.horaActual = hora;
+      this.fecha = hora.split(',')[0];
+    });
     this.listElementService.getAll(1).then((ret) => {
-      
       ret.forEach((element) => {
         let obj: Detail = {
           pick: element.pick,
@@ -183,11 +204,10 @@ export class DetailOptionComponent implements OnInit {
         }
         return order.indexOf(a.pick.length) - order.indexOf(b.pick.length);
       });
-      this.paseDetails.details=[...this.paseDetails.original]
-      this.numberDetails.details=[...this.numberDetails.original]
+      this.paseDetails.details = [...this.paseDetails.original];
+      this.numberDetails.details = [...this.numberDetails.original];
       this.numberList = this.numberDetails.original;
-      this.paseList = this.paseDetails.original
-
+      this.paseList = this.paseDetails.original;
     });
     this.db.mDb.query(`SELECT * FROM pases`).then((ret) => {
       this.pase = ret.values![0].pase;
@@ -202,8 +222,8 @@ export class DetailOptionComponent implements OnInit {
       cssClass: 'add-modal-css',
     });
     modal.onDidDismiss().then((result) => {
-      if (result.data) {        
-        this.addPase(result.data.value); 
+      if (result.data) {
+        this.addPase(result.data.value);
       }
     });
     return await modal.present();
@@ -237,13 +257,13 @@ export class DetailOptionComponent implements OnInit {
   }
   private setPase() {
     if (this.pase !== 0) {
-      this.paseDetails.pase=[]
-      this.numberDetails.pase=[]
-      this.paseDetails.pasePlus=[]
-        this.numberDetails.pasePlus=[]
-      
+      this.paseDetails.pase = [];
+      this.numberDetails.pase = [];
+      this.paseDetails.pasePlus = [];
+      this.numberDetails.pasePlus = [];
+
       this.paseDetails.details = this.paseDetails.original.map((obj) => {
-        let newObj = { ...obj,corrido:undefined };
+        let newObj = { ...obj, corrido: undefined };
         let newObj2 = { ...obj };
         if (newObj2.price > this.pase) {
           newObj.price -= this.pase;
@@ -253,7 +273,7 @@ export class DetailOptionComponent implements OnInit {
         return newObj2;
       });
       this.numberDetails.details = this.numberDetails.original.map((obj) => {
-        let newObj = { ...obj,corrido:undefined };
+        let newObj = { ...obj, corrido: undefined };
         let newObj2 = { ...obj };
         if (newObj2.price > this.pase) {
           newObj.price -= this.pase;
@@ -263,11 +283,8 @@ export class DetailOptionComponent implements OnInit {
         return newObj2;
       });
       if (this.pasePlus !== 0) {
-        
-        
-        
         this.paseDetails.pase = this.paseDetails.pase.map((obj) => {
-          let newObj = { ...obj};
+          let newObj = { ...obj };
           let newObj2 = { ...obj };
           if (obj.price > this.pasePlus) {
             newObj.price -= this.pasePlus;
@@ -285,15 +302,15 @@ export class DetailOptionComponent implements OnInit {
             this.numberDetails.pasePlus.push(newObj);
           }
           return newObj2;
-        }); 
+        });
       }
-    }else{      
-      this.paseDetails.pase=[]
-      this.numberDetails.pase=[]
-      this.paseDetails.pasePlus=[]
-      this.numberDetails.pasePlus=[]
-      this.paseDetails.details=[...this.paseDetails.original]
-      this.numberDetails.details=[...this.numberDetails.original]
+    } else {
+      this.paseDetails.pase = [];
+      this.numberDetails.pase = [];
+      this.paseDetails.pasePlus = [];
+      this.numberDetails.pasePlus = [];
+      this.paseDetails.details = [...this.paseDetails.original];
+      this.numberDetails.details = [...this.numberDetails.original];
     }
     if (this.tabSeleccionado === 'Detalles') {
       this.numberList = this.numberDetails.details;
@@ -303,23 +320,58 @@ export class DetailOptionComponent implements OnInit {
       this.paseList = this.paseDetails.pase;
     }
   }
-  getChecked(){
-    const copyPase:Detail[]=[]
-    const copyNumber:Detail[]=[]
-    this.paseCheckboxes.forEach(box=>{
-      if (box.checked){
-        const element:Detail =this.paseList.filter(x=>x.pick===box.value)[0]
-        copyPase.push(element)
+  getChecked() {
+    const copyPase: Detail[] = [];
+    const copyNumber: Detail[] = [];
+    this.paseCheckboxes.forEach((box) => {
+      if (box.checked) {
+        const element: Detail = this.paseList.filter(
+          (x) => x.pick === box.value
+        )[0];
+        copyPase.push(element);
       }
-    })
-    this.numberCheckboxes.forEach(box=>{
-      if (box.checked){
-        const element:Detail =this.numberList.filter(x=>x.pick===box.value)[0]
-        copyNumber.push(element)
+    });
+    this.numberCheckboxes.forEach((box) => {
+      if (box.checked) {
+        const element: Detail = this.numberList.filter(
+          (x) => x.pick === box.value
+        )[0];
+        copyNumber.push(element);
       }
-    })
-    const message= this.listsService.listToText(copyPase,copyNumber)
+    });
+    const message = this.listsService.listToText(copyPase, copyNumber);
     // console.log(message);
-    Clipboard.write({string: message})
+    Clipboard.write({ string: message });
+    Toast.show({
+      text: `Lista copiada`,
+      duration: 'long',
+    });
+  }
+  checkAll() {
+    this.paseCheckboxes = this.paseCheckboxes.map((cbox) => {
+      cbox.checked = !this.todosCheckbox.checked;
+      return cbox;
+    });
+    this.numberCheckboxes = this.numberCheckboxes.map((cbox) => {
+      cbox.checked = !this.todosCheckbox.checked;
+      return cbox;
+    });
+  }
+  checkOne() {
+    console.log(this.todosCheckbox.checked);
+    const checkedP = this.paseCheckboxes.filter((x) => x.checked);
+    const checkedN = this.numberCheckboxes.filter((x) => x.checked);
+    if (
+      checkedP.length + checkedN.length ===
+      this.paseCheckboxes.length + this.numberCheckboxes.length
+    ) {
+      this.todosCheckbox.checked = true;
+    } else if (checkedP.length + checkedN.length === 0) {
+      this.todosCheckbox.indeterminate = false;
+      this.todosCheckbox.checked = false;
+    } else {
+      this.todosCheckbox.checked = false;
+      this.todosCheckbox.indeterminate = true;
+    }
   }
 }

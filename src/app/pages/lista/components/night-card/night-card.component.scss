@@ -1,81 +1,87 @@
 //Estilos Tarjeta de Lista
-#list-card{
-    --background: #3880ff;
-    --color: white;
-    padding: 0px;
-    border-radius: 3%;
-    margin: 5px;
-    font-size: 25px;
-    margin-top: 10px;
-  }
-  
-  .card-top{
-    display: flex;
-    font-size: 25px;
-    flex-direction: row;
-    justify-content: space-between;
-   
-  }
-  
-  #icon-background{
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    background-color: black;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  #trash-icon{
-   color: rgb(255, 255, 255);
-   font-size: 30px;
-  }
-  
-  .pase-title {
-    margin-top: 5px;
-    font-weight: bold;
-  }
+#list-card {
+  --background: #3880ff;
+  --color: white;
+  padding: 0px;
+  border-radius: 3%;
+  margin: 5px;
+  font-size: 25px;
+  margin-top: 10px;
+}
 
-  .pase-section {
-    margin-top: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+.card-top {
+  display: flex;
+  font-size: 25px;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
-  .pase-porcent{
-    margin-top: 5px;
-  }
+#icon-background {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .divider {
-    border-top: 1px solid rgb(255, 255, 255);
-    margin: 10px 0px 5px;
-    box-shadow: 5px #000;
-  }
+#trash-icon {
+  color: rgb(255, 255, 255);
+  font-size: 30px;
+}
 
-  .list-title{
-    margin-top: 10px;
-    font-weight: bold;
-  }
+.pase-title {
+  margin-top: 5px;
+  font-weight: bold;
+}
 
-  .list-section {
-    margin-top: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
+.pase-section {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
+.pase-porcent {
+  margin-top: 5px;
+}
 
-  .card-end {
-    margin-top: 5px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-   
+.divider {
+  border-top: 1px solid rgb(255, 255, 255);
+  margin: 10px 0px 5px;
+  box-shadow: 5px #000;
+}
 
-  }
+.list-title {
+  margin-top: 10px;
+  font-weight: bold;
+}
 
-  .detail-button{
-    font-weight: bold;
-  }
+.list-section {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.card-end {
+  margin-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.detail-button {
+  font-weight: bold;
+}
+
+#listPorcent2 {
+  transform: scale(1.9);
+  color: white;
+}
+
+#pasePorcent2 {
+  transform: scale(1.9);
+  color: white;
+}

@@ -4,7 +4,7 @@ export const bolistaDbVersionUpgrades = [
     statements: [
       `CREATE TABLE IF NOT EXISTS list_elements (
           id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-          pick varchar(20) NOT NULL UNIQUE,
+          pick varchar(20) NOT NULL,
           price integer NOT NULL,
           amount integer NOT NULL,
           grupo integer NOT NULL,
@@ -58,6 +58,16 @@ export const bolistaDbVersionUpgrades = [
         timestamp varchar NOT NULL UNIQUE
       );`,
       `INSERT INTO pases (pase,pase_plus) VALUES (0,0)`
+    ]
+  },
+  {
+    toVersion: 5,
+    statements: [
+      `CREATE TABLE IF NOT EXISTS trial (
+        id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+        active integer NOT NULL
+      );`,
+      `INSERT INTO trial (active) VALUES (0)`
     ]
   }
 ];

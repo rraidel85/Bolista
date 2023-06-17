@@ -66,3 +66,22 @@ ion-toast.error-toast {
   --color: #fff;
   font-size: 18px;
 }
+
+.info-modal{
+  --height: 160px; 
+  --width: 200px; 
+  --border-radius: 10px;
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --background: var(--ion-color-danger);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); 
+}
+
+
+.porcentModal{
+  --height: 160px; 
+  --width: 230px; 
+  --border-radius: 10px; 
+  --background: rgba(85, 78, 78, 0.4);
+  --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
