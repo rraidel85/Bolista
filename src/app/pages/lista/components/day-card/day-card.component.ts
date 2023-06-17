@@ -126,7 +126,7 @@ export class DayCardComponent implements OnInit {
         this.selectedPercentMoney = data;
         this.calculatePercentMoney(data);
       }
-      else if(data.percentType === 'pasePorcent'){
+      else if(modalId === 'pasePorcent'){
         this.selectedPercentPase = data;
         this.calculatePercentPase(data);
       }
@@ -145,8 +145,16 @@ export class DayCardComponent implements OnInit {
     this.dbService.mDb
       .execute(`DELETE FROM list_elements WHERE grupo=${this.group}`)
       .then((_) => {
-        this.listCardService.updateListDayTotal(0);
+        this.resetCard()
       })
       .catch((err) => console.log(err));
+  }
+
+  resetCard(){
+    this.listCardService.updateListDayTotal(0);
+    this.percentMoney = 0;
+    this.percentPases = 0;
+    this.selectedPercentMoney = 0;
+    this.selectedPercentPase = 0;
   }
 }
