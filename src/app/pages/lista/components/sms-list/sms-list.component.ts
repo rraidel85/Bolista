@@ -155,7 +155,8 @@ export class SmsListComponent implements OnInit, OnDestroy {
   currentEditingSms!: SMSObject; // Current sms in editing input and value saved after done edit
   oldSms!: SMSObject; // Old sms before editing in case user cancel edit
   isModalOpen: boolean = false;
-  smsSubscription!: Subscription;
+  smsReceivedSubscription!: Subscription;
+  smsSentSubscription!: Subscription;
   smsToImport: SMSObject[] = [];
   group!: number;
   groupSuscription!: Subscription;
@@ -247,19 +248,19 @@ export class SmsListComponent implements OnInit, OnDestroy {
     if (ev.detail.role === 'confirm') {
       await this.smsService.saveOrUpdate(ev.detail.data!.sms);
 
-      this.smsSubscription = this.receivedSMS$.subscribe((ret) => {
-        ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
-        this.oldSms = ev.detail.data!.sms; // Update oldText with new text
-        this.receivedSMS$ = of(ret); // Update oldText with new text
-      });
-      // }else if (this.selectedSegment === 'sent') {
-      //   this.sentSMS$.subscribe((ret) => {
-      //     ret.smsList[ev.detail.data!.smsIndex].body = ev.detail.data!.smsText;
-      //     this.oldSmsText = ev.detail.data!.smsText; // Update oldText with new text
-      //     this.sentSMS$ = of(ret); // Update oldText with new text
-      //   });
-      // }
-      // this.dbService.mDb.query()
+      if (this.selectedSegment === 'received') {
+        this.smsReceivedSubscription = this.receivedSMS$.subscribe((ret) => {
+          ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
+          this.oldSms = ev.detail.data!.sms; // Update oldText with new text
+          this.receivedSMS$ = of(ret); // Update oldText with new text
+        });
+      } else if (this.selectedSegment === 'sent') {
+        this.smsSentSubscription = this.sentSMS$.subscribe((ret) => {
+          ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
+          this.oldSms = ev.detail.data!.sms; // Update oldText with new text
+          this.sentSMS$ = of(ret); // Update oldText with new text
+        });
+      }
     }
     this.isModalOpen = false;
   }
@@ -287,8 +288,11 @@ export class SmsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.smsSubscription) {
-      this.smsSubscription.unsubscribe();
+    if (this.smsReceivedSubscription) {
+      this.smsReceivedSubscription.unsubscribe();
+    }
+    if (this.smsSentSubscription) {
+      this.smsSentSubscription.unsubscribe();
     }
     this.groupSuscription.unsubscribe();
   }
