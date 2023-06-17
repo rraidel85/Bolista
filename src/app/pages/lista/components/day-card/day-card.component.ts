@@ -26,7 +26,13 @@ import { Observable, tap } from 'rxjs';
           <ng-container *ngIf="total$ | async as total">
             <div class="pase-title">Pase</div>
             <div class="pase-section">
-              <div class="cash-button">
+              <div
+                [routerLink]="['contactos']"
+                [queryParams]="{ group }"
+                class="cash-button"
+                detail="false"
+                routerLinkActive="selected"
+              >
                 $ {{ total.totalPases | number : '1.2-2' }}
               </div>
               <div class="cash">$ {{ percentPases | number : '1.2-2' }}</div>
@@ -47,6 +53,7 @@ import { Observable, tap } from 'rxjs';
                 [queryParams]="{ group }"
                 class="cash-button"
                 detail="false"
+                routerLinkActive="selected"
               >
                 $ {{ total.totalMoney | number : '1.2-2' }}
               </div>
@@ -92,6 +99,7 @@ export class DayCardComponent implements OnInit {
   modalCtrl = inject(ModalController);
 
   @Input() group!: number;
+
   total$!: Observable<ListTotal>;
   totalMoney: number = 0;
   totalPases: number = 0;
@@ -101,10 +109,8 @@ export class DayCardComponent implements OnInit {
   selectedPercentPase: number = 0;
 
   ngOnInit() {
-    // this.listCardService.updateListTotal(this.group);
     this.total$ = this.listCardService.listDayTotal$.pipe(
       tap((total) => {
-        console.log(total);
         this.totalMoney = total.totalMoney;
         this.totalPases = total.totalPases;
       })
@@ -122,11 +128,10 @@ export class DayCardComponent implements OnInit {
     const { data, role } = await modal.onWillDismiss();
 
     if (role === 'confirm') {
-      if(modalId === 'listPorcent'){
+      if (modalId === 'listPorcent') {
         this.selectedPercentMoney = data;
         this.calculatePercentMoney(data);
-      }
-      else if(modalId === 'pasePorcent'){
+      } else if (modalId === 'pasePorcent') {
         this.selectedPercentPase = data;
         this.calculatePercentPase(data);
       }
@@ -145,12 +150,12 @@ export class DayCardComponent implements OnInit {
     this.dbService.mDb
       .execute(`DELETE FROM list_elements WHERE grupo=${this.group}`)
       .then((_) => {
-        this.resetCard()
+        this.resetCard();
       })
       .catch((err) => console.log(err));
   }
 
-  resetCard(){
+  resetCard() {
     this.listCardService.updateListDayTotal(0);
     this.percentMoney = 0;
     this.percentPases = 0;

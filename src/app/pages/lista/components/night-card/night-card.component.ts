@@ -26,7 +26,13 @@ import { Observable, tap } from 'rxjs';
           <ng-container *ngIf="total$ | async as total">
             <div class="pase-title">Pase</div>
             <div class="pase-section">
-              <div class="cash-button">
+              <div
+                [routerLink]="['contactos']"
+                [queryParams]="{ group }"
+                class="cash-button"
+                detail="false"
+                routerLinkActive="selected"
+              >
                 $ {{ total.totalPases | number : '1.2-2' }}
               </div>
               <div class="cash">$ {{ percentPases | number : '1.2-2' }}</div>
@@ -35,7 +41,7 @@ import { Observable, tap } from 'rxjs';
               fill="clear"
               id="pasePorcent2"
               (click)="openPorcentModal('pasePorcent')"
-              >0 %</ion-button
+              >{{ selectedPercentPase }} %</ion-button
             >
 
             <div class="divider"></div>
@@ -59,7 +65,7 @@ import { Observable, tap } from 'rxjs';
                 fill="clear"
                 id="listPorcent2"
                 (click)="openPorcentModal('listPorcent')"
-                >0 %</ion-button
+                >{{ selectedPercentMoney }} %</ion-button
               >
               <div
                 class="detail-button"
@@ -99,9 +105,10 @@ export class NightCardComponent implements OnInit {
   totalPases: number = 0;
   percentMoney: number = 0;
   percentPases: number = 0;
+  selectedPercentMoney: number = 0;
+  selectedPercentPase: number = 0;
 
   ngOnInit() {
-    // this.listCardService.updateListTotal(this.group);
     this.total$ = this.listCardService.listNightTotal$.pipe(
       tap((total) => {
         this.totalMoney = total.totalMoney;
@@ -116,7 +123,20 @@ export class NightCardComponent implements OnInit {
       cssClass: 'porcentModal',
       id: modalId,
     });
+
     modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+
+    if (role === 'confirm') {
+      if (modalId === 'listPorcent') {
+        this.selectedPercentMoney = data;
+        this.calculatePercentMoney(data);
+      } else if (modalId === 'pasePorcent') {
+        this.selectedPercentPase = data;
+        this.calculatePercentPase(data);
+      }
+    }
   }
 
   calculatePercentMoney(percent: number) {
@@ -131,8 +151,16 @@ export class NightCardComponent implements OnInit {
     this.dbService.mDb
       .execute(`DELETE FROM list_elements WHERE grupo=${this.group}`)
       .then((_) => {
-        this.listCardService.updateListDayTotal(0);
+        this.resetCard();
       })
       .catch((err) => console.log(err));
+  }
+
+  resetCard() {
+    this.listCardService.updateListNightTotal(0);
+    this.percentMoney = 0;
+    this.percentPases = 0;
+    this.selectedPercentMoney = 0;
+    this.selectedPercentPase = 0;
   }
 }

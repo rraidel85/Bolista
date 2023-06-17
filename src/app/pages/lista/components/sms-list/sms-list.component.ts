@@ -289,7 +289,6 @@ export class SmsListComponent implements OnInit, OnDestroy {
     const smsBodys: string[] = this.smsToImport.map((sms) => sms.body);
     await this.listService.processMessage(smsBodys, this.group);
     if (this.group === 1) {
-      console.log('sms-list grupo 1')
       this.listCardService.updateListDayTotal(this.group);
     } else if (this.group === 2) {
       this.listCardService.updateListNightTotal(this.group);

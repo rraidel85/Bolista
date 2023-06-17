@@ -86,7 +86,6 @@ export class SmsComponent {
         await this.listService.validateMessage(this.sms.body);
         // There is no error in message validation
         this.checkedSms.emit(this.sms);
-        console.log('sms')
       } catch (error: any) {
         // If there is error on the sms disable checkbox and add error styles
         this.isChecked = false;
