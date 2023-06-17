@@ -77,3 +77,4 @@ bolistaSQLite.db
 
 #My files
 MY_TASKS_TO_DO.txt
+resources/android/**/*

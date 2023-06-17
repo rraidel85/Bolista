@@ -4,6 +4,7 @@
 }
 .modal-button{
   --color: white;
+  margin-top: 10px;
 }
 .modal-title{
   text-align: center;
@@ -14,4 +15,22 @@
   align-items: center;
   height: 100%;
   font-size: larger;
+  color: var(--ion-color-dark);
+}
+
+ion-segment{
+  --background:var(--ion-color-light);
+  ion-segment-button{
+    --color: var(--ion-color-dark);
+  }
+}
+
+ion-content{
+  --background:var(--ion-color-light);
+}
+
+.modal-buttons{
+display: flex;
+justify-content: space-between;
+margin-top: 20px;
 }

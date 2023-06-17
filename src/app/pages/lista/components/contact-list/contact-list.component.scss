@@ -1,6 +1,7 @@
 .contact {
   display: flex;
   height: 85px;
+  --border-color:var(--ion-color-medium);
 }
 .contact-icon {
   width: 100%;
@@ -8,12 +9,27 @@
   object-fit: cover;
 }
 .contact-info {
-  color: #525252;
+  color: var(--ion-color-medium-shade);
   margin-left: 17px;
+  font-weight: bold;
 }
 .contact-info h4 {
   font-size: 18px;
 }
 .contact-info-name {
   margin-bottom: 15px;
+  color: var(--ion-color-dark);
+  font-weight: bold;
+}
+
+ion-content {
+  --background: var(--ion-color-light);
+
+  ion-list {
+    background: var(--ion-color-light);
+
+   ion-item{
+    --background:var(--ion-color-light);
+   }
+}
 }

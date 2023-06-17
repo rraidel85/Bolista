@@ -17,7 +17,7 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
     <ion-card [ngStyle]="{ border: validationError ? '1px solid red' : '' }">
       <ion-card-header>
         <div class="card-header">
-          <ion-text color="primary">{{ sms.address }}</ion-text>
+          <ion-text style="font-weight: bold;" color="primary">{{ sms.address }}</ion-text>
           <ion-checkbox
             [checked]="isChecked"
             [disabled]="validationError"
