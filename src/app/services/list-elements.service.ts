@@ -67,6 +67,7 @@ export class ListElementsService {
             list.forEach((element) => {
               if (picks.includes(element.pick)) {
                 if (element[field as keyof ListElement]) {
+                  
                   if (typeof element[field as keyof ListElement] === 'number') {
                     
                     values.push(
@@ -85,11 +86,15 @@ export class ListElementsService {
                 }
               }
             });
-
+            
             statement = statement + values.join(' ') + ` ELSE ${field} END `;
-            return statement;
+            if (values.length>0){
+              return statement;
+
+            }
+            return '';
           })
-          .filter((x) => x !== undefined);
+          .filter((x) => x !== undefined&&x!=='');          
         uStmt += updateValues.join(',\n') + `WHERE grupo = ${grupo}`;
         await this.mDb.execute(uStmt);
       }

@@ -209,9 +209,6 @@ export class WinnersComponent implements OnInit {
         if (element.pick === this.pick3.value) {
           
           let pago=centena
-          if (limits!.includes(element.pick)) {
-            pago=limitado
-          }
           if (exist.includes({ pick: element.pick, pago: 'centena' })) {
             const [found, ...rest] = this.winners.filter(
               (x) => x.pick === element.pick&&x.pago=== pago
