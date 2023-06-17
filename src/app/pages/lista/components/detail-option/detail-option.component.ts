@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { IonCheckbox, IonicModule, ModalController } from '@ionic/angular';
 import { Clipboard } from '@capacitor/clipboard';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
@@ -10,6 +10,8 @@ import { AddModalComponent } from '../add-modal/add-modal.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { ListsService } from 'src/app/shared/services/lists.service';
 import { Toast } from '@capacitor/toast';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-detail-option',
@@ -119,7 +121,7 @@ import { Toast } from '@capacitor/toast';
   imports: [CommonModule, IonicModule, HoraPipe],
   providers: [ListElementsService, ListsService],
 })
-export class DetailOptionComponent implements OnInit {
+export class DetailOptionComponent implements OnInit, OnDestroy {
   horaActual!: string;
   fecha!: string;
   tabSeleccionado: string = 'Detalles';
@@ -139,7 +141,8 @@ export class DetailOptionComponent implements OnInit {
     pase: [],
     pasePlus: [],
   };
-
+  suscription!: Subscription;
+  group!: number;
   @ViewChild('todosCheckbox') todosCheckbox!: IonCheckbox;
   @ViewChildren('paseCheckbox') paseCheckboxes!: IonCheckbox[];
   @ViewChildren('numberCheckbox') numberCheckboxes!: IonCheckbox[];
@@ -149,7 +152,8 @@ export class DetailOptionComponent implements OnInit {
     private listElementService: ListElementsService,
     private listsService: ListsService,
     private db: BolistaDbService,
-    private modalCtrl: ModalController
+    private modalCtrl: ModalController,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -157,63 +161,70 @@ export class DetailOptionComponent implements OnInit {
       this.horaActual = hora;
       this.fecha = hora.split(',')[0];
     });
-    this.listElementService.getAll(1).then((ret) => {
-      ret.forEach((element) => {
-        let obj: Detail = {
-          pick: element.pick,
-          price: element.price,
-          amount: element.amount,
-        };
-        if (element.corrido) {
-          obj.corrido = element.corrido;
-        }
-        if (element.price !== 0) {
-          this.numberDetails.original.push({ ...obj, pase: false });
-        }
-        if (element.pase) {
-          obj.price = element.pase;
-          this.paseDetails.original.push({ ...obj, pase: true });
-        }
+
+    this.suscription = this.route.queryParams.subscribe((params) => {
+      this.group = Number(params['group']);
+
+      this.listElementService.getAll(this.group).then((ret) => {
+        ret.forEach((element) => {
+          let obj: Detail = {
+            pick: element.pick,
+            price: element.price,
+            amount: element.amount,
+          };
+          if (element.corrido) {
+            obj.corrido = element.corrido;
+          }
+          if (element.price !== 0) {
+            this.numberDetails.original.push({ ...obj, pase: false });
+          }
+          if (element.pase) {
+            obj.price = element.pase;
+            this.paseDetails.original.push({ ...obj, pase: true });
+          }
+        });
+        const order = [2, 7, 10, 3];
+        this.numberDetails.original.sort((a, b) => {
+          if (order.indexOf(a.pick.length) === order.indexOf(b.pick.length)) {
+            const nameA = a.pick.toUpperCase();
+            const nameB = b.pick.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          }
+          return order.indexOf(a.pick.length) - order.indexOf(b.pick.length);
+        });
+        this.paseDetails.original.sort((a, b) => {
+          if (order.indexOf(a.pick.length) === order.indexOf(b.pick.length)) {
+            const nameA = a.pick.toUpperCase();
+            const nameB = b.pick.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          }
+          return order.indexOf(a.pick.length) - order.indexOf(b.pick.length);
+        });
+        this.paseDetails.details = [...this.paseDetails.original];
+        this.numberDetails.details = [...this.numberDetails.original];
+        this.numberList = this.numberDetails.original;
+        this.paseList = this.paseDetails.original;
       });
-      const order = [2, 7, 10, 3];
-      this.numberDetails.original.sort((a, b) => {
-        if (order.indexOf(a.pick.length) === order.indexOf(b.pick.length)) {
-          const nameA = a.pick.toUpperCase();
-          const nameB = b.pick.toUpperCase();
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          return 0;
-        }
-        return order.indexOf(a.pick.length) - order.indexOf(b.pick.length);
+      this.db.mDb.query(`SELECT * FROM pases`).then((ret) => {
+        this.pase = ret.values![0].pase;
+        this.pasePlus = ret.values![0].pase_plus;
+        // this.setPase();
       });
-      this.paseDetails.original.sort((a, b) => {
-        if (order.indexOf(a.pick.length) === order.indexOf(b.pick.length)) {
-          const nameA = a.pick.toUpperCase();
-          const nameB = b.pick.toUpperCase();
-          if (nameA < nameB) {
-            return -1;
-          }
-          if (nameA > nameB) {
-            return 1;
-          }
-          return 0;
-        }
-        return order.indexOf(a.pick.length) - order.indexOf(b.pick.length);
-      });
-      this.paseDetails.details = [...this.paseDetails.original];
-      this.numberDetails.details = [...this.numberDetails.original];
-      this.numberList = this.numberDetails.original;
-      this.paseList = this.paseDetails.original;
     });
-    this.db.mDb.query(`SELECT * FROM pases`).then((ret) => {
-      this.pase = ret.values![0].pase;
-      this.pasePlus = ret.values![0].pase_plus;
-      // this.setPase();
-    });
+
+    
   }
 
   async openAddModal() {
@@ -373,5 +384,9 @@ export class DetailOptionComponent implements OnInit {
       this.todosCheckbox.checked = false;
       this.todosCheckbox.indeterminate = true;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.suscription.unsubscribe();
   }
 }

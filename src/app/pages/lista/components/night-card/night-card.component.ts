@@ -70,6 +70,7 @@ import { Observable, tap } from 'rxjs';
               <div
                 class="detail-button"
                 [routerLink]="['detalles']"
+                [queryParams]="{ group }"
                 detail="false"
                 routerLinkActive="selected"
               >
