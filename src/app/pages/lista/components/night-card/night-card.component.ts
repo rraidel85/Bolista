@@ -1,7 +1,8 @@
 import { Component, OnInit, inject, Input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
+import { PorcentModalComponent } from '../porcent-modal/porcent-modal.component';
 import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { AsyncPipe, DecimalPipe, NgIf } from '@angular/common';
@@ -16,9 +17,7 @@ import { Observable, tap } from 'rxjs';
       <ion-label>
         <ion-grid>
           <div class="card-top">
-            <div id="icon-background">
-              <ion-icon id="moon-icon" name="moon"></ion-icon>
-            </div>
+            <ion-icon id="moon-icon" name="moon"></ion-icon>
             <ion-icon
               id="trash-icon"
               name="trash"
@@ -33,10 +32,12 @@ import { Observable, tap } from 'rxjs';
               </div>
               <div class="cash">$ {{ percentPases | number : '1.2-2' }}</div>
             </div>
-            <app-porcent-popover
-              (emitPercent)="calculatePercentPase($event)"
-              [buttonId]="'pase-porcent'"
-            ></app-porcent-popover>
+            <ion-button
+              fill="clear"
+              id="pasePorcent2"
+              (click)="openPorcentModal('pasePorcent')"
+              >0 %</ion-button
+            >
 
             <div class="divider"></div>
 
@@ -55,10 +56,12 @@ import { Observable, tap } from 'rxjs';
             </div>
 
             <div class="card-end">
-              <app-porcent-popover
-                (emitPercent)="calculatePercentMoney($event)"
-                [buttonId]="'list-porcent'"
-              ></app-porcent-popover>
+              <ion-button
+                fill="clear"
+                id="listPorcent2"
+                (click)="openPorcentModal('listPorcent')"
+                >0 %</ion-button
+              >
               <div
                 class="detail-button"
                 [routerLink]="['detalles']"
@@ -79,7 +82,7 @@ import { Observable, tap } from 'rxjs';
     IonicModule,
     RouterLink,
     FormsModule,
-    PorcentPopoverComponent,
+    PorcentModalComponent,
     DecimalPipe,
     NgIf,
     AsyncPipe,
@@ -88,6 +91,7 @@ import { Observable, tap } from 'rxjs';
 export class NightCardComponent implements OnInit {
   dbService = inject(BolistaDbService);
   listCardService = inject(ListCardService);
+  modalCtrl = inject(ModalController);
 
   @Input() group!: number;
 
@@ -107,6 +111,15 @@ export class NightCardComponent implements OnInit {
     );
   }
 
+  async openPorcentModal(modalId: string) {
+    const modal = await this.modalCtrl.create({
+      component: PorcentModalComponent,
+      cssClass: 'porcentModal',
+      id: modalId,
+    });
+    modal.present();
+  }
+
   calculatePercentMoney(percent: number) {
     this.percentMoney = (this.totalMoney * percent) / 100;
   }
@@ -119,8 +132,7 @@ export class NightCardComponent implements OnInit {
     this.dbService.mDb
       .execute(`DELETE FROM list_elements WHERE grupo=${this.group}`)
       .then((_) => {
-        this.totalMoney = 0;
-        this.totalPases = 0;
+        this.listCardService.updateListDayTotal(0);
       })
       .catch((err) => console.log(err));
   }

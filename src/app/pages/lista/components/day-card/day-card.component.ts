@@ -31,7 +31,12 @@ import { Observable, tap } from 'rxjs';
               </div>
               <div class="cash">$ {{ percentPases | number : '1.2-2' }}</div>
             </div>
-            <ion-button fill="clear" id="pasePorcent" (click)="openPorcentModal('pasePorcent')">0 %</ion-button>
+            <ion-button
+              fill="clear"
+              id="pasePorcent"
+              (click)="openPorcentModal('pasePorcent')"
+              >0 %</ion-button
+            >
 
             <div class="divider"></div>
 
@@ -49,7 +54,12 @@ import { Observable, tap } from 'rxjs';
             </div>
 
             <div class="card-end">
-            <ion-button fill="clear" id="listPorcent" (click)="openPorcentModal('listPorcent')">0 %</ion-button>
+              <ion-button
+                fill="clear"
+                id="listPorcent"
+                (click)="openPorcentModal('listPorcent')"
+                >0 %</ion-button
+              >
               <div
                 class="detail-button"
                 [routerLink]="['detalles']"
@@ -70,7 +80,7 @@ import { Observable, tap } from 'rxjs';
     IonicModule,
     RouterLink,
     FormsModule,
-     PorcentModalComponent,
+    PorcentModalComponent,
     DecimalPipe,
     NgIf,
     AsyncPipe,
@@ -79,8 +89,8 @@ import { Observable, tap } from 'rxjs';
 export class DayCardComponent implements OnInit {
   dbService = inject(BolistaDbService);
   listCardService = inject(ListCardService);
+  modalCtrl = inject(ModalController);
 
-  constructor(private modalCtrl: ModalController) {}
   @Input() group!: number;
   total$!: Observable<ListTotal>;
   totalMoney: number = 0;
@@ -101,7 +111,7 @@ export class DayCardComponent implements OnInit {
     const modal = await this.modalCtrl.create({
       component: PorcentModalComponent,
       cssClass: 'porcentModal',
-      id: modalId 
+      id: modalId,
     });
     modal.present();
   }
