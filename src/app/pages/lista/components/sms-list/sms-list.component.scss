@@ -14,4 +14,17 @@
   align-items: center;
   height: 100%;
   font-size: larger;
+  color: var(--ion-color-dark);
 }
+
+ion-segment{
+  --background:var(--ion-color-light);
+  ion-segment-button{
+    --color: var(--ion-color-dark);
+  }
+}
+
+ion-content{
+  --background:var(--ion-color-light);
+}
+

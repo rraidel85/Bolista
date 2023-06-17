@@ -38,9 +38,11 @@ import { ListsService } from '../../../../shared/services/lists.service';
       >
         <ion-segment-button value="received">
           <ion-label>Recibidos</ion-label>
+          <ion-icon name="mail-unread"></ion-icon>
         </ion-segment-button>
         <ion-segment-button value="sent">
           <ion-label>Enviados</ion-label>
+          <ion-icon name="paper-plane"></ion-icon>
         </ion-segment-button>
       </ion-segment>
 
@@ -56,7 +58,7 @@ import { ListsService } from '../../../../shared/services/lists.service';
             Importar
           </ion-button>
           <ng-container *ngIf="receivedSMS.smsList.length !== 0; else noSms">
-              <ion-list>
+              <ion-list style="background:var(--ion-color-light);">
                 <app-sms
                   (modalOpen)="openEditModal(sms, i)"
                   (checkedSms)="onCheckedSms($event)"
@@ -77,7 +79,7 @@ import { ListsService } from '../../../../shared/services/lists.service';
         >
           Importar
         </ion-button>
-        <ion-list>
+        <ion-list style="background:var(--ion-color-light);">
           <ng-container *ngIf="sentSMS$ | async as sentSMS">
             <app-sms
               *ngFor="let sms of sentSMS.smsList; index as i"
