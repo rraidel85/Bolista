@@ -45,6 +45,7 @@ import { Observable, tap } from 'rxjs';
               <div
                 class="cash-button"
                 [routerLink]="['contactos']"
+                [queryParams]="{ group }"
                 detail="false"
                 routerLinkActive="selected"
               >

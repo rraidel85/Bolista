@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ContactsService } from '../../services/contacts.service';
 import { ContactPayload } from '@capacitor-community/contacts';
 import { JsonPipe, NgFor, NgIf } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HoraService } from 'src/app/services/hora.service';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-contact-list',
@@ -34,6 +35,7 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
           <ion-item
             class="contact"
             [routerLink]="[contact.phones![0].number]"
+            [queryParams]="{ group }"
             *cdkVirtualFor="let contact of contacts; trackBy: trackByFn"
           >
             <ion-thumbnail>
@@ -98,13 +100,16 @@ import { HoraPipe } from 'src/app/pipes/hora.pipe';
     HoraPipe,
   ],
 })
-export class ContactListComponent implements OnInit {
+export class ContactListComponent implements OnInit, OnDestroy {
   contacts!: ContactPayload[];
   horaActual!: string;
+  group!: string | null;
+  suscription!: Subscription;
 
   constructor(
     private contactsService: ContactsService,
-    private horaService: HoraService
+    private horaService: HoraService,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -116,9 +121,17 @@ export class ContactListComponent implements OnInit {
       .getAllContacts()
       .then((contacts) => (this.contacts = contacts))
       .catch((error) => console.error(error));
+
+    this.suscription = this.route.queryParams.subscribe((params) => {
+      this.group = params['group'];
+    });
   }
 
   trackByFn(index: number, item: ContactPayload): string {
     return item.contactId;
+  }
+
+  ngOnDestroy(): void {
+    this.suscription.unsubscribe();
   }
 }

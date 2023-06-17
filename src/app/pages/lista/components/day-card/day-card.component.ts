@@ -39,12 +39,12 @@ import { Observable, tap } from 'rxjs';
             <div class="divider"></div>
 
             <div class="list-title">Lista</div>
-            <div class="list-section" routerLink="">
+            <div class="list-section">
               <div
-                class="cash-button"
                 [routerLink]="['contactos']"
+                [queryParams]="{ group }"
+                class="cash-button"
                 detail="false"
-                routerLinkActive="selected"
               >
                 $ {{ total.totalMoney | number : '1.2-2' }}
               </div>
@@ -79,7 +79,7 @@ import { Observable, tap } from 'rxjs';
     PorcentPopoverComponent,
     DecimalPipe,
     NgIf,
-    AsyncPipe
+    AsyncPipe,
   ],
 })
 export class DayCardComponent implements OnInit {
@@ -97,7 +97,7 @@ export class DayCardComponent implements OnInit {
   ngOnInit() {
     // this.listCardService.updateListTotal(this.group);
     this.total$ = this.listCardService.listDayTotal$.pipe(
-      tap(total => {
+      tap((total) => {
         this.totalMoney = total.totalMoney;
         this.totalPases = total.totalPases;
       })
@@ -116,8 +116,7 @@ export class DayCardComponent implements OnInit {
     this.dbService.mDb
       .execute(`DELETE FROM list_elements WHERE grupo=${this.group}`)
       .then((_) => {
-        this.totalMoney = 0;
-        this.totalPases = 0;
+        this.listCardService.updateListDayTotal(0);
       })
       .catch((err) => console.log(err));
   }
