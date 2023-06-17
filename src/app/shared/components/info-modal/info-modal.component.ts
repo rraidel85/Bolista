@@ -15,7 +15,7 @@ import { IonicModule, ModalController } from '@ionic/angular';
     </ion-header>
     <ion-content>
       <div class="text-content">
-      <ion-text class="warning-text">Conéctese a <span class="web">Internet</span> e intente nuevamente</ion-text>
+      <ion-text class="warning-text">{{ message}}</ion-text>
       </div>
       <div class="modal-buttons">
         <ion-button fill="clear" shape="round" color="danger" style="font-weight: bold;" (click)="closeModal()"
