@@ -35,7 +35,7 @@ import { Observable, tap } from 'rxjs';
               fill="clear"
               id="pasePorcent"
               (click)="openPorcentModal('pasePorcent')"
-              >0 %</ion-button
+              >{{ selectedPercentPase }} %</ion-button
             >
 
             <div class="divider"></div>
@@ -58,7 +58,7 @@ import { Observable, tap } from 'rxjs';
                 fill="clear"
                 id="listPorcent"
                 (click)="openPorcentModal('listPorcent')"
-                >0 %</ion-button
+                >{{ selectedPercentMoney }} %</ion-button
               >
               <div
                 class="detail-button"
@@ -97,11 +97,14 @@ export class DayCardComponent implements OnInit {
   totalPases: number = 0;
   percentMoney: number = 0;
   percentPases: number = 0;
+  selectedPercentMoney: number = 0;
+  selectedPercentPase: number = 0;
 
   ngOnInit() {
     // this.listCardService.updateListTotal(this.group);
     this.total$ = this.listCardService.listDayTotal$.pipe(
       tap((total) => {
+        console.log(total);
         this.totalMoney = total.totalMoney;
         this.totalPases = total.totalPases;
       })
@@ -113,8 +116,23 @@ export class DayCardComponent implements OnInit {
       cssClass: 'porcentModal',
       id: modalId,
     });
+
     modal.present();
+
+    const { data, role } = await modal.onWillDismiss();
+
+    if (role === 'confirm') {
+      if(modalId === 'listPorcent'){
+        this.selectedPercentMoney = data;
+        this.calculatePercentMoney(data);
+      }
+      else if(data.percentType === 'pasePorcent'){
+        this.selectedPercentPase = data;
+        this.calculatePercentPase(data);
+      }
+    }
   }
+
   calculatePercentMoney(percent: number) {
     this.percentMoney = (this.totalMoney * percent) / 100;
   }

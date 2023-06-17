@@ -3,7 +3,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { PorcentModalComponent } from '../porcent-modal/porcent-modal.component';
-import { PorcentPopoverComponent } from '../porcent-popover/porcent-popover.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { AsyncPipe, DecimalPipe, NgIf } from '@angular/common';
 import { ListCardService } from '../../services/list-card.service';

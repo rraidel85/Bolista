@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
@@ -21,13 +21,13 @@ import { FormsModule } from '@angular/forms';
               min="0"
               max="100"
               inputmode="numeric"
-              [(ngModel)]="porcentajeSeleccionado"
               placeholder="Ingrese el %"
+              #percentInput
             ></ion-input>
     </ion-item>
    <div class="modal-buttons">
-    <ion-button fill="clear" color="danger" (click)="closeModal()">Cancelar</ion-button>
-    <ion-button fill="clear" color="success" (click)="saveNumber()">Aceptar</ion-button>
+    <ion-button fill="clear" color="danger" (click)="cancel()">Cancelar</ion-button>
+    <ion-button fill="clear" color="success" (click)="confirm(percentInput.value)">Aceptar</ion-button>
   </div>
   </ion-content>
   `,
@@ -35,19 +35,33 @@ import { FormsModule } from '@angular/forms';
 })
 export class PorcentModalComponent {
   @Input() buttonId!: string;
-  porcentajeSeleccionado: number = 0;
+  selectedPercent: number = 0;
 
   constructor(private modalController: ModalController) {}
 
   async closeModal() {
-    await this.modalController.dismiss;
+    await this.modalController.dismiss(null, 'cancel');
   }
 
-  saveNumber() {
-    const porcentButton = document.getElementById('porcent-button');
-    if (porcentButton) {
-      porcentButton.textContent = `${this.porcentajeSeleccionado}%`;
+  async saveNumber(percent: any) {
+    if (percent) {
+      this.selectedPercent = percent;  
+    } else {
+      this.selectedPercent = 0;
     }
-    this.modalController.dismiss();
+   await this.modalController.dismiss({selectedPercent: this.selectedPercent}, 'ok');
+  }
+
+  cancel() {
+    return this.modalController.dismiss(null, 'cancel');
+  }
+
+  confirm(percent: any) {
+    if(percent){
+      this.selectedPercent = percent;
+    }else{
+      this.selectedPercent = 0;
+    }
+    return this.modalController.dismiss(this.selectedPercent, 'confirm');
   }
 }
