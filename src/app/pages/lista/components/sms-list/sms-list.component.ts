@@ -4,7 +4,13 @@ import { SmsService } from '../../services/sms.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { SMSObject } from 'capacitor-sms-inbox';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription, map, of, switchMap } from 'rxjs';
+import {
+  Observable,
+  Subscription,
+  map,
+  switchMap,
+  tap,
+} from 'rxjs';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
 import { FormsModule } from '@angular/forms';
@@ -249,17 +255,19 @@ export class SmsListComponent implements OnInit, OnDestroy {
       await this.smsService.saveOrUpdate(ev.detail.data!.sms);
 
       if (this.selectedSegment === 'received') {
-        this.smsReceivedSubscription = this.receivedSMS$.subscribe((ret) => {
-          ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
-          this.oldSms = ev.detail.data!.sms; // Update oldText with new text
-          this.receivedSMS$ = of(ret); // Update oldText with new text
-        });
+        this.receivedSMS$ = this.receivedSMS$.pipe(
+          tap((ret) => {
+            ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
+            this.oldSms = ev.detail.data!.sms; // Update oldText with new text
+          })
+        );
       } else if (this.selectedSegment === 'sent') {
-        this.smsSentSubscription = this.sentSMS$.subscribe((ret) => {
-          ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
-          this.oldSms = ev.detail.data!.sms; // Update oldText with new text
-          this.sentSMS$ = of(ret); // Update oldText with new text
-        });
+        this.sentSMS$ = this.sentSMS$.pipe(
+          tap((ret) => {
+            ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
+            this.oldSms = ev.detail.data!.sms; // Update oldText with new text
+          })
+        );
       }
     }
     this.isModalOpen = false;
@@ -288,12 +296,6 @@ export class SmsListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.smsReceivedSubscription) {
-      this.smsReceivedSubscription.unsubscribe();
-    }
-    if (this.smsSentSubscription) {
-      this.smsSentSubscription.unsubscribe();
-    }
     this.groupSuscription.unsubscribe();
   }
 }

@@ -93,7 +93,7 @@ export class SmsComponent {
         this.smsErrors = error.badBets;
         this.presentToast();
       }
-    } else{
+    } else {
       this.uncheckedSms.emit(this.sms);
     }
   }
