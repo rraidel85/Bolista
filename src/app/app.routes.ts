@@ -8,7 +8,19 @@ export const APP_ROUTES: Routes = [
   },
   {
     path: 'lista',
-    loadChildren: () =>import('./pages/lista/list.routes').then(m => m.LIST_ROUTES)
+    loadComponent: () =>import('./pages/lista/list.component').then(c => c.ListComponent),
+  },
+  {
+    path: 'lista/contactos',
+    loadComponent: () =>import('./pages/lista/components/contact-list/contact-list.component').then(c => c.ContactListComponent),
+  },
+  {
+    path: 'lista/contactos/:phone',
+    loadComponent: () =>import('./pages/lista/components/sms-list/sms-list.component').then(c => c.SmsListComponent),
+  },
+  {
+    path: 'lista/detalles',
+    loadComponent: () =>import('./pages/lista/components/detail-option/detail-option.component').then(c => c.DetailOptionComponent),
   },
   {
     path: 'configuracion',
@@ -23,5 +35,7 @@ export const APP_ROUTES: Routes = [
     loadComponent: () =>import('./pages/about/about.component').then(c => c.AboutComponent)
   }
 ];
+
+
 
 
