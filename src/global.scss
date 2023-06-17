@@ -86,10 +86,11 @@ ion-toast.error-toast {
   --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
-.edit-modal{
-  --height: 220px; 
-  --width: 300px; 
-  --border-radius: 10px; 
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px); 
-}
+// .edit-modal{
+//   // --height: 220px;
+//   // --max-height: 400px; 
+//   --width: 300px; 
+//   --border-radius: 10px; 
+//   backdrop-filter: blur(5px);
+//   -webkit-backdrop-filter: blur(5px); 
+// }

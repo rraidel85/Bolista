@@ -4,13 +4,7 @@ import { SmsService } from '../../services/sms.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { SMSObject } from 'capacitor-sms-inbox';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  Observable,
-  Subscription,
-  map,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { Observable, Subscription, map, switchMap, tap } from 'rxjs';
 import { OverlayEventDetail } from '@ionic/core/components';
 import { ModalSmsDataDismiss } from '../../models/modal-sms-data-dismiss.model';
 import { FormsModule } from '@angular/forms';
@@ -64,10 +58,7 @@ import { ListCardService } from '../../services/list-card.service';
                 (modalOpen)="openEditModal(sms, i)"
                 (checkedSms)="onCheckedSms($event)"
                 (uncheckedSms)="onUnCheckedSms($event)"
-                *ngFor="
-                  let sms of receivedSMS.smsList;
-                  index as i
-                "
+                *ngFor="let sms of receivedSMS.smsList; index as i"
                 [sms]="sms"
               ></app-sms>
             </ion-list>
@@ -105,7 +96,7 @@ import { ListCardService } from '../../services/list-card.service';
       <ion-modal
         [isOpen]="isModalOpen"
         (willDismiss)="onWillDismiss($event)"
-        class="edit-modal"
+        class="auto-height"
       >
         <ng-template>
           <ion-header>
@@ -113,22 +104,33 @@ import { ListCardService } from '../../services/list-card.service';
               <ion-title class="modal-title">Editar</ion-title>
             </ion-toolbar>
           </ion-header>
-          <ion-content class="ion-padding">
+          <div class="ion-padding">
             <ion-item>
-              <ion-input type="text" [(ngModel)]="currentEditingSms.body">
-              </ion-input>
+              <ion-textarea
+                type="text"
+                [(ngModel)]="currentEditingSms.body"
+                [autoGrow]="true"
+              >
+              </ion-textarea>
             </ion-item>
 
-            
             <div class="modal-buttons">
-              <ion-button fill="clear" color="danger" slot="start" (click)="cancel()"
+              <ion-button
+                fill="clear"
+                color="danger"
+                slot="start"
+                (click)="cancel()"
                 >Cancelar</ion-button
               >
-              <ion-button fill="clear" color="success" slot="end" (click)="confirm()"
+              <ion-button
+                fill="clear"
+                color="success"
+                slot="end"
+                (click)="confirm()"
                 >Aceptar</ion-button
               >
             </div>
-          </ion-content>
+          </div>
         </ng-template>
       </ion-modal>
 
@@ -228,7 +230,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
 
     this.groupSuscription = this.route.queryParams.subscribe((params) => {
       this.group = Number(params['group']);
-      console.log(this.group)
+      console.log(this.group);
     });
   }
 
@@ -298,7 +300,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
     } else if (this.group === 2) {
       this.listCardService.updateListNightTotal(this.group);
     }
-    
+
     this.router.navigate(['lista']);
   }
 

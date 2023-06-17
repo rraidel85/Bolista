@@ -34,3 +34,19 @@ display: flex;
 justify-content: space-between;
 margin-top: 20px;
 }
+
+
+ion-modal.auto-height {
+  --height: auto;
+  --max-height: 80vh;
+  --width: 300px; 
+  --border-radius: 10px; 
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+ion-modal.auto-height .ion-content {
+  max-height: 100%;
+  overflow: auto;
+  padding: 10px;
+}
