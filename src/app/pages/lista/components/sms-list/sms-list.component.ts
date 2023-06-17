@@ -62,7 +62,7 @@ import { ListCardService } from '../../services/list-card.service';
                   (modalOpen)="openEditModal(sms, i)"
                   (checkedSms)="onCheckedSms($event)"
                   (uncheckedSms)="onUnCheckedSms($event)"
-                  *ngFor="let sms of receivedSMS.smsList; index as i; trackBy: trackByFn"
+                  *ngFor="let sms of receivedSMS.smsList; index as i"
                   [sms]="sms"
                 ></app-sms>
               </ion-list>
@@ -154,6 +154,8 @@ export class SmsListComponent implements OnInit, OnDestroy {
   isModalOpen: boolean = false;
   smsSubscription!: Subscription;
   smsToImport: SMSObject[] = [];
+  group!: number;
+  groupSuscription!: Subscription;
   @ViewChild(IonModal) modal!: IonModal;
 
   ngOnInit(): void {
@@ -190,6 +192,10 @@ export class SmsListComponent implements OnInit, OnDestroy {
         return this.smsService.getSentSMS(contactPhone);
       })
     );
+
+    this.groupSuscription = this.route.queryParams.subscribe((params) => {
+      this.group = params['group'];
+    }); 
   }
 
   segmentChanged(event: any) {
@@ -215,10 +221,10 @@ export class SmsListComponent implements OnInit, OnDestroy {
     this.modal.dismiss(dismissData, 'confirm');
   }
 
-  onWillDismiss(event: Event) {
+  async onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<ModalSmsDataDismiss>>;
     if (ev.detail.role === 'confirm') {
-      this.smsService.saveOrUpdate(ev.detail.data!.sms);
+      await this.smsService.saveOrUpdate(ev.detail.data!.sms);
 
       this.smsSubscription = this.receivedSMS$.subscribe((ret) => {
         ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
@@ -250,18 +256,20 @@ export class SmsListComponent implements OnInit, OnDestroy {
 
   async importSmsList() {
     const smsBodys: string[] = this.smsToImport.map((sms) => sms.body);
-    await this.listService.processMessage(smsBodys, 1);
-    this.listCardService.updateListDayTotal(1);
+    await this.listService.processMessage(smsBodys, this.group);
+    if(this.group === 1){
+      this.listCardService.updateListDayTotal(this.group);
+    }
+    else if(this.group === 2){
+      this.listCardService.updateListNightTotal(this.group);
+    }
     this.router.navigate(['lista']);
-  }
-
-  trackByFn(index: number, item: SMSObject): number {
-    return item.id;
   }
 
   ngOnDestroy(): void {
     if (this.smsSubscription) {
       this.smsSubscription.unsubscribe();
     }
+    this.groupSuscription.unsubscribe();
   }
 }

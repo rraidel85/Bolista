@@ -23,6 +23,7 @@ export class ErrorDirective implements OnChanges {
       let highlightedText = '';
       let currentIndex = 0;
       for (let { start, end } of this.badBets) {
+        end += 1; 
         let beforeText = text.slice(currentIndex, start);
         let highlightedPart = text.slice(start, end);
         highlightedText += `${beforeText}<span style="background-color: #ff6262">${highlightedPart}</span>`;
