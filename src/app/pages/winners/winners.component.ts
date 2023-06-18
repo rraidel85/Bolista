@@ -23,7 +23,7 @@ import { HoraService } from 'src/app/services/hora.service';
         <ion-grid>
           <ion-row>
             <ion-col>
-              <ion-item>
+              <ion-item lines="inset">
                 <ion-label>Limitados:</ion-label>
                 <ion-select #limitados interface="popover" value="1">
                   <ion-select-option value="1">Mediodía</ion-select-option>
@@ -37,7 +37,7 @@ import { HoraService } from 'src/app/services/hora.service';
         <ion-grid>
           <ion-row>
             <ion-col>
-              <ion-item>
+              <ion-item lines="inset">
                 <ion-label position="stacked">Pick3:</ion-label>
                 <ion-input #pick3 type="text"></ion-input>
               </ion-item>
@@ -48,14 +48,14 @@ import { HoraService } from 'src/app/services/hora.service';
         <ion-grid>
           <ion-row>
             <ion-col>
-              <ion-item>
+              <ion-item lines="inset">
                 <ion-label position="stacked">Pick4:</ion-label>
                 <ion-input #pick41></ion-input>
               </ion-item>
             </ion-col>
 
             <ion-col>
-              <ion-item>
+              <ion-item lines="inset">
                 <ion-label position="stacked">Pick4:</ion-label>
                 <ion-input #pick42></ion-input>
               </ion-item>
