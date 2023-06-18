@@ -86,3 +86,18 @@ ion-card-content {
   }
   
 }
+
+ion-segment{
+  --background:var(--ion-color-light);
+  ion-segment-button{
+    --color: var(--ion-color-dark);
+  }
+}
+
+.divider {
+  border-top: 1px solid var(--ion-color-dark);
+    margin: 0px 20px 5px;
+    padding: 5px;
+    max-width: calc(100% - 10px);
+    box-sizing: border-box;
+}

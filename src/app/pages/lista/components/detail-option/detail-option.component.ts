@@ -28,14 +28,14 @@ import { ActivatedRoute } from '@angular/router';
 
     <ion-content [fullscreen]="true">
       <ion-segment value="Detalles" (ionChange)="segmentChanged($event)">
-        <ion-segment-button value="Detalles">
-          <ion-label>Detalles</ion-label>
+        <ion-segment-button value="Detalles" >
+          <ion-label >Detalles</ion-label>
         </ion-segment-button>
         <ion-segment-button value="Pase">
-          <ion-label>Pase</ion-label>
+          <ion-label >Pase</ion-label>
         </ion-segment-button>
         <ion-segment-button value="Pase+">
-          <ion-label>Pase+</ion-label>
+          <ion-label >Pase+</ion-label>
         </ion-segment-button>
       </ion-segment>
 
@@ -44,10 +44,10 @@ import { ActivatedRoute } from '@angular/router';
         <div class="page-tab-header detalles-header">
           <div class="page-tab-header-date detalles-date">
             <!-- <ion-icon id="day-icon" name="sunny"></ion-icon> -->
-            <ion-text>{{ fecha }}</ion-text>
+            <ion-text color="medium">{{ fecha }}</ion-text>
           </div>
           <div class="detalles-todos">
-            <ion-label>Todos </ion-label>
+            <ion-label color="medium">Todos </ion-label>
             <div class="checkbox">
               <ion-checkbox
                 #todosCheckbox
@@ -77,7 +77,7 @@ import { ActivatedRoute } from '@angular/router';
               </div>
             </ion-card-content>
           </ion-card>
-          <ion-segment>-------------------------------------</ion-segment>
+          <div class="divider"></div>
           <ion-card *ngFor="let number of numberList">
             <ion-card-content>
               <ion-text class="first">{{ number.pick }}</ion-text>
@@ -104,13 +104,13 @@ import { ActivatedRoute } from '@angular/router';
           <ion-icon name="share-social"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
-          <ion-fab-button (click)="getChecked()">
+          <ion-fab-button color="primary" (click)="getChecked()">
             <ion-icon name="copy"></ion-icon>
           </ion-fab-button>
-          <ion-fab-button (click)="openAddModal()">
+          <ion-fab-button color="primary" (click)="openAddModal()">
             <ion-icon name="send"></ion-icon>
           </ion-fab-button>
-          <ion-fab-button>
+          <ion-fab-button color="primary">
             <ion-icon name="share-social"></ion-icon>
           </ion-fab-button>
         </ion-fab-list>
