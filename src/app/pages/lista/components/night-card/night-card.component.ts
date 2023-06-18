@@ -43,7 +43,7 @@ import { Observable, tap } from 'rxjs';
               fill="clear"
               id="pasePorcent2"
               (click)="openPorcentModal('pasePorcent')"
-              >{{ selectedPercentPase }} %</ion-button
+              >{{ selectedPercentPase }}%</ion-button
             >
 
             <div class="divider"></div>
@@ -67,7 +67,7 @@ import { Observable, tap } from 'rxjs';
                 fill="clear"
                 id="listPorcent2"
                 (click)="openPorcentModal('listPorcent')"
-                >{{ selectedPercentMoney }} %</ion-button
+                >{{ selectedPercentMoney }}%</ion-button
               >
               <div
                 class="detail-button"
