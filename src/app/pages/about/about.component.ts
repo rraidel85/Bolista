@@ -40,7 +40,6 @@ import { Toast } from '@capacitor/toast';
           <ion-button fill="clear" class="update-title" (click)="Update()"
             ><ion-icon
               slot="start"
-              color="light"
               size="large"
               name="refresh-outline"
               class="update-icon"
