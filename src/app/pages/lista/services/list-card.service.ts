@@ -34,9 +34,12 @@ export class ListCardService {
       `select * from list_elements WHERE grupo=${group}`
     );
 
-    const totalMoney = list_elements.values
-      ?.map((obj) => obj.price)
-      .reduce((accumulator, price) => accumulator + price, 0);
+    const totalMoney = list_elements.values?.reduce((accumulator, obj) => {
+      const price = obj?.price || 0;
+      const corrido = obj?.corrido || 0;
+      const pase = obj?.pase || 0;
+      return accumulator + price + corrido + pase;
+    }, 0);
 
     const totalPases = list_elements.values
       ?.filter((list_element) => !!list_element.pase)

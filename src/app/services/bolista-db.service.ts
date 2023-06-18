@@ -32,7 +32,7 @@ export class BolistaDbService {
 
     this.dbVerService.set(this.databaseName, this.loadToVersion);
     const isData = await this.mDb.query('select * from sqlite_sequence');
-    console.log('tablas',(await this.mDb.getTableList()).values)
+    // console.log('tablas',(await this.mDb.getTableList()).values)
   }
   async openDatabase() {
     if (
