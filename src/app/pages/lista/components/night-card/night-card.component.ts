@@ -16,7 +16,9 @@ import { Observable, tap } from 'rxjs';
       <ion-label>
         <ion-grid>
           <div class="card-top">
+            <div id="icon-background">
             <ion-icon id="moon-icon" name="moon"></ion-icon>
+            </div>
             <ion-icon
               id="trash-icon"
               name="trash"
