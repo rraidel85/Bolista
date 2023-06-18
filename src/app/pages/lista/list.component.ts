@@ -29,7 +29,7 @@ import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-mo
             <div class="card-mid" routerLink="">
               <div class="buttons">
                 <ion-button (click)="dbtest()" style="width: 99px">Cuadres</ion-button>
-                <ion-button (click)="openInfoModal()" expand="block">Test-Jorge</ion-button>
+                <ion-button (click)="openInfoModal()" expand="block">Info-Test</ion-button>
               </div>
 
               <div class="buttons">
