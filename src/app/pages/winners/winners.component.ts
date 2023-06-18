@@ -40,7 +40,7 @@ import { HoraService } from 'src/app/services/hora.service';
             <ion-col>
               <ion-item lines="inset">
                 <ion-label position="stacked">Pick3:</ion-label>
-                <ion-input #pick3 type="text"></ion-input>
+                <ion-input #pick3 type="text" inputmode="numeric"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -51,14 +51,14 @@ import { HoraService } from 'src/app/services/hora.service';
             <ion-col>
               <ion-item lines="inset">
                 <ion-label position="stacked">Pick4:</ion-label>
-                <ion-input #pick41></ion-input>
+                <ion-input #pick41 inputmode="numeric"></ion-input>
               </ion-item>
             </ion-col>
 
             <ion-col>
               <ion-item lines="inset">
                 <ion-label position="stacked">Pick4:</ion-label>
-                <ion-input #pick42></ion-input>
+                <ion-input #pick42 inputmode="numeric"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
