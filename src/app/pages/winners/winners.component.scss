@@ -1,46 +1,43 @@
 //Estilos toolbar
 ion-menu-button {
-    color: white;
-  }
-  
-  ion-title{
-    color: white;
-    justify-content: center;
-  }
+  color: white;
+}
 
-  ion-content {
-    --background: var(--ion-color-light);
-  
-    ion-list {
-      background: var(--ion-color-light);
+ion-title {
+  color: white;
+  justify-content: center;
+}
 
-      ion-item{
-        --background: var(--ion-color-light);
-        --border-color: var(--ion-color-dark);
-        color: var(--ion-color-dark);;
-      }
+ion-content {
+  --background: var(--ion-color-light);
 
+  ion-list {
+    background: var(--ion-color-light);
+
+    ion-item {
+      --background: var(--ion-color-light);
+      --border-color: var(--ion-color-dark);
+      color: var(--ion-color-dark);
     }
   }
+}
 
-ion-grid ion-row ion-col ion-item ion-label{
-    font-size: 20px;
-    font-weight: bold;
-    color: var(--ion-color-dark);
-  }
+ion-grid ion-row ion-col ion-item ion-label {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--ion-color-dark);
+}
 
-
-  //Estilo sección de premios
-  .trophy-section{
-    margin-top: 25px;
-    font-size: 20px;
-    font-weight: bold;
-    justify-content: center;
-    display: flex;
-    color: var(--ion-color-dark);
-    border: 2px solid var(--ion-color-dark);
-  }
-
+//Estilo sección de premios
+.trophy-section {
+  margin-top: 25px;
+  font-size: 20px;
+  font-weight: bold;
+  justify-content: center;
+  display: flex;
+  color: var(--ion-color-dark);
+  border: 2px solid var(--ion-color-dark);
+}
 
 .center-button {
   display: flex;
@@ -48,35 +45,34 @@ ion-grid ion-row ion-col ion-item ion-label{
   margin-top: 15px;
   font-size: 15px;
   transform: scale(1.1);
- 
 }
 
-.column-title{
+.column-title {
   border: 1px solid var(--ion-color-dark);
   text-align: center;
   color: var(--ion-color-dark);
 }
 
-.pick-title{
- color: var(--ion-color-success); 
- font-weight:bold; 
- border-bottom: 1px solid var(--ion-color-dark);
-}
-
-.price-title{
-  color: var(--ion-color-warning); 
-  font-weight:bold; 
+.pick-title {
+  color: var(--ion-color-success);
+  font-weight: bold;
   border-bottom: 1px solid var(--ion-color-dark);
 }
 
-.pay-title{
-  color: var(--ion-color-tertiary); 
-  font-weight:bold; 
+.price-title {
+  color: var(--ion-color-warning);
+  font-weight: bold;
   border-bottom: 1px solid var(--ion-color-dark);
 }
 
-.apay-title{
-  color: var(--ion-color-danger); 
-  font-weight:bold; 
+.pay-title {
+  color: var(--ion-color-tertiary);
+  font-weight: bold;
+  border-bottom: 1px solid var(--ion-color-dark);
+}
+
+.apay-title {
+  color: var(--ion-color-danger);
+  font-weight: bold;
   border-bottom: 1px solid var(--ion-color-dark);
 }

@@ -1,11 +1,11 @@
 ion-menu ion-content {
-  --background:var(--ion-color-light);
-  ion-list{
-    --background:var(--ion-color-light);
-    ion-item{
-      --background:var(--ion-color-light);
+  --background: var(--ion-color-light);
+  ion-list {
+    --background: var(--ion-color-light);
+    ion-item {
+      --background: var(--ion-color-light);
+    }
   }
-}
 }
 
 ion-menu.md ion-content {
@@ -23,12 +23,10 @@ ion-menu.md ion-note {
   margin-bottom: 30px;
 }
 
-
 ion-menu.md ion-list-header,
 ion-menu.md ion-note {
   padding-left: 10px;
 }
-
 
 #inbox-list {
   background: black;
@@ -36,27 +34,24 @@ ion-menu.md ion-note {
   margin: -50px -25px 0px -8px;
   height: 40%;
 
-  #logo{
-    transform: scale(0.80);
+  #logo {
+    transform: scale(0.8);
   }
-  
 }
 
 ion-menu.md ion-list#inbox-list {
   border-bottom: 2px solid #8e8e8e;
 
-  ion-note{
+  ion-note {
     color: var(--ion-color-light);
   }
-
 }
 
 ion-menu.md ion-list#inbox-list ion-list-header {
   font-size: 22px;
   font-weight: 600;
- 
+
   min-height: 20px;
-  
 }
 
 ion-menu.md ion-list#labels-list {
@@ -69,14 +64,12 @@ ion-menu.ios ion-list#labels-list {
 
 ion-menu.md ion-list#labels-list ion-list-header {
   font-size: 16px;
-  
+
   margin-bottom: 18px;
 
   color: var(--ion-color-dark-shade);
 
   min-height: 26px;
-
- 
 }
 
 ion-menu.ios ion-list#labels-list ion-list-header {
@@ -87,7 +80,6 @@ ion-menu.md ion-item {
   --padding-start: 10px;
   --padding-end: 10px;
   border-radius: 4px;
-  
 }
 
 ion-menu.md ion-item.selected {
@@ -106,7 +98,6 @@ ion-menu.ios ion-item ion-icon {
   color: var(--ion-color-dark-tint);
 }
 
-
 ion-menu.md ion-item ion-label {
   font-weight: 500;
   color: var(--ion-color-dark-tint);
@@ -124,7 +115,6 @@ ion-menu.md ion-item.selected ion-label {
 ion-menu.ios ion-item.selected ion-label {
   color: var(--ion-color-primary);
 }
-
 
 ion-menu.ios ion-content {
   --padding-bottom: 20px;
@@ -163,7 +153,7 @@ ion-menu.ios ion-list-header,
 ion-menu.ios ion-note {
   padding-left: 16px;
   padding-right: 16px;
-  --background:var(--ion-color-light);
+  --background: var(--ion-color-light);
 }
 
 ion-menu.ios ion-note {

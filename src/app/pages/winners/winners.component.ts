@@ -63,12 +63,17 @@ import { HoraService } from 'src/app/services/hora.service';
           </ion-row>
         </ion-grid>
 
-        
         <div class="center-button">
-      <ion-item class="accept-item" lines="none">
-        <ion-button class="accept-button" shape="round" size="default" (click)="getWinners()">Aceptar</ion-button>
-      </ion-item>
-    </div>
+          <ion-item class="accept-item" lines="none">
+            <ion-button
+              class="accept-button"
+              shape="round"
+              size="default"
+              (click)="getWinners()"
+              >Aceptar</ion-button
+            >
+          </ion-item>
+        </div>
 
         <ion-grid>
           <ion-row>
@@ -134,8 +139,10 @@ export class WinnersComponent implements OnInit {
       ...rest
     } = (await this.dbService.mDb.query(`select * from config`)).values![0];
     const limits = (
-      await this.dbService.mDb.query(`select pick from limits where grupo=${this.limitados.value}`)
-    ).values?.map(x=>x.pick);
+      await this.dbService.mDb.query(
+        `select pick from limits where grupo=${this.limitados.value}`
+      )
+    ).values?.map((x) => x.pick);
 
     const list = (await this.dbService.mDb.query(`select * from list_elements`))
       .values;
@@ -144,15 +151,20 @@ export class WinnersComponent implements OnInit {
 
     const fijo: string = this.pick3.value!.toString().slice(1);
     this.winners = [];
-    let firstForThird=+this.pick41.value!.toString()[1]+(+this.pick42.value!.toString()[1])
-    let firstForSecond=+this.pick41.value!.toString()[0]+(+this.pick42.value!.toString()[0])
-    if(firstForThird>9){
-      firstForSecond+= +firstForThird.toString()[0]
-      firstForSecond= +firstForSecond.toString()[1]
-      firstForThird=+firstForThird.toString()[1]
+    let firstForThird =
+      +this.pick41.value!.toString()[1] + +this.pick42.value!.toString()[1];
+    let firstForSecond =
+      +this.pick41.value!.toString()[0] + +this.pick42.value!.toString()[0];
+    if (firstForThird > 9) {
+      firstForSecond += +firstForThird.toString()[0];
+      firstForSecond = +firstForSecond.toString()[1];
+      firstForThird = +firstForThird.toString()[1];
     }
-    const centenaCorrida=[firstForSecond.toString()+this.pick41.value,firstForThird.toString()+this.pick42.value]
-    
+    const centenaCorrida = [
+      firstForSecond.toString() + this.pick41.value,
+      firstForThird.toString() + this.pick42.value,
+    ];
+
     list?.forEach((element) => {
       let mayWin = {
         pick: element.pick,
@@ -164,9 +176,9 @@ export class WinnersComponent implements OnInit {
 
       if (element.pick.length === 2) {
         if (element.pick === fijo) {
-          let pago=pick3
+          let pago = pick3;
           if (limits!.includes(element.pick)) {
-            pago=limitado
+            pago = limitado;
           }
           if (exist.includes({ pick: element.pick, pago: 'pick3' })) {
             const [found, ...rest] = this.winners.filter(
@@ -209,11 +221,10 @@ export class WinnersComponent implements OnInit {
         }
       } else if (element.pick.length === 3) {
         if (element.pick === this.pick3.value) {
-          
-          let pago=centena
+          let pago = centena;
           if (exist.includes({ pick: element.pick, pago: 'centena' })) {
             const [found, ...rest] = this.winners.filter(
-              (x) => x.pick === element.pick&&x.pago=== pago
+              (x) => x.pick === element.pick && x.pago === pago
             );
             this.winners[this.winners.indexOf(found)].pago += mayWin.price;
             this.winners[this.winners.indexOf(found)].aPagar =
@@ -227,10 +238,10 @@ export class WinnersComponent implements OnInit {
             exist.push({ pick: element.pick, pago: 'centena' });
           }
         }
-        if(centenaCorrida.includes(element.pick)){
+        if (centenaCorrida.includes(element.pick)) {
           if (exist.includes({ pick: element.pick, pago: 'centenaC' })) {
             const [found, ...rest] = this.winners.filter(
-              (x) => x.pick === element.pick&&x.pago=== centena_c
+              (x) => x.pick === element.pick && x.pago === centena_c
             );
             this.winners[this.winners.indexOf(found)].pago += mayWin.price;
             this.winners[this.winners.indexOf(found)].aPagar =
@@ -245,12 +256,14 @@ export class WinnersComponent implements OnInit {
           }
         }
       } else if (element.pick.length === 7) {
-        const [pick1,pick2]=element.pick.split('con')
-        if (pick1 === fijo&&(pick2===this.pick41.value||pick2===this.pick42.value)) {
-          
+        const [pick1, pick2] = element.pick.split('con');
+        if (
+          pick1 === fijo &&
+          (pick2 === this.pick41.value || pick2 === this.pick42.value)
+        ) {
           if (exist.includes({ pick: element.pick, pago: 'parle' })) {
             const [found, ...rest] = this.winners.filter(
-              (x) => x.pick === element.pick&&x.pago=== parle
+              (x) => x.pick === element.pick && x.pago === parle
             );
             this.winners[this.winners.indexOf(found)].pago += mayWin.price;
             this.winners[this.winners.indexOf(found)].aPagar =
@@ -265,13 +278,19 @@ export class WinnersComponent implements OnInit {
           }
         }
       } else if (element.pick.length === 10) {
-        const [pick1,pick2, pick3]=element.pick.replace('(','').replace(')','').split(',')
-        const lock=[fijo,this.pick41.value,this.pick42.value]
-        if (lock.includes(pick1)&&lock.includes(pick2)&&lock.includes(pick3)) {
-          
+        const [pick1, pick2, pick3] = element.pick
+          .replace('(', '')
+          .replace(')', '')
+          .split(',');
+        const lock = [fijo, this.pick41.value, this.pick42.value];
+        if (
+          lock.includes(pick1) &&
+          lock.includes(pick2) &&
+          lock.includes(pick3)
+        ) {
           if (exist.includes({ pick: element.pick, pago: 'candado' })) {
             const [found, ...rest] = this.winners.filter(
-              (x) => x.pick === element.pick&&x.pago=== candado
+              (x) => x.pick === element.pick && x.pago === candado
             );
             this.winners[this.winners.indexOf(found)].pago += mayWin.price;
             this.winners[this.winners.indexOf(found)].aPagar =
