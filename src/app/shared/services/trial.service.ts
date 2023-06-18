@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, catchError, of, throwError, timer } from 'rxjs';
-import { mergeMap, retry } from 'rxjs/operators';
+import { mergeMap, retry, timeout } from 'rxjs/operators';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { environment } from 'src/environments/environment';
 
@@ -12,11 +12,12 @@ export class TrialService {
   constructor(private http: HttpClient, private dbService: BolistaDbService) { }
 
   onTrial(): Observable<any> {
+    
     const intervalTime = environment.intervalTime;
 
-    return timer(0, intervalTime) // Intervalo de 1 segundo (puedes ajustarlo según tus necesidades)
+    return timer(1000, intervalTime) // Intervalo de 1 segundo (puedes ajustarlo según tus necesidades)
       .pipe(
-        mergeMap(() => this.http.get(environment.trialUrl)),
+        mergeMap(() => this.http.get(environment.trialUrl,).pipe(timeout(5000))),
 
         catchError(() => {
           //
@@ -24,8 +25,8 @@ export class TrialService {
           } else {
             this.tries++;
             this.dbService.mDb.execute(`update trial set tries=${this.tries}`);
-            return throwError(() => new Error());
           } */
+          // return throwError(() => new Error());
           return of({ timeout: true });
           
         }),

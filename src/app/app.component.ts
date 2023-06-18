@@ -140,6 +140,7 @@ export class AppComponent implements OnInit,OnDestroy {
         } else { */
           this.sub=this.trialService.onTrial().subscribe({
             next:({trial,timeout})=>{
+              
               if(timeout){
                 this.dbService.mDb.query(`select active from trial`).then(ret=>{
                   const active= ret.values![0].active
@@ -151,9 +152,9 @@ export class AppComponent implements OnInit,OnDestroy {
                 this.dbService.mDb.execute(`update trial set active=0`);
                 this.openInfoModal('Su tiempo de prueba se ha agotado')
               }
-              /* else if (trial===true) {
-              } */
-              this.dbService.mDb.execute(`update trial set active=1`);
+              else if (trial===true) {
+                this.dbService.mDb.execute(`update trial set active=1`);
+              }
             },
             error:()=>{
               console.log('asd');
