@@ -1,29 +1,27 @@
-
-ion-content{
-    --background: var(--ion-color-light);
+ion-content {
+  --background: var(--ion-color-light);
 }
 
-ion-title{
-    color:white; 
+ion-title {
+  color: white;
 }
 
-ion-button{
-    color:white;
+ion-button {
+  color: white;
 }
 
 ion-list {
-    
-    background: var(--ion-color-light);
-  
+  background: var(--ion-color-light);
 
-    ion-item{
-       color: var(--ion-color-dark);
-       --background: var(--ion-color-light);
-       --border-color: var(--ion-color-dark);
-      
+  ion-item {
+    color: var(--ion-color-dark);
+    --background: var(--ion-color-light);
+    --border-color: var(--ion-color-dark);
+    margin-bottom: 10px;
 
-    ion-label{
-        font-size: 20px;
-      }
-}
+    ion-label {
+      font-size: 20px;
+      font-weight: 600;
+    }
+  }
 }
