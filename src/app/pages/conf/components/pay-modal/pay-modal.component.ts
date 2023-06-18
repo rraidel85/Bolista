@@ -19,31 +19,31 @@ import { BolistaDbService } from 'src/app/services/bolista-db.service';
     </ion-header>
     <ion-content class="ion-padding">
       <ion-list>
-        <ion-item>
+        <ion-item lines="inset">
           <ion-label position="stacked">Pick3:</ion-label>
           <ion-input [(ngModel)]="pick3" inputmode="numeric"></ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item lines="inset">
           <ion-label position="stacked">Pick4:</ion-label>
           <ion-input [(ngModel)]="pick4" inputmode="numeric"></ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item lines="inset">
           <ion-label position="stacked">Limitado:</ion-label>
           <ion-input [(ngModel)]="limitado" inputmode="numeric"></ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item lines="inset">
           <ion-label position="stacked">Centena:</ion-label>
           <ion-input [(ngModel)]="centena" inputmode="numeric"></ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item lines="inset">
           <ion-label position="stacked">Parle:</ion-label>
           <ion-input [(ngModel)]="parle" inputmode="numeric"></ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item lines="inset">
           <ion-label position="stacked">Candado:</ion-label>
           <ion-input [(ngModel)]="candado" inputmode="numeric"></ion-input>
         </ion-item>
-        <ion-item>
+        <ion-item lines="inset">
           <ion-label position="stacked">Centena Corrida:</ion-label>
           <ion-input [(ngModel)]="centenaCorrida" inputmode="numeric"></ion-input>
         </ion-item>
