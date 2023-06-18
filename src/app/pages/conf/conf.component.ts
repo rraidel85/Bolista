@@ -6,6 +6,8 @@ import { HoraService } from 'src/app/services/hora.service';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-conf',
@@ -16,7 +18,7 @@ import { FormsModule } from '@angular/forms';
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Configuración</ion-title>
-        <ion-text class="hour" slot="end">{{ horaActual | hora }}</ion-text>
+        <ion-text class="hour" slot="end">{{ (horaActual$ | async) | hora }}</ion-text>
       </ion-toolbar>
     </ion-header>
 
@@ -49,11 +51,11 @@ import { FormsModule } from '@angular/forms';
   `,
   styleUrls: ['./conf.component.scss'],
   standalone: true,
-  imports: [IonicModule, HoraPipe, FormsModule],
+  imports: [IonicModule, HoraPipe, FormsModule, AsyncPipe],
 })
 export class ConfComponent implements OnInit {
   public darkMode: boolean = false;
-  horaActual!: string;
+  horaActual$!: Observable<string>;
 
   constructor(
     private modalCtrl: ModalController,
@@ -100,9 +102,6 @@ export class ConfComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.horaService
-      .obtenerHoraActual()
-      .subscribe((hora) => (this.horaActual = hora));
-    
+    this.horaActual$ = this.horaService.obtenerHoraActual();
   }
 }

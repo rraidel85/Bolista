@@ -2,12 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { ContactsService } from '../../services/contacts.service';
 import { ContactPayload } from '@capacitor-community/contacts';
-import { JsonPipe, NgFor, NgIf } from '@angular/common';
+import { JsonPipe, NgFor, NgIf, AsyncPipe } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HoraService } from 'src/app/services/hora.service';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-contact-list',
@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Contactos</ion-title>
-        <ion-text class="hour" slot="end">{{ horaActual | hora }}</ion-text>
+        <ion-text class="hour" slot="end">{{ (horaActual$ | async) | hora }}</ion-text>
       </ion-toolbar>
     </ion-header>
 
@@ -98,11 +98,12 @@ import { Subscription } from 'rxjs';
     RouterLink,
     ScrollingModule,
     HoraPipe,
+    AsyncPipe
   ],
 })
 export class ContactListComponent implements OnInit, OnDestroy {
   contacts!: ContactPayload[];
-  horaActual!: string;
+  horaActual$!: Observable<string>;
   group!: string | null;
   suscription!: Subscription;
 
@@ -113,9 +114,7 @@ export class ContactListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.horaService
-      .obtenerHoraActual()
-      .subscribe((hora) => (this.horaActual = hora));
+    this.horaActual$ = this.horaService.obtenerHoraActual();
 
     this.contactsService
       .getAllContacts()

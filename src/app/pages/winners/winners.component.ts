@@ -1,6 +1,7 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { IonInput, IonSelect, IonicModule } from '@ionic/angular';
+import { Observable } from 'rxjs';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { HoraService } from 'src/app/services/hora.service';
@@ -14,7 +15,7 @@ import { HoraService } from 'src/app/services/hora.service';
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Ganadores</ion-title>
-        <ion-text class="hour" slot="end">{{ horaActual | hora }}</ion-text>
+        <ion-text class="hour" slot="end">{{ (horaActual$ | async) | hora }}</ion-text>
       </ion-toolbar>
     </ion-header>
 
@@ -97,7 +98,7 @@ import { HoraService } from 'src/app/services/hora.service';
               <div>{{ winner.pago }}</div>
             </ion-col>
             <ion-col class="column-title">
-              <div class="apay-title">A.Pagar</div>
+              <div class="apay-title">A Pagar</div>
               <div>{{ winner.aPagar }}</div>
             </ion-col>
           </ion-row>
@@ -107,10 +108,10 @@ import { HoraService } from 'src/app/services/hora.service';
   `,
   styleUrls: ['./winners.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, HoraPipe],
+  imports: [CommonModule, IonicModule, HoraPipe, AsyncPipe],
 })
 export class WinnersComponent implements OnInit {
-  horaActual!: string;
+  horaActual$!: Observable<string>;
   tiro!: string;
   @ViewChild('pick3') pick3!: IonInput;
   @ViewChild('pick41') pick41!: IonInput;
@@ -122,9 +123,7 @@ export class WinnersComponent implements OnInit {
   constructor(private horaService: HoraService) {}
 
   ngOnInit() {
-    this.horaService
-      .obtenerHoraActual()
-      .subscribe((hora) => (this.horaActual = hora));
+    this.horaActual$ = this.horaService.obtenerHoraActual();
   }
 
   async getWinners() {

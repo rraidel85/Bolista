@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { IonCheckbox, IonicModule, ModalController } from '@ionic/angular';
 import { Clipboard } from '@capacitor/clipboard';
@@ -10,7 +10,7 @@ import { AddModalComponent } from '../add-modal/add-modal.component';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { ListsService } from 'src/app/shared/services/lists.service';
 import { Toast } from '@capacitor/toast';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -22,7 +22,7 @@ import { ActivatedRoute } from '@angular/router';
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Detalles</ion-title>
-        <ion-text class="hour" slot="end">{{ horaActual | hora }}</ion-text>
+        <ion-text class="hour" slot="end">{{ (horaActual$ | async) | hora }}</ion-text>
       </ion-toolbar>
     </ion-header>
 
@@ -118,11 +118,11 @@ import { ActivatedRoute } from '@angular/router';
     </ion-content> `,
   styleUrls: ['./detail-option.component.scss'],
 
-  imports: [CommonModule, IonicModule, HoraPipe],
+  imports: [CommonModule, IonicModule, HoraPipe, AsyncPipe],
   providers: [ListElementsService, ListsService],
 })
 export class DetailOptionComponent implements OnInit, OnDestroy {
-  horaActual!: string;
+  horaActual$!: Observable<string>;
   fecha!: string;
   tabSeleccionado: string = 'Detalles';
   pase = 0;
@@ -157,10 +157,7 @@ export class DetailOptionComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.horaService.obtenerHoraActual().subscribe((hora) => {
-      this.horaActual = hora;
-      this.fecha = hora.split(',')[0];
-    });
+    this.horaActual$ = this.horaService.obtenerHoraActual();
 
     this.suscription = this.route.queryParams.subscribe((params) => {
       this.group = Number(params['group']);

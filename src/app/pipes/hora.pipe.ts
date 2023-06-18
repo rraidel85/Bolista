@@ -5,7 +5,7 @@ import { Pipe, PipeTransform } from '@angular/core';
   standalone: true
 })
 export class HoraPipe implements PipeTransform {
-  transform(value: string): string {
+  transform(value: string | null): string {
     if(value){
     const [date,time]=value.split(',')
     const [horas, minutos,segundos]=time.trim().split(':')

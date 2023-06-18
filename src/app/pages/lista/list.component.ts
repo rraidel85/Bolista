@@ -8,6 +8,8 @@ import { ListsService } from 'src/app/shared/services/lists.service';
 import { ListElementsService } from 'src/app/services/list-elements.service';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
 import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-modal.component';
+import { Observable } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-inicio',
@@ -18,7 +20,7 @@ import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-mo
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Lista</ion-title>
-        <ion-text class="hour" slot="end">{{ horaActual | hora }}</ion-text>
+        <ion-text class="hour" slot="end">{{ (horaActual$ | async) | hora }}</ion-text>
       </ion-toolbar>
     </ion-header>
 
@@ -62,11 +64,12 @@ import { InfoModalComponent } from 'src/app/shared/components/info-modal/info-mo
     HoraPipe,
     DayCardComponent,
     NightCardComponent,
+    AsyncPipe
   ],
   providers: [ListsService, ListElementsService],
 })
 export class ListComponent implements OnInit {
-  horaActual!: string;
+  horaActual$!: Observable<string>;
 
   constructor(
     private horaService: HoraService,
@@ -76,10 +79,9 @@ export class ListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.horaService
-      .obtenerHoraActual()
-      .subscribe((hora) => (this.horaActual = hora));
+    this.horaActual$ = this.horaService.obtenerHoraActual();
   }
+
   dbtest() {
     // const message='999-123456,Pase 10a19-23000000,Pase 23con24-3434,pacE (66,22,44)-123,(12,23,34)-123,23con34-3434,20al28-123,23-123-123c,82-5,92-5,24-5,16-10,61-5,27-5,41-50,33-50,35-5,65-5,66-5,25-7,41-8,11-5,50-10,45-30,82-100,28-100,68-100,86-100,60a69-10,89-100,69-50,60-10,67-5,62-5,26-5,49-5,36-2,63-2,25-2,58-2,14-2,47-2,863-1,758-1,869-1,'
     const message = 'Pase 01-11000-400c';
