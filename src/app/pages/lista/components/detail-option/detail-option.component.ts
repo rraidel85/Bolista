@@ -96,6 +96,7 @@ import { ActivatedRoute } from '@angular/router';
               </div>
             </ion-card-content>
           </ion-card>
+          <div class="footer"></div>
         </div>
       </ng-container>
 
@@ -104,14 +105,11 @@ import { ActivatedRoute } from '@angular/router';
           <ion-icon name="share-social"></ion-icon>
         </ion-fab-button>
         <ion-fab-list side="top">
-          <ion-fab-button color="primary" (click)="getChecked()">
+          <ion-fab-button color="primary" (click)="getChecked()" >
             <ion-icon name="copy"></ion-icon>
           </ion-fab-button>
-          <ion-fab-button color="primary" (click)="openAddModal()">
+          <ion-fab-button color="primary" (click)="openAddModal()" *ngIf="tabSeleccionado!=='Pase+'">
             <ion-icon name="send"></ion-icon>
-          </ion-fab-button>
-          <ion-fab-button color="primary">
-            <ion-icon name="share-social"></ion-icon>
           </ion-fab-button>
         </ion-fab-list>
       </ion-fab>
@@ -157,11 +155,16 @@ export class DetailOptionComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    
     this.horaActual$ = this.horaService.obtenerHoraActual();
-
+    
     this.suscription = this.route.queryParams.subscribe((params) => {
       this.group = Number(params['group']);
 
+      this.paseList=[]
+      this.numberList=[]
+      this.paseDetails.original=[]
+      this.numberDetails.original=[]
       this.listElementService.getAll(this.group).then((ret) => {
         ret.forEach((element) => {
           let obj: Detail = {
@@ -217,10 +220,10 @@ export class DetailOptionComponent implements OnInit, OnDestroy {
       this.db.mDb.query(`SELECT * FROM pases`).then((ret) => {
         this.pase = ret.values![0].pase;
         this.pasePlus = ret.values![0].pase_plus;
-        // this.setPase();
+        this.setPase();
       });
     });
-
+    
     
   }
 
@@ -297,7 +300,7 @@ export class DetailOptionComponent implements OnInit, OnDestroy {
           if (obj.price > this.pasePlus) {
             newObj.price -= this.pasePlus;
             newObj2.price = this.pasePlus;
-            this.numberDetails.pasePlus.push(newObj);
+            this.paseDetails.pasePlus.push(newObj);
           }
           return newObj2;
         });
@@ -313,6 +316,8 @@ export class DetailOptionComponent implements OnInit, OnDestroy {
         });
       }
     } else {
+      this.db.mDb.execute(`update pases set pase_plus=0`)
+      this.pasePlus=0
       this.paseDetails.pase = [];
       this.numberDetails.pase = [];
       this.paseDetails.pasePlus = [];
@@ -326,7 +331,10 @@ export class DetailOptionComponent implements OnInit, OnDestroy {
     } else if (this.tabSeleccionado === 'Pase') {
       this.numberList = this.numberDetails.pase;
       this.paseList = this.paseDetails.pase;
-    }
+    } /* else if (this.tabSeleccionado === 'Pase+') {
+      this.paseList = this.paseDetails.pasePlus;
+    this.numberList = this.numberDetails.pasePlus;
+  } */
   }
   getChecked() {
     const copyPase: Detail[] = [];

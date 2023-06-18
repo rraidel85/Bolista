@@ -175,16 +175,18 @@ export class ListsService {
   }
 
   async processMessage(messages: string[],grupo:number): Promise<void> {
+    
     let list: ListElement[] = [];
     let allMessages: string = messages
       .map((message) => {
         if (message[message.length - 1] !== ',') return message + ',';
         return message;
       })
-      .join();
-
-    const bets = this.tansformMessage(allMessages);
-
+      .join('');
+    
+      const bets = this.tansformMessage(allMessages);
+    
+      
     return await this.addList(bets,grupo);
   }
 
@@ -255,7 +257,7 @@ export class ListsService {
         });
       }
     });
-    return this.listElementsService.createMany(this.list_elements, grupo);
+    return this.listElementsService.createMany(this.list_elements, grupo).then(()=>{this.list_elements=[]});
     
   }
 

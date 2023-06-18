@@ -1,5 +1,6 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { Toast } from '@capacitor/toast';
 import { IonInput, IonSelect, IonicModule } from '@ionic/angular';
 import { Observable } from 'rxjs';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
@@ -15,7 +16,9 @@ import { HoraService } from 'src/app/services/hora.service';
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Ganadores</ion-title>
-        <ion-text class="hour" slot="end">{{ (horaActual$ | async) | hora }}</ion-text>
+        <ion-text class="hour" slot="end">{{
+          horaActual$ | async | hora
+        }}</ion-text>
       </ion-toolbar>
     </ion-header>
 
@@ -76,30 +79,48 @@ import { HoraService } from 'src/app/services/hora.service';
           </ion-item>
         </div>
 
-        <ion-grid>
-          <ion-row>
+        <ion-grid *ngIf="winners.length > 0">
+          <ion-row >
             <ion-col>
               <div class="trophy-section">Premios</div>
             </ion-col>
           </ion-row>
         </ion-grid>
         <ion-grid>
-          <ion-row *ngFor="let winner of winners">
+          <ion-row *ngIf="winners.length > 0">
             <ion-col class="column-title">
               <div class="pick-title">Pick</div>
-              <div>{{ winner.pick }}</div>
             </ion-col>
             <ion-col class="column-title">
               <div class="price-title">Precio</div>
-              <div>{{ winner.price }}</div>
             </ion-col>
             <ion-col class="column-title">
               <div class="pay-title">Pago</div>
-              <div>{{ winner.pago }}</div>
             </ion-col>
             <ion-col class="column-title">
               <div class="apay-title">A Pagar</div>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngFor="let winner of winners">
+            <ion-col class="column-title">
+              <div>{{ winner.pick }}</div>
+            </ion-col>
+            <ion-col class="column-title">
+              <div>{{ winner.price }}</div>
+            </ion-col>
+            <ion-col class="column-title">
+              <div>{{ winner.pago }}</div>
+            </ion-col>
+            <ion-col class="column-title">
               <div>{{ winner.aPagar }}</div>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="winners.length > 0">
+            <ion-col class="column-title">
+              <div class="total-title">Total</div>
+            </ion-col>
+            <ion-col class="column-title">
+              <div>{{totalAPagar()}}</div>
             </ion-col>
           </ion-row>
         </ion-grid>
@@ -305,5 +326,14 @@ export class WinnersComponent implements OnInit {
         }
       }
     });
+    if (this.winners.length===0) {
+      await Toast.show({
+        text: `No hubo ganadores`,
+        duration: 'long'
+      });
+    }
+  }
+  totalAPagar(){
+    return this.winners.map(x=>x.aPagar).reduce((a, b) => a + b, 0)
   }
 }
