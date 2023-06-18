@@ -40,3 +40,13 @@ ion-grid ion-row ion-col ion-item ion-label{
     color: var(--ion-color-dark);
     border: 1px solid var(--ion-color-dark);
   }
+
+
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  font-size: 15px;
+  transform: scale(1.1);
+ 
+}

@@ -62,15 +62,13 @@ import { HoraService } from 'src/app/services/hora.service';
             </ion-col>
           </ion-row>
         </ion-grid>
-        <ion-grid>
-          <ion-row>
-            <ion-col>
-              <ion-item>
-                <ion-button (click)="getWinners()">Aceptar</ion-button>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+
+        
+        <div class="center-button">
+      <ion-item class="accept-item" lines="none">
+        <ion-button class="accept-button" shape="round" size="default" (click)="getWinners()">Aceptar</ion-button>
+      </ion-item>
+    </div>
 
         <ion-grid>
           <ion-row>
