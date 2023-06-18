@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'www',
   server: {
     androidScheme: 'https',
-    url:'http://0.0.0.0:8100'
+    // url:'http://0.0.0.0:8100'
   },
   plugins: {
     CapacitorSQLite: {
