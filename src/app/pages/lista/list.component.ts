@@ -30,11 +30,11 @@ import { AsyncPipe } from '@angular/common';
           <ion-grid>
             <div class="card-mid" routerLink="">
               <div class="buttons">
-                <ion-button (click)="dbtest()" style="width: 99px"
+                <ion-button style="width: 99px"
                   >Cuadres</ion-button
                 >
-                <ion-button (click)="openInfoModal()" expand="block"
-                  >Info-Test</ion-button
+                <ion-button expand="block"
+                  >Cuadres</ion-button
                 >
               </div>
 
