@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
+import { Toast } from '@capacitor/toast';
 
 @Component({
   selector: 'app-about',
@@ -36,7 +37,7 @@ import { IonicModule } from '@ionic/angular';
     <ion-footer style="color: yellow;">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button fill="clear" color="light"
+          <ion-button fill="clear" color="light" (click)="Update()"
             ><ion-icon
               slot="start"
               color="light"
@@ -57,4 +58,13 @@ import { IonicModule } from '@ionic/angular';
 })
 export class AboutComponent {
   constructor() {}
+
+  //Agregar aqui la lógica para realizar el update
+  async Update() {
+    await Toast.show({
+      text: 'Sin updates',
+      duration: 'short',
+      position: 'bottom',
+    });
+  }
 }
