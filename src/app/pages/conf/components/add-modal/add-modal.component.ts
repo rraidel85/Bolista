@@ -19,7 +19,7 @@ import { Toast } from '@capacitor/toast';
     <ion-content>
       <ion-item>
         <ion-label>No.</ion-label>
-        <ion-input [(ngModel)]="number" type="text" inputmode="numeric" pattern="^[0-9]{2,3}$"></ion-input>
+        <ion-input [(ngModel)]="number" type="text" inputmode="numeric" pattern="^[0-9]{2}$"></ion-input>
       </ion-item>
       <div class="modal-buttons">
         <ion-button fill="clear" color="danger" (click)="closeModal()">Cancelar</ion-button>
@@ -45,7 +45,7 @@ export class AddModalComponent {
   }
 
   async saveNumber() {
-    if (this.number && +this.number >= 0 && +this.number <= 999) {
+    if (this.number?.length === 2) {
       await this.modalCtrl.dismiss({ number: this.number });
     } else {
       await Toast.show({

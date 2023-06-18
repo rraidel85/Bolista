@@ -37,15 +37,14 @@ import { Toast } from '@capacitor/toast';
     <ion-footer style="color: yellow;">
       <ion-toolbar>
         <ion-buttons slot="start">
-          <ion-button fill="clear" color="light" (click)="Update()"
+          <ion-button fill="clear" class="update-title" (click)="Update()"
             ><ion-icon
               slot="start"
-              color="light"
               size="large"
               name="refresh-outline"
               class="update-icon"
             ></ion-icon
-            >Update</ion-button
+            >Actualizar</ion-button
           >
         </ion-buttons>
 

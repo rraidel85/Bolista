@@ -33,7 +33,7 @@ import { AsyncPipe } from '@angular/common';
                 <ion-button style="width: 99px"
                   >Cuadres</ion-button
                 >
-                <ion-button expand="block"
+                <ion-button style="width: 99px"
                   >Cuadres</ion-button
                 >
               </div>

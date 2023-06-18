@@ -8,6 +8,7 @@ import { AsyncPipe, DecimalPipe, NgIf } from '@angular/common';
 import { ListCardService } from '../../services/list-card.service';
 import { ListTotal } from '../../interfaces/list-total.interface';
 import { Observable, tap } from 'rxjs';
+import { Toast } from '@capacitor/toast';
 
 @Component({
   selector: 'app-day-card',
@@ -156,6 +157,12 @@ export class DayCardComponent implements OnInit {
         this.resetCard();
       })
       .catch((err) => console.log(err));
+      
+      Toast.show({
+        text: 'Lista eliminada',
+        duration: 'short',
+        position: 'bottom',
+      });
   }
 
   resetCard() {
