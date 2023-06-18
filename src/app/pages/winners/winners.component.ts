@@ -79,16 +79,20 @@ import { HoraService } from 'src/app/services/hora.service';
         </ion-grid>
         <ion-grid>
           <ion-row *ngFor="let winner of winners">
-            <ion-col>
+            <ion-col class="column-title">
+              <div class="pick-title">Pick</div>
               <div>{{ winner.pick }}</div>
             </ion-col>
-            <ion-col>
+            <ion-col class="column-title">
+              <div class="price-title">Precio</div>
               <div>{{ winner.price }}</div>
             </ion-col>
-            <ion-col>
+            <ion-col class="column-title">
+              <div class="pay-title">Pago</div>
               <div>{{ winner.pago }}</div>
             </ion-col>
-            <ion-col>
+            <ion-col class="column-title">
+              <div class="apay-title">A.Pagar</div>
               <div>{{ winner.aPagar }}</div>
             </ion-col>
           </ion-row>

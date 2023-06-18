@@ -38,7 +38,7 @@ ion-grid ion-row ion-col ion-item ion-label{
     justify-content: center;
     display: flex;
     color: var(--ion-color-dark);
-    border: 1px solid var(--ion-color-dark);
+    border: 2px solid var(--ion-color-dark);
   }
 
 
@@ -49,4 +49,34 @@ ion-grid ion-row ion-col ion-item ion-label{
   font-size: 15px;
   transform: scale(1.1);
  
+}
+
+.column-title{
+  border: 1px solid var(--ion-color-dark);
+  text-align: center;
+  color: var(--ion-color-dark);
+}
+
+.pick-title{
+ color: var(--ion-color-success); 
+ font-weight:bold; 
+ border-bottom: 1px solid var(--ion-color-dark);
+}
+
+.price-title{
+  color: var(--ion-color-warning); 
+  font-weight:bold; 
+  border-bottom: 1px solid var(--ion-color-dark);
+}
+
+.pay-title{
+  color: var(--ion-color-tertiary); 
+  font-weight:bold; 
+  border-bottom: 1px solid var(--ion-color-dark);
+}
+
+.apay-title{
+  color: var(--ion-color-danger); 
+  font-weight:bold; 
+  border-bottom: 1px solid var(--ion-color-dark);
 }
