@@ -44,7 +44,7 @@ import { Toast } from '@capacitor/toast';
               name="refresh-outline"
               class="update-icon"
             ></ion-icon
-            >Update</ion-button
+            >Actualizar</ion-button
           >
         </ion-buttons>
 
