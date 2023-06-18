@@ -60,6 +60,8 @@ cdk-virtual-scroll-viewport {
   display: flex;
   justify-content: center;
   align-items: center;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px); 
   }
 ion-toast.error-toast {
   --background: #f15555;
