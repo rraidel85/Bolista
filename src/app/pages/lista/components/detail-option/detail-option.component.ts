@@ -3,6 +3,7 @@ import { Component, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/
 import { IonCheckbox, IonicModule, ModalController } from '@ionic/angular';
 import { Clipboard } from '@capacitor/clipboard';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
+import { FechaPipe } from 'src/app/pipes/fecha.pipe';
 import { HoraService } from 'src/app/services/hora.service';
 import { ListElementsService } from 'src/app/services/list-elements.service';
 import { Detail, Details } from '../../interfaces/details.interface';
@@ -44,7 +45,7 @@ import { ActivatedRoute } from '@angular/router';
         <div class="page-tab-header detalles-header">
           <div class="page-tab-header-date detalles-date">
             <!-- <ion-icon id="day-icon" name="sunny"></ion-icon> -->
-            <ion-text color="medium">{{ fecha }}</ion-text>
+            <ion-text color="medium">{{ (horaActual$|async)|fecha }}</ion-text>
           </div>
           <div class="detalles-todos">
             <ion-label color="medium">Todos </ion-label>
@@ -92,6 +93,7 @@ import { ActivatedRoute } from '@angular/router';
                   #numberCheckbox
                   [value]="number.pick"
                   slot="end"
+                  (ionChange)="checkOne()"
                 ></ion-checkbox>
               </div>
             </ion-card-content>
@@ -116,12 +118,11 @@ import { ActivatedRoute } from '@angular/router';
     </ion-content> `,
   styleUrls: ['./detail-option.component.scss'],
 
-  imports: [CommonModule, IonicModule, HoraPipe, AsyncPipe],
+  imports: [CommonModule, IonicModule, HoraPipe,FechaPipe, AsyncPipe],
   providers: [ListElementsService, ListsService],
 })
 export class DetailOptionComponent implements OnInit, OnDestroy {
   horaActual$!: Observable<string>;
-  fecha!: string;
   tabSeleccionado: string = 'Detalles';
   pase = 0;
   pasePlus = 0;
