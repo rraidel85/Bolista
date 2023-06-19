@@ -10,8 +10,8 @@ export const bolistaDbVersionUpgrades = [
           grupo integer NOT NULL,
           corrido integer,
           pase integer
-        );`
-    ]
+        );`,
+    ],
   },
   {
     toVersion: 2,
@@ -34,8 +34,7 @@ export const bolistaDbVersionUpgrades = [
         );`,
       `insert into config (pick3,pick4,limitado,centena,parle,candado,centena_c) 
       values (0,0,0,0,0,0,0);`,
-      
-    ]
+    ],
   },
   {
     toVersion: 3,
@@ -45,8 +44,8 @@ export const bolistaDbVersionUpgrades = [
         pase integer default 0,
         pase_plus integer default 0
       );`,
-      `INSERT INTO pases (pase,pase_plus) VALUES (0,0)`
-    ]
+      `INSERT INTO pases (pase,pase_plus) VALUES (0,0)`,
+    ],
   },
   {
     toVersion: 4,
@@ -57,8 +56,8 @@ export const bolistaDbVersionUpgrades = [
         body varchar NOT NULL,
         timestamp varchar NOT NULL UNIQUE
       );`,
-      `INSERT INTO pases (pase,pase_plus) VALUES (0,0)`
-    ]
+      `INSERT INTO pases (pase,pase_plus) VALUES (0,0)`,
+    ],
   },
   {
     toVersion: 5,
@@ -67,7 +66,26 @@ export const bolistaDbVersionUpgrades = [
         id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
         active integer NOT NULL
       );`,
-      `INSERT INTO trial (active) VALUES (0)`
-    ]
-  }
+      `INSERT INTO trial (active) VALUES (0)`,
+    ],
+  },
+  {
+    toVersion: 6,
+    statements: [
+      `CREATE TABLE IF NOT EXISTS ganadores (
+        id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+        pick3 varchar NOT NULL,
+        pick41 varchar NOT NULL,
+        pick42 varchar NOT NULL
+      );`,
+      `INSERT INTO ganadores (pick3,pick41,pick42) VALUES ('0','0','0')`,
+      `CREATE TABLE IF NOT EXISTS premios (
+        id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+        pick varchar NOT NULL,
+        price varchar NOT NULL,
+        pago varchar NOT NULL,
+        a_pagar varchar NOT NULL
+      );`,
+    ],
+  },
 ];

@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: 'Bolista',
   webDir: 'www',
   server: {
-    androidScheme: 'https',
+    androidScheme: 'http',
     // url:'http://0.0.0.0:8100'
   },
   plugins: {

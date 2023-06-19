@@ -145,9 +145,40 @@ export class WinnersComponent implements OnInit {
 
   ngOnInit() {
     this.horaActual$ = this.horaService.obtenerHoraActual();
+
+    this.dbService.mDb.query(`select * from ganadores`).then(ret=>{
+      const {pick3,pick41,pick42}=ret.values![0]
+      this.pick3.value=pick3
+      this.pick41.value=pick41
+      this.pick42.value=pick42
+    })
+    this.winners=[]
+    this.dbService.mDb.query(`select * from premios`).then(ret=>{
+      
+      ret.values!.forEach(({pick, price, pago, a_pagar})=>{
+        
+        this.winners.push({pick,price,pago,aPagar:a_pagar})
+      })
+      
+    })
   }
 
   async getWinners() {
+
+    this.dbService.mDb.execute(`update ganadores set pick3=${this.pick3.value},pick41=${this.pick41.value},pick42=${this.pick42.value}`)
+    let stmt:string[]=[]
+    this.winners.forEach(win=>{
+      stmt.push(`(${win.pick},${win.price},${win.pago},${win.aPagar})`)
+    })
+    this.dbService.mDb.execute(`delete from premios`).then(()=>{
+      if(stmt.length>0){
+        
+        this.dbService.mDb.execute(`insert into premios (pick,price, pago,a_pagar) values ${stmt.join()}`)
+      }
+
+    })
+
+
     const {
       pick3,
       pick4,
