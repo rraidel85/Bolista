@@ -228,7 +228,6 @@ export class SmsListComponent implements OnInit, OnDestroy {
 
     this.groupSuscription = this.route.queryParams.subscribe((params) => {
       this.group = Number(params['group']);
-      console.log(this.group);
     });
   }
 

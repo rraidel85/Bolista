@@ -21,7 +21,7 @@ export class ContactsService {
 
   constructor() {}
 
-  async getAllContacts(): Promise<ContactPayload[]> {
+  async getContactsWithSms(): Promise<ContactPayload[]> {
     const returnedContacts = await Contacts.getContacts(this.contactOptions);
     const contactsWithSms: ContactPayload[] = [];
 
@@ -87,7 +87,7 @@ export class ContactsService {
       const hasSmsForReceiving = await this.smsService.hasSms(
         phoneForReceivingSms
       );
-      const hasSmsForSent = await this.smsService.getSmsCount(phoneForSentSms);
+      const hasSmsForSent = await this.smsService.hasSms(phoneForSentSms);
 
       if (hasSmsForReceiving || hasSmsForSent) {
         contactsWithSms.push(contact);
