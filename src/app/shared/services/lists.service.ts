@@ -134,8 +134,8 @@ export class ListsService {
                   start.slice(0, -1) === end.slice(0, -1)) ||
                 (diff % 10 === 0 &&
                   diff !== 10 &&
-                  start.slice(0, 1) + start.slice(2) ===
-                    end.slice(0, 1) + end.slice(2)) ||
+                   start.slice(2) === end.slice(2) &&
+                   start.slice(0, 1)===end.slice(0, 1) ) ||
                 (diff % 11 === 0 &&
                   diff !== 11 &&
                   start[0] === end[0] &&
