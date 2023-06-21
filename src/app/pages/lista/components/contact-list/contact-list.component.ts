@@ -112,7 +112,8 @@ export class ContactListComponent implements OnInit, OnDestroy {
   async presentLoading() {
     const loading = await this.loadingCtrl.create({
       message: 'Cargando contactos...',
-      spinner: 'circles', // Choose a spinner type
+      spinner: 'circular', // Choose a spinner type
+      cssClass: 'loading-spinner',
     });
     await loading.present();
   }

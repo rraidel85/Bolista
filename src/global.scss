@@ -96,3 +96,13 @@ ion-toast.error-toast {
 //   backdrop-filter: blur(5px);
 //   -webkit-backdrop-filter: blur(5px); 
 // }
+
+
+//Mod custom spinner
+.loading-spinner{
+  color: dark;
+  
+  ion-spiner{
+    --color: var(--ion-color-tertiary);
+  }
+}
