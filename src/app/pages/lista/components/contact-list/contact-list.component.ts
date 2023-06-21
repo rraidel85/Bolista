@@ -50,40 +50,6 @@ import { Subscription, Observable } from 'rxjs';
               <h4>{{ contact.phones![0].number }}</h4>
             </ion-label>
           </ion-item>
-
-          <!-- <ng-template #contactAccordion>
-              <ion-accordion-group>
-                <ion-accordion value="contact.phones![0].number">
-                  <ion-item
-                    class="contact"
-                    [routerLink]="[contact.phones![0].number]"
-                  >
-                    <ion-thumbnail>
-                      <ion-icon
-                        class="contact-icon"
-                        name="person-circle-outline"
-                        color="primary"
-                      ></ion-icon>
-                    </ion-thumbnail>
-                    <ion-label class="contact-info">
-                      <h4 class="contact-info-name">
-                        {{ contact.name?.display }}
-                      </h4>
-                      <h4>{{ contact.phones![0].number }}</h4>
-                    </ion-label>
-                  </ion-item>
-                  <div
-                    class="ion-padding"
-                    slot="content"
-                    *ngFor="let phone of contact.phones.slice(1)"
-                    [routerLink]="[phone.number]"
-                  >
-                    {{ phone.number }}
-                  </div>
-                </ion-accordion>
-              </ion-accordion-group>
-            </ng-template> -->
-          <!-- </ng-container> -->
         </ion-list>
       </cdk-virtual-scroll-viewport>
     </ion-content>

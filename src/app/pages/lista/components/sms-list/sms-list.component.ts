@@ -205,9 +205,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
     // Sent SMS
     this.sentSMS$ = this.route.paramMap.pipe(
       switchMap((params) => {
-        const contactPhone = this.smsService.checkCountryCode(
-          params.get('phone')!
-        );
+        const contactPhone = params.get('phone')!;
         return Promise.all([
           this.smsService.getSentSMS(contactPhone),
           this.smsService.getAllSmsFromDB(),

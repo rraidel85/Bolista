@@ -74,6 +74,29 @@ export class SmsService {
     }
   }
 
+  async hasSms(contactPhone: string): Promise<boolean>{
+    const smsOptions: SmsOptions = {
+      projection: this.smsProjection,
+      filter: {
+        type: MessageType.ALL,
+        address: contactPhone,
+        maxCount: 1,
+      },
+    };
+    const sms = await SMSInboxReader.getSMSList(smsOptions);
+    return sms.smsList.length !== 0;
+  }
+
+  async getSmsCount(contactPhone: string): Promise<number>{
+    const smsOptions: SmsOptions = {
+      filter: {
+        type: MessageType.INBOX,
+        address: contactPhone,
+      },
+    };
+    const smsCount = await SMSInboxReader.getCount(smsOptions);
+    return smsCount.count
+  }
   
   // Database Operations -------------------------
 
