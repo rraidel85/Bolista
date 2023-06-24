@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'exa.bolista.app',
+  appId: 'io.ionic.starter',
   appName: 'Bolista',
   webDir: 'www',
   server: {

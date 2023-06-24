@@ -18,15 +18,11 @@ import { LoadingController } from '@ionic/angular';
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
+        
         <ion-title>Contactos</ion-title>
         <ion-text class="hour" slot="end">{{
           horaActual$ | async | hora
         }}</ion-text>
-        <ion-buttons slot="end">
-          <ion-button class="update-contacts" (click)="updateContacts()">
-            <ion-icon name="refresh"></ion-icon>
-          </ion-button>
-        </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
@@ -59,7 +55,21 @@ import { LoadingController } from '@ionic/angular';
             </ion-label>
           </ion-item>
         </ion-list>
+
+        
       </cdk-virtual-scroll-viewport>
+
+
+      <ion-fab
+        slot="fixed"
+        vertical="bottom"
+        horizontal="end"
+        class="update-contacts"
+      >
+        <ion-fab-button  (click)="updateContacts()">
+          <ion-icon size="large" name="refresh"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
     </ion-content>
   `,
   styleUrls: ['./contact-list.component.scss'],
