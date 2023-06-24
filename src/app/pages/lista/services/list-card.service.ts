@@ -21,7 +21,6 @@ export class ListCardService {
   );
 
   updateListDayTotal(group: number) {
-    console.log('list card service', group)
     this.totalDaySubject.next(group);
   }
 

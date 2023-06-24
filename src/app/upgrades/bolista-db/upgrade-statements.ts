@@ -86,6 +86,12 @@ export const bolistaDbVersionUpgrades = [
         pago varchar NOT NULL,
         a_pagar varchar NOT NULL
       );`,
+      `CREATE TABLE IF NOT EXISTS contactos (
+        id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+        contactId int NOT NULL,
+        name varchar NOT NULL,
+        phones varchar NOT NULL
+      );`,
     ],
   },
 ];

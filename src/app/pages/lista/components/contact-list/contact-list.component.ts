@@ -7,7 +7,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { HoraService } from 'src/app/services/hora.service';
 import { HoraPipe } from 'src/app/pipes/hora.pipe';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, tap, catchError, of } from 'rxjs';
 import { LoadingController } from '@ionic/angular';
 
 @Component({
@@ -37,9 +37,9 @@ import { LoadingController } from '@ionic/angular';
           > -->
             <ion-item
               class="contact"
-              [routerLink]="[contact.phones![0].number]"
+              [routerLink]="[contact.phones[0]]"
               [queryParams]="{ group }"
-              *cdkVirtualFor="let contact of contacts"
+              *cdkVirtualFor="let contact of contacts$ | async"
             >
               <ion-thumbnail>
                 <ion-icon
@@ -50,7 +50,7 @@ import { LoadingController } from '@ionic/angular';
               </ion-thumbnail>
               <ion-label class="contact-info">
                 <h4 class="contact-info-name">{{ contact.name?.display }}</h4>
-                <h4>{{ contact.phones![0].number }}</h4>
+                <h4>{{ contact.phones[0] }}</h4>
               </ion-label>
             </ion-item>
           </ion-list>
@@ -71,7 +71,7 @@ import { LoadingController } from '@ionic/angular';
   ],
 })
 export class ContactListComponent implements OnInit, OnDestroy {
-  contacts!: ContactPayload[];
+  contacts$!: Observable<ContactPayload[]>;
   horaActual$!: Observable<string>;
   group!: string | null;
   suscription!: Subscription;
@@ -85,20 +85,24 @@ export class ContactListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.loadData()
+  }
+
+  async loadData(){
     this.horaActual$ = this.horaService.obtenerHoraActual();
 
-    this.presentLoading(); // Show loading spinner
+    await this.presentLoading(); // Show loading spinner
 
-    this.contactsService
-      .getContactsWithSms()
-      .then((contacts) => {
-        this.contacts = contacts;
-        this.dismissLoading();
-      })
-      .catch((error) => {
-        console.log(error);
-        this.dismissLoading();
-      });
+    this.contacts$ = this.contactsService
+      .contacts$.pipe(
+        tap((contacts)=> console.log('Desde el contact-list',contacts)),
+        tap(()=> this.dismissLoading()),
+        catchError(err => {
+          console.log(err);
+          this.dismissLoading()
+          return of([]);
+        })
+      )
 
     this.suscription = this.route.queryParams.subscribe((params) => {
       this.group = params['group'];
@@ -125,5 +129,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.suscription.unsubscribe();
+    this.contactsService.cancelSignal.abort();
   }
 }
