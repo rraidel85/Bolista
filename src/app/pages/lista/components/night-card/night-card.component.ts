@@ -30,11 +30,8 @@ import { Toast } from '@capacitor/toast';
             <div class="pase-title">Pase</div>
             <div class="pase-section">
               <div
-                [routerLink]="['contactos']"
-                [queryParams]="{ group }"
                 class="cash-button"
                 detail="false"
-                routerLinkActive="selected"
               >
                 $ {{ total.totalPases | number : '1.2-2' }}
               </div>
