@@ -105,10 +105,6 @@ export class ContactListComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-    this.suscription.unsubscribe();
-  }
-
   async presentLoading() {
     const loading = await this.loadingCtrl.create({
       message: 'Cargando contactos...',
@@ -122,4 +118,12 @@ export class ContactListComponent implements OnInit, OnDestroy {
     await this.loadingCtrl.dismiss();
   }
 
+  
+  ionViewWillLeave() {
+    this.contactsService.cancelSignal.abort();
+  }
+
+  ngOnDestroy(): void {
+    this.suscription.unsubscribe();
+  }
 }

@@ -138,42 +138,42 @@ export class AppComponent implements OnInit,OnDestroy {
         /* if (active===0) {
           this.openInfoModal('Su tiempo de prueba se ha agotado')
         } else { */
-          this.sub=this.trialService.onTrial().subscribe({
-            next:({trial,timeout})=>{
+          // this.sub=this.trialService.onTrial().subscribe({
+          //   next:({trial,timeout})=>{
               
-              if(timeout){
-                this.dbService.mDb.query(`select active from trial`).then(ret=>{
-                  const active= ret.values![0].active
-                  if (active===0) {
-                    this.openInfoModal('Su tiempo de prueba se ha agotado')
-                  }
-                })
-              }else if (trial===false) {
-                this.dbService.mDb.execute(`update trial set active=0`);
-                this.openInfoModal('Su tiempo de prueba se ha agotado')
-              }
-              else if (trial===true) {
-                this.dbService.mDb.execute(`update trial set active=1`);
-              }
-            },
-            error:()=>{
-              console.log('asd');
+          //     if(timeout){
+          //       this.dbService.mDb.query(`select active from trial`).then(ret=>{
+          //         const active= ret.values![0].active
+          //         if (active===0) {
+          //           this.openInfoModal('Su tiempo de prueba se ha agotado')
+          //         }
+          //       })
+          //     }else if (trial===false) {
+          //       this.dbService.mDb.execute(`update trial set active=0`);
+          //       this.openInfoModal('Su tiempo de prueba se ha agotado')
+          //     }
+          //     else if (trial===true) {
+          //       this.dbService.mDb.execute(`update trial set active=1`);
+          //     }
+          //   },
+          //   error:()=>{
+          //     console.log('asd');
               
-            }
-            /* ,
-            complete:()=>{
+          //   }
+          //   /* ,
+          //   complete:()=>{
       
-              console.log('complete');
+          //     console.log('complete');
               
-            } */
-          });
+          //   } */
+          // });
           
         // }
       
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe()
+    // this.sub.unsubscribe()
   }
   //Cerrar la aplicación con capacitor
   async openInfoModal(message:string) {

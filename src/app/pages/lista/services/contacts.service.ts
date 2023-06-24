@@ -12,6 +12,7 @@ import {
 })
 export class ContactsService {
   smsService = inject(SmsService);
+  cancelSignal!: AbortController;
   private contactOptions: GetContactsOptions = {
     projection: {
       name: true,
@@ -77,12 +78,19 @@ export class ContactsService {
         (a, b) => a.name?.display?.localeCompare(b.name?.display || '') || 0
       ); // Order contacs alphabetically
 
+
+      
+    this.cancelSignal = new AbortController();
+
     for (const contact of filteredContacts) {
+      if (this.cancelSignal.signal.aborted) {
+        throw new Error('Operación cancelada');
+      }
+
       const phoneForReceivingSms = this.smsService.checkCountryCode(
         contact.phones[0].number!
       );
       const phoneForSentSms = contact.phones[0].number!;
-
 
       const hasSmsForReceiving = await this.smsService.hasSms(
         phoneForReceivingSms
