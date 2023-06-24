@@ -22,39 +22,44 @@ import { LoadingController } from '@ionic/angular';
         <ion-text class="hour" slot="end">{{
           horaActual$ | async | hora
         }}</ion-text>
+        <ion-buttons slot="end">
+          <ion-button class="update-contacts" (click)="updateContacts()">
+            <ion-icon name="refresh"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
 
     <ion-content [fullscreen]="true" [scrollY]="false">
-        <cdk-virtual-scroll-viewport
-          class="ion-content-scroll-host"
-          itemSize="85"
-          minBufferPx="900"
-          maxBufferPx="1350"
-        >
-          <ion-list>
-            <!-- <ng-container
+      <cdk-virtual-scroll-viewport
+        class="ion-content-scroll-host"
+        itemSize="85"
+        minBufferPx="900"
+        maxBufferPx="1350"
+      >
+        <ion-list>
+          <!-- <ng-container
           > -->
-            <ion-item
-              class="contact"
-              [routerLink]="[contact.phones[0]]"
-              [queryParams]="{ group }"
-              *cdkVirtualFor="let contact of contacts$ | async"
-            >
-              <ion-thumbnail>
-                <ion-icon
-                  class="contact-icon"
-                  name="person-circle-outline"
-                  color="primary"
-                ></ion-icon>
-              </ion-thumbnail>
-              <ion-label class="contact-info">
-                <h4 class="contact-info-name">{{ contact.name?.display }}</h4>
-                <h4>{{ contact.phones[0] }}</h4>
-              </ion-label>
-            </ion-item>
-          </ion-list>
-        </cdk-virtual-scroll-viewport>
+          <ion-item
+            class="contact"
+            [routerLink]="[contact.phones[0]]"
+            [queryParams]="{ group }"
+            *cdkVirtualFor="let contact of contacts$ | async"
+          >
+            <ion-thumbnail>
+              <ion-icon
+                class="contact-icon"
+                name="person-circle-outline"
+                color="primary"
+              ></ion-icon>
+            </ion-thumbnail>
+            <ion-label class="contact-info">
+              <h4 class="contact-info-name">{{ contact.name?.display }}</h4>
+              <h4>{{ contact.phones[0] }}</h4>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </cdk-virtual-scroll-viewport>
     </ion-content>
   `,
   styleUrls: ['./contact-list.component.scss'],
@@ -85,24 +90,22 @@ export class ContactListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.loadData()
+    this.loadData();
   }
 
-  async loadData(){
+  async loadData() {
     this.horaActual$ = this.horaService.obtenerHoraActual();
 
     await this.presentLoading(); // Show loading spinner
 
-    this.contacts$ = this.contactsService
-      .contacts$.pipe(
-        tap((contacts)=> console.log('Desde el contact-list',contacts)),
-        tap(()=> this.dismissLoading()),
-        catchError(err => {
-          console.log(err);
-          this.dismissLoading()
-          return of([]);
-        })
-      )
+    this.contacts$ = this.contactsService.contacts$.pipe(
+      tap(() => this.dismissLoading()),
+      catchError((err) => {
+        console.log(err);
+        this.dismissLoading();
+        return of([]);
+      })
+    );
 
     this.suscription = this.route.queryParams.subscribe((params) => {
       this.group = params['group'];
@@ -119,10 +122,18 @@ export class ContactListComponent implements OnInit, OnDestroy {
   }
 
   async dismissLoading() {
-    await this.loadingCtrl.dismiss();
+    try {
+      await this.loadingCtrl.dismiss();
+    } catch (error) {
+      console.log('Overlay does not exist');
+    }
   }
 
-  
+  async updateContacts(){
+    await this.presentLoading();
+    this.contactsService.updateContacts(false);
+  }
+
   ionViewWillLeave() {
     this.contactsService.cancelSignal.abort();
   }

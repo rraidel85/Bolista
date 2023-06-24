@@ -35,14 +35,12 @@ export class ContactsService {
         if (fromDb) {
           return from(this.getContactsFromDb()).pipe(
             tap((contacts) => {
-              console.log('desde el pipeline', contacts)
               if (contacts.length === 0) {
                 this.contactsSubject.next(false);
               }
             }),
             map((contacts) => {
               const newContacts = contacts.map((contact: any) => {
-                console.log('desde el map del pipeline', contact)
                 const newContact: ContactPayload = {
                   contactId: contact.contactId,
                   name: {
@@ -70,8 +68,11 @@ export class ContactsService {
       })
     );
 
+  updateContacts(fromDb: boolean){
+    this.contactsSubject.next(fromDb);
+  }
+
   async getContactsWithSms(): Promise<ContactPayload[]> {
-    console.log('Ejecutando getContactsWithSms');
     const returnedContacts = await Contacts.getContacts(this.contactOptions);
     const contactsWithSms: ContactPayload[] = [];
 
@@ -154,15 +155,12 @@ export class ContactsService {
   }
 
   async getContactsFromDb(): Promise<any> {
-    console.log('Ejecutando getContactsFromDb');
     this.cancelSignal = new AbortController();
     const contacts = await this.dbService.mDb.query(`select * from contactos`);
-    console.log('Desde el getContactsfromDb',contacts)
     return contacts.values;
   }
 
   async saveContactsInDb(contacts: ContactPayload[]) {
-    console.log(contacts![0]);
     await this.dbService.mDb.execute(`DELETE FROM contactos`);
 
     for (const contact of contacts) {
