@@ -33,7 +33,7 @@ import { AsyncPipe } from '@angular/common';
                 <ion-button style="width: 99px"
                   >Cuadres</ion-button
                 >
-                <ion-button style="width: 99px"
+                <ion-button style="width: 99px" 
                   >Cuadres</ion-button
                 >
               </div>
@@ -64,17 +64,16 @@ import { AsyncPipe } from '@angular/common';
     HoraPipe,
     DayCardComponent,
     NightCardComponent,
-    AsyncPipe
+    AsyncPipe,
   ],
   providers: [ListsService, ListElementsService],
 })
 export class ListComponent implements OnInit {
   horaActual$!: Observable<string>;
-
+  timeout: any = null;
   constructor(
     private horaService: HoraService,
     private listsService: ListsService,
-    private listElementService: ListElementsService,
     private modalCtrl: ModalController
   ) {}
 
