@@ -12,10 +12,14 @@ import { Detail } from 'src/app/pages/lista/interfaces/details.interface';
 export class ListsService {
   private list_elements: ListElement[] = [];
   // private listRegExp: listRegExpp=/(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{2}al?\d{2}|\d{3}al?\d{3})-\d+,|\d{2}-\d+-\d+c,)*(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{2}al?\d{2}|\d{3}al?\d{3})-\d+|\d{2}-\d+-\d+c)/g
+  // private listRegExp: RegExp =
+  //   /(pa(s|c)e )?(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+,|\d{2}-\d+-\d+c,)*/gi;
   private listRegExp: RegExp =
-    /(pa(s|c)e )?(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+,|\d{2}-\d+-\d+c,)*/gi;
+  /(pa(s|c)e )?(((\d{1,2},)*\d{1,2}|(\d{3},)*\d{3}|\(\d{1,2},\d{1,2},\d{1,2}\)|\d{1,2}con\d{1,2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+,|\d{1,2}-\d+-\d+c,)*/gi;
+  // private betRegExp: RegExp =
+  //   /^(pa(s|c)e )?(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+|\d{2}-\d+-\d+c)$/gi;
   private betRegExp: RegExp =
-    /^(pa(s|c)e )?(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+|\d{2}-\d+-\d+c)$/gi;
+    /^(pa(s|c)e )?(((\d{1,2},)*\d{1,2}|(\d{3},)*\d{3}|\(\d{1,2},\d{1,2},\d{1,2}\)|\d{1,2}con\d{1,2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+|\d{1,2}-\d+-\d+c)$/gi;
   private allowedChars: RegExp = /^[0123456789(),alcon\-pasce ]+$/i;
 
   constructor(private listElementsService: ListElementsService) {}
@@ -24,10 +28,14 @@ export class ListsService {
     const badBets: BetError[] = [];
 
     const matches = message.match(this.listRegExp);
+    // console.log(matches);
+    
     if (!matches) {
       throw new ListException('Lista Invalida');
     } else {
       const bets = this.tansformMessage(message);
+      // console.log(bets);
+      
       for (const betObj of bets) {
         const bet = betObj.bet;
         const [first, ...rest]: string[] = bet.split('-');
@@ -168,6 +176,8 @@ export class ListsService {
         }
       }
       if (badBets.length !== 0) {
+        // console.log(badBets);
+        
         throw new ListException('Se encontraron errores', badBets);
       }
     }
