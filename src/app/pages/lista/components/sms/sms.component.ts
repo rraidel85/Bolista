@@ -58,7 +58,7 @@ import { LongPressDirective } from '../../directives/longpress.directive';
     NgStyle,
     ErrorDirective,
     DatePipe,
-    LongPressDirective,
+    LongPressDirective
   ],
 })
 export class SmsComponent {
