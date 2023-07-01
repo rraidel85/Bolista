@@ -15,7 +15,7 @@ export class ListsService {
   // private listRegExp: RegExp =
   //   /(pa(s|c)e )?(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+,|\d{2}-\d+-\d+c,)*/gi;
   private listRegExp: RegExp =
-  /(pa(s|c)e )?(((\d{1,2},)*\d{1,2}|(\d{3},)*\d{3}|\(\d{1,2},\d{1,2},\d{1,2}\)|\d{1,2}con\d{1,2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+,|\d{1,2}-\d+-\d+c,)*/gi;
+    /(pa(s|c)e )?(((\d{1,2},)*\d{1,2}|(\d{3},)*\d{3}|\(\d{1,2},\d{1,2},\d{1,2}\)|\d{1,2}con\d{1,2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+,|\d{1,2}-\d+-\d+c,)*/gi;
   // private betRegExp: RegExp =
   //   /^(pa(s|c)e )?(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+|\d{2}-\d+-\d+c)$/gi;
   private betRegExp: RegExp =
@@ -27,15 +27,19 @@ export class ListsService {
   validateMessage(message: string): Promise<any> {
     const badBets: BetError[] = [];
 
+   /*  console.log('asd');
+    const noSpaces = this.removeSpaces(message);
+    console.log(noSpaces); */
+
     const matches = message.match(this.listRegExp);
     // console.log(matches);
-    
+
     if (!matches) {
       throw new ListException('Lista Invalida');
     } else {
       const bets = this.tansformMessage(message);
       // console.log(bets);
-      
+
       for (const betObj of bets) {
         const bet = betObj.bet;
         const [first, ...rest]: string[] = bet.split('-');
@@ -142,8 +146,8 @@ export class ListsService {
                   start.slice(0, -1) === end.slice(0, -1)) ||
                 (diff % 10 === 0 &&
                   diff !== 10 &&
-                   start.slice(2) === end.slice(2) &&
-                   start.slice(0, 1)===end.slice(0, 1) ) ||
+                  start.slice(2) === end.slice(2) &&
+                  start.slice(0, 1) === end.slice(0, 1)) ||
                 (diff % 11 === 0 &&
                   diff !== 11 &&
                   start[0] === end[0] &&
@@ -177,15 +181,14 @@ export class ListsService {
       }
       if (badBets.length !== 0) {
         // console.log(badBets);
-        
+
         throw new ListException('Se encontraron errores', badBets);
       }
     }
     return new Promise((resolve, reject) => resolve(null));
   }
 
-  async processMessage(messages: string[],grupo:number): Promise<void> {
-    
+  async processMessage(messages: string[], grupo: number): Promise<void> {
     let list: ListElement[] = [];
     let allMessages: string = messages
       .map((message) => {
@@ -193,53 +196,51 @@ export class ListsService {
         return message;
       })
       .join('');
-    
-      const bets = this.tansformMessage(allMessages);
-    
-      
-    return await this.addList(bets,grupo);
+
+    const bets = this.tansformMessage(allMessages);
+
+    return await this.addList(bets, grupo);
   }
 
-  listToText(pases:Detail[],numbers:Detail[]):string{
-    let message=''
-      pases.forEach(element=>{
-        message+=`Pase ${element.pick}-${element.price}`
-        if(element.corrido){
-          message+=`-${element.corrido}c`
-        }
-        message+=','
-      })
-      numbers.forEach(element=>{
-        message+=`${element.pick}-${element.price}`
-        if(element.corrido){
-          message+=`-${element.corrido}c`
-        }
-        message+=','
-      })
+  listToText(pases: Detail[], numbers: Detail[]): string {
+    let message = '';
+    pases.forEach((element) => {
+      message += `Pase ${element.pick}-${element.price}`;
+      if (element.corrido) {
+        message += `-${element.corrido}c`;
+      }
+      message += ',';
+    });
+    numbers.forEach((element) => {
+      message += `${element.pick}-${element.price}`;
+      if (element.corrido) {
+        message += `-${element.corrido}c`;
+      }
+      message += ',';
+    });
 
-
-    return message
+    return message;
   }
-  private addList(bets: Bet[],grupo:number): Promise<void> {
+  private addList(bets: Bet[], grupo: number): Promise<void> {
     let currentPrice: string = '';
     bets.forEach((betObj) => {
       const bet = betObj.bet;
       const [first, ...prices]: string[] = bet.split('-');
-      let pase = false
-      let picks=''
+      let pase = false;
+      let picks = '';
       if (first.match(/^pa(s|c)e /i)) {
         picks = first.replace(/^pa(s|c)e /i, '');
         pase = true;
       } else {
-         picks = first;
+        picks = first;
       }
       // if is corrido
       if (prices[1] && prices[1].includes('c')) {
-        this.addToNumbers(picks, prices[0],pase, prices[1].replace('c', ''));
+        this.addToNumbers(picks, prices[0], pase, prices[1].replace('c', ''));
       }
       // if is candado || con
       else if (picks.includes('(') || picks.includes('con')) {
-        this.addToNumbers(picks, prices[0],pase);
+        this.addToNumbers(picks, prices[0], pase);
       } else if (picks.includes('a')) {
         const [start, end]: string[] = picks.replace('l', '').split('a');
         const serieNumbers: string[] = [];
@@ -258,20 +259,28 @@ export class ListsService {
         }
 
         serieNumbers.forEach((pick) => {
-          this.addToNumbers(pick, prices[0],pase);
+          this.addToNumbers(pick, prices[0], pase);
         });
       } else {
         const separatedPicks: string[] = picks.split(',');
         separatedPicks.forEach((pick) => {
-          this.addToNumbers(pick, prices[0],pase);
+          this.addToNumbers(pick, prices[0], pase);
         });
       }
     });
-    return this.listElementsService.createMany(this.list_elements, grupo).then(()=>{this.list_elements=[]});
-    
+    return this.listElementsService
+      .createMany(this.list_elements, grupo)
+      .then(() => {
+        this.list_elements = [];
+      });
   }
 
-  private addToNumbers(pick: string, prices: string,pase:boolean, corrido?: string): void {
+  private addToNumbers(
+    pick: string,
+    prices: string,
+    pase: boolean,
+    corrido?: string
+  ): void {
     const exists = this.list_elements.filter(
       (element) => element.pick === pick
     );
@@ -284,7 +293,7 @@ export class ListsService {
         } else {
           this.list_elements[index].pase = +prices;
         }
-      }else{
+      } else {
         this.list_elements[index].price += +prices;
       }
       this.list_elements[index].amount += 1;
@@ -295,16 +304,16 @@ export class ListsService {
           this.list_elements[index].corrido = +corrido;
         }
       }
-      
     } else {
       const element: ListElement = {
         pick,
-        price: pase? 0:+prices,
+        price: pase ? 0 : +prices,
         amount: 1,
       };
       if (corrido) {
         element.corrido = +corrido;
-      }if (pase) {
+      }
+      if (pase) {
         element.pase = +prices;
       }
       this.list_elements.push(element);
@@ -341,5 +350,53 @@ export class ListsService {
       start,
       end,
     };
+  }
+
+  removeSpaces(message: string): string {
+    let trimedString = '';
+    let newString = '';
+    const messg = message.trim();
+    console.log(message);
+
+    for (let i = 0; i < messg.length; i++) {
+      const char = messg[i];
+      if (char === ' ') {
+        const after = message[i + 1];
+        if (after !== ' ') {
+          trimedString += char;
+        }
+      } else {
+        trimedString += char;
+      }
+    }
+    console.log(trimedString);
+    for (let i = 0; i < trimedString.length; i++) {
+      const char = trimedString[i];
+      if (char === ' ') {
+        console.log('123');
+
+        const before = trimedString[i - 1];
+        const after = trimedString[i + 1];
+        if (after && before) {
+          if (before.match(/^\d|c$/) && after.match(/^p$/i)) {
+            newString += ',';
+            console.log('456');
+          } else if (
+            before.match(/^e$/i) &&
+            after.match(/^\d$/)
+          ) {
+            newString += char;
+            console.log('789');
+          }
+        }
+      } else {
+        console.log('asd');
+
+        newString += char;
+      }
+    }
+    console.log(newString);
+
+    return newString;
   }
 }
