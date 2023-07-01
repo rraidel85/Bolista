@@ -15,28 +15,38 @@ import { LongPressDirective } from '../../directives/longpress.directive';
   selector: 'app-sms',
   standalone: true,
   template: `
-    <ion-card [ngStyle]="{ border: validationError ? '1px solid red' : '' }">
-      <ion-card-header>
-        <div class="card-header">
-          <ion-text style="font-weight: bold;" color="primary">{{ sms.address }}</ion-text>
-          <ion-checkbox
+    <ion-card [ngStyle]="{ border: validationError ? '1px solid red' : '' }" >
+      <div class="ion-activatable ripple-parent">
+        <ion-ripple-effect></ion-ripple-effect>
+        <ion-card-header>
+          <div class="card-header">
+            <ion-text style="font-weight: bold;" color="primary">{{
+              sms.address
+            }}</ion-text>
+            <ion-checkbox
             [checked]="isChecked"
             [disabled]="validationError"
             (ionChange)="onCheckboxChange($event)"
-          ></ion-checkbox>
-        </div>
-      </ion-card-header>
-      <ion-card-content ion-long-press [interval]="250" (longPressed)="openModal()">
-        <ion-text class="sms-body" appError [badBets]="this.smsErrors">
-          {{ sms.body }}
-        </ion-text>
-        <div class="ion-card-content-footer">
-          <ion-label class="sms-date">
-            {{ sms.date | date : "d 'de' MMMM, y h:mm a" }}</ion-label
-          >
-          <ion-icon *ngIf="validationError" name="warning-outline"></ion-icon>
-        </div>
-      </ion-card-content>
+            ></ion-checkbox>
+          </div>
+        </ion-card-header>
+        <ion-card-content
+        ion-long-press
+        [interval]="200"
+        (longPressed)="openModal()"
+        >
+          
+          <ion-text class="sms-body" appError [badBets]="this.smsErrors">
+            {{ sms.body }}
+          </ion-text>
+          <div class="ion-card-content-footer">
+            <ion-label class="sms-date">
+              {{ sms.date | date : "d 'de' MMMM, y h:mm a" }}</ion-label
+            >
+            <ion-icon *ngIf="validationError" name="warning-outline"></ion-icon>
+          </div>
+        </ion-card-content>
+      </div>
     </ion-card>
   `,
   styleUrls: ['./sms.component.scss'],
@@ -49,7 +59,7 @@ import { LongPressDirective } from '../../directives/longpress.directive';
     NgStyle,
     ErrorDirective,
     DatePipe,
-    LongPressDirective
+    LongPressDirective,
   ],
 })
 export class SmsComponent {
