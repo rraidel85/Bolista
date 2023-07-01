@@ -10,13 +10,12 @@ import { BetError } from 'src/app/shared/classes/list-exception.class';
 import { ToastController } from '@ionic/angular';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { LongPressDirective } from '../../directives/longpress.directive';
-import { HammerModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-sms',
   standalone: true,
   template: `
-    <ion-card [ngStyle]="{ border: validationError ? '1px solid red' : '' }" ion-long-press [interval]="250" (longPressed)="openModal()">
+    <ion-card [ngStyle]="{ border: validationError ? '1px solid red' : '' }">
       <div class="ion-activatable ripple-parent">
         <ion-ripple-effect></ion-ripple-effect>
         <ion-card-header>
@@ -25,13 +24,17 @@ import { HammerModule } from '@angular/platform-browser';
               sms.address
             }}</ion-text>
             <ion-checkbox
-            [checked]="isChecked"
-            [disabled]="validationError"
-            (ionChange)="onCheckboxChange($event)"
+              [checked]="isChecked"
+              [disabled]="validationError"
+              (ionChange)="onCheckboxChange($event)"
             ></ion-checkbox>
           </div>
         </ion-card-header>
-        <ion-card-content>
+        <ion-card-content
+          ion-long-press
+          [interval]="250"
+          (longPressed)="openModal()"
+        >
           <ion-text class="sms-body" appError [badBets]="this.smsErrors">
             {{ sms.body }}
           </ion-text>
