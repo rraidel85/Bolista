@@ -356,7 +356,6 @@ export class ListsService {
     let trimedString = '';
     let newString = '';
     const messg = message.trim();
-    console.log(message);
 
     for (let i = 0; i < messg.length; i++) {
       const char = messg[i];
@@ -369,33 +368,27 @@ export class ListsService {
         trimedString += char;
       }
     }
-    console.log(trimedString);
     for (let i = 0; i < trimedString.length; i++) {
       const char = trimedString[i];
       if (char === ' ') {
-        console.log('123');
 
         const before = trimedString[i - 1];
         const after = trimedString[i + 1];
         if (after && before) {
           if (before.match(/^\d|c$/) && after.match(/^p$/i)) {
             newString += ',';
-            console.log('456');
           } else if (
             before.match(/^e$/i) &&
             after.match(/^\d$/)
           ) {
             newString += char;
-            console.log('789');
           }
         }
       } else {
-        console.log('asd');
 
         newString += char;
       }
     }
-    console.log(newString);
 
     return newString;
   }
