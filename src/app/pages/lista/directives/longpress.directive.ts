@@ -33,7 +33,7 @@ export class LongPressDirective implements OnInit, OnDestroy {
     }
 
     this._hammer = new Hammer.Manager(this.el, {
-      recognizers: [[Hammer.Pan, { direction: Hammer.DIRECTION_VERTICAL }], [Hammer.Press], [Hammer.Tap]],
+      recognizers: [ [Hammer.Press]],
     })
 
     this._hammer.on('pan', (e: any) => {

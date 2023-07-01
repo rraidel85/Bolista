@@ -10,12 +10,13 @@ import { BetError } from 'src/app/shared/classes/list-exception.class';
 import { ToastController } from '@ionic/angular';
 import { BolistaDbService } from 'src/app/services/bolista-db.service';
 import { LongPressDirective } from '../../directives/longpress.directive';
+import { HammerModule } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-sms',
   standalone: true,
   template: `
-    <ion-card [ngStyle]="{ border: validationError ? '1px solid red' : '' }">
+    <ion-card [ngStyle]="{ border: validationError ? '1px solid red' : '' }" ion-long-press [interval]="250" (longPressed)="openModal()">
       <ion-card-header>
         <div class="card-header">
           <ion-text style="font-weight: bold;" color="primary">{{ sms.address }}</ion-text>
@@ -26,7 +27,7 @@ import { LongPressDirective } from '../../directives/longpress.directive';
           ></ion-checkbox>
         </div>
       </ion-card-header>
-      <ion-card-content ion-long-press [interval]="250" (longPressed)="openModal()">
+      <ion-card-content>
         <ion-text class="sms-body" appError [badBets]="this.smsErrors">
           {{ sms.body }}
         </ion-text>
@@ -49,7 +50,8 @@ import { LongPressDirective } from '../../directives/longpress.directive';
     NgStyle,
     ErrorDirective,
     DatePipe,
-    LongPressDirective
+    LongPressDirective,
+    HammerModule
   ],
 })
 export class SmsComponent {
