@@ -14,12 +14,15 @@ export class ListsService {
   // private listRegExp: listRegExpp=/(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{2}al?\d{2}|\d{3}al?\d{3})-\d+,|\d{2}-\d+-\d+c,)*(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{2}al?\d{2}|\d{3}al?\d{3})-\d+|\d{2}-\d+-\d+c)/g
   // private listRegExp: RegExp =
   //   /(pa(s|c)e )?(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+,|\d{2}-\d+-\d+c,)*/gi;
+  // private listRegExp: RegExp =
+  //   /(pa(s|c)e )?(((\d{1,2},)*\d{1,2}|(\d{3},)*\d{3}|\(\d{1,2},\d{1,2},\d{1,2}\)|\d{1,2}con\d{1,2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+,|\d{1,2}-\d+-\d+c,)*/gi;
   private listRegExp: RegExp =
-    /(pa(s|c)e )?(((\d{1,2},)*\d{1,2}|(\d{3},)*\d{3}|\(\d{1,2},\d{1,2},\d{1,2}\)|\d{1,2}con\d{1,2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+,|\d{1,2}-\d+-\d+c,)*/gi;
-  // private betRegExp: RegExp =
+    /(pa(s|c)e )?(((((\d{1,2})(al?\d{1,2})?),)*((\d{1,2})(al?\d{1,2})?)|(((\d{3})(al?\d{3})?),)*((\d{3})(al?\d{3})?)|\(\d{1,2},\d{1,2},\d{1,2}\)|\d{1,2}con\d{1,2})-\d+,|\d{1,2}-\d+-\d+c,)*/gi; // private betRegExp: RegExp =
   //   /^(pa(s|c)e )?(((\d{2},)*\d{2}|(\d{3},)*\d{3}|[(](\d{2},){2}\d{2}[)]|\d{2}con\d{2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+|\d{2}-\d+-\d+c)$/gi;
+  // private betRegExp: RegExp =
+  //   /^(pa(s|c)e )?(((\d{1,2},)*\d{1,2}|(\d{3},)*\d{3}|\(\d{1,2},\d{1,2},\d{1,2}\)|\d{1,2}con\d{1,2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+|\d{1,2}-\d+-\d+c)$/gi;
   private betRegExp: RegExp =
-    /^(pa(s|c)e )?(((\d{1,2},)*\d{1,2}|(\d{3},)*\d{3}|\(\d{1,2},\d{1,2},\d{1,2}\)|\d{1,2}con\d{1,2}|\d{1,2}al?\d{1,2}|\d{3}al?\d{3})-\d+|\d{1,2}-\d+-\d+c)$/gi;
+    /^(pa(s|c)e )?(((((\d{1,2})(al?\d{1,2})?),)*((\d{1,2})(al?\d{1,2})?)|(((\d{3})(al?\d{3})?),)*((\d{3})(al?\d{3})?)|\(\d{1,2},\d{1,2},\d{1,2}\)|\d{1,2}con\d{1,2})-\d+|\d{1,2}-\d+-\d+c)$/gi;
   private allowedChars: RegExp = /^[0123456789(),alcon\-pasce ]+$/i;
 
   constructor(private listElementsService: ListElementsService) {}
@@ -27,7 +30,7 @@ export class ListsService {
   validateMessage(message: string): Promise<any> {
     const badBets: BetError[] = [];
 
-   /*  console.log('asd');
+    /*  console.log('asd');
     const noSpaces = this.removeSpaces(message);
     console.log(noSpaces); */
 
@@ -57,22 +60,7 @@ export class ListsService {
             );
           } else {
             let pickList: string[] = [];
-            if (picks.match(/(al?)|con/)) {
-              let pickss = picks.replace('con', ',');
-              pickss = pickss.replace('al', ',');
-              pickss = pickss.replace('a', ',');
-              pickList = pickss.split(',');
-              if (pickList.length !== 2) {
-                badBets.push(
-                  this.handleErrors(
-                    'Error: Revise la apuesta',
-                    betObj.start,
-                    betObj.end
-                  )
-                );
-                continue;
-              }
-            } else if (picks.match(/^\(.*\)$/)) {
+            if (picks.match(/^\(.*\)$/)) {
               let pickss = picks.replace('(', '').replace(')', '');
               pickList = pickss.split(',');
               if (pickList.length !== 3) {
@@ -89,10 +77,24 @@ export class ListsService {
               pickList = picks.split(',');
             }
             let pickError = false;
-            let currentSize: number = pickList[0].length;
-            for (let pick of pickList) {
-              if (pick.match(/[con]|[al]/) || pick.length === 0) {
-                break;
+            let currentSize: number = pickList[0].length===1?2:pickList[0].length;
+            for (let elem of pickList) {
+              const pick= elem.length===1?'0'+elem:elem;
+              if (pick.length === 0) {break;}
+              else if (pick.match(/(al?)|con/)) {
+                let pickss = pick.replace('con', ',');
+                pickss = pickss.replace('al', ',');
+                pickss = pickss.replace('a', ',');
+                const size = pickss.split(',').length;
+                if (size !== 2) {
+                  badBets.push(
+                    this.handleErrors(
+                      'Error: Revise la apuesta',
+                      betObj.start,
+                      betObj.end
+                    )
+                  );
+                }
               } else if (!pick.match(/^\d{1,3}$/)) {
                 badBets.push(
                   this.handleErrors(
@@ -131,7 +133,6 @@ export class ListsService {
           for (let pick of pickList) {
             if (pick.match(/al?/)) {
               const [startN, endN, ...resto]: string[] = pick.split(/al?/);
-              const asd: string[] = pick.split(/al?/);
 
               const start = '0'.repeat(3 - startN.length) + startN;
               const end = '0'.repeat(3 - endN.length) + endN;
@@ -236,35 +237,43 @@ export class ListsService {
       }
       // if is corrido
       if (prices[1] && prices[1].includes('c')) {
-        this.addToNumbers(picks, prices[0], pase, prices[1].replace('c', ''));
+        this.addToNumbers(picks.length==1?'0'+picks:picks, prices[0], pase, prices[1].replace('c', ''));
       }
       // if is candado || con
       else if (picks.includes('(') || picks.includes('con')) {
-        this.addToNumbers(picks, prices[0], pase);
-      } else if (picks.includes('a')) {
-        const [start, end]: string[] = picks.replace('l', '').split('a');
-        const serieNumbers: string[] = [];
-        const diff = +end - +start;
-        let step = 1;
-        if (diff % 100 === 0) step = 100;
-        else if (diff % 11 === 0) step = 11;
-        else if (diff % 10 === 0) step = 10;
-        for (let i = 0; i < diff + 1; i += step) {
-          let nextNumber = +start + i;
-          let stringedNumber = nextNumber.toString();
-          if (stringedNumber.length === 1) {
-            stringedNumber = '0' + stringedNumber;
-          }
-          serieNumbers.push(stringedNumber);
-        }
+        this.addToNumbers(picks.length==1?'0'+picks:picks, prices[0], pase);
+        /* } else 
 
         serieNumbers.forEach((pick) => {
           this.addToNumbers(pick, prices[0], pase);
-        });
+        }); */
       } else {
         const separatedPicks: string[] = picks.split(',');
+        
         separatedPicks.forEach((pick) => {
-          this.addToNumbers(pick, prices[0], pase);
+          if (pick.includes('a')) {
+            
+            const [start, end]: string[] = pick.replace('l', '').split('a');
+            const serieNumbers: string[] = [];
+            const diff = +end - +start;
+            let step = 1;
+            if (diff % 100 === 0) step = 100;
+            else if (diff % 11 === 0) step = 11;
+            else if (diff % 10 === 0) step = 10;
+            for (let i = 0; i < diff + 1; i += step) {
+              let nextNumber = +start + i;
+              let stringedNumber = nextNumber.toString();
+              if (stringedNumber.length === 1) {
+                stringedNumber = '0' + stringedNumber;
+              }
+              serieNumbers.push(stringedNumber);
+            }
+            serieNumbers.forEach((pick) => {
+              this.addToNumbers(pick.length==1?'0'+pick:pick, prices[0], pase);
+            });
+          } else {
+            this.addToNumbers(pick.length==1?'0'+pick:pick, prices[0], pase);
+          }
         });
       }
     });
@@ -371,21 +380,16 @@ export class ListsService {
     for (let i = 0; i < trimedString.length; i++) {
       const char = trimedString[i];
       if (char === ' ') {
-
         const before = trimedString[i - 1];
         const after = trimedString[i + 1];
         if (after && before) {
           if (before.match(/^\d|c$/) && after.match(/^p$/i)) {
             newString += ',';
-          } else if (
-            before.match(/^e$/i) &&
-            after.match(/^\d$/)
-          ) {
+          } else if (before.match(/^e$/i) && after.match(/^\d$/)) {
             newString += char;
           }
         }
       } else {
-
         newString += char;
       }
     }
