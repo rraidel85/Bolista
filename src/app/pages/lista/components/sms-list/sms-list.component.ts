@@ -21,7 +21,7 @@ import { ListCardService } from '../../services/list-card.service';
         <ion-buttons slot="start">
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title>Mensaje</ion-title>
+        <ion-title>Mensajes</ion-title>
       </ion-toolbar>
     </ion-header>
 
