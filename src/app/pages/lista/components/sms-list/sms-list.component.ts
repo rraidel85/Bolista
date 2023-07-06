@@ -199,6 +199,13 @@ export class SmsListComponent implements OnInit, OnDestroy {
           });
         }
         return smsPhoneList;
+      }),
+      map((smsPhoneList) => {
+        const smsListWithoutSpaces = smsPhoneList.smsList.map((sms) =>{
+          const smsWithoutSpaces = this.listService.removeSpaces(sms.body)
+          return {...sms, body: smsWithoutSpaces}
+        });
+        return {smsList: smsListWithoutSpaces};
       })
     );
 
@@ -223,6 +230,13 @@ export class SmsListComponent implements OnInit, OnDestroy {
           });
         }
         return smsPhoneList;
+      }),
+      map((smsPhoneList) => {
+        const smsListWithoutSpaces = smsPhoneList.smsList.map((sms) =>{
+          const smsWithoutSpaces = this.listService.removeSpaces(sms.body)
+          return {...sms, body: smsWithoutSpaces}
+        });
+        return {smsList: smsListWithoutSpaces};
       })
     );
 
