@@ -82,10 +82,19 @@ ion-toast.error-toast {
 
 .porcentModal{
   --height: 160px; 
-  --width: 240px; 
+  --width: 70%; 
   --border-radius: 10px; 
   --background: rgba(85, 78, 78, 0.4);
   --box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.modal-buttons{
+  display: flex;
+  justify-content: space-around;
+
+  // ion-button{
+  //   --width: 50%;
+  // }
 }
 
 // .edit-modal{
