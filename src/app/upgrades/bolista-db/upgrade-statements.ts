@@ -18,7 +18,7 @@ export const bolistaDbVersionUpgrades = [
     statements: [
       `CREATE TABLE IF NOT EXISTS limits (
           id integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-          pick varchar(20) NOT NULL UNIQUE,
+          pick varchar(20) NOT NULL,
           grupo integer NOT NULL
         );`,
       `CREATE TABLE IF NOT EXISTS config (
