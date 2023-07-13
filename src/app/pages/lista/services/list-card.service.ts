@@ -36,8 +36,7 @@ export class ListCardService {
     const totalMoney = list_elements.values?.reduce((accumulator, obj) => {
       const price = obj?.price || 0;
       const corrido = obj?.corrido || 0;
-      const pase = obj?.pase || 0;
-      return accumulator + price + corrido + pase;
+      return accumulator + price + corrido;
     }, 0);
 
     const totalPases = list_elements.values
