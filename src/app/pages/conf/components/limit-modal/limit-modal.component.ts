@@ -140,11 +140,11 @@ export class LimitModalComponent implements OnInit {
   }
   
   addCard(number: string) {
-    if (this.selectedOption === 'mediodia') {
+    if (this.selectedOption === 'mediodia'&&!this.dayCards.includes(number)) {
       this.dbService.mDb.execute(
         `insert into limits (pick,grupo) values ('${number}',1)`
       );
-    } else if (this.selectedOption === 'noche') {
+    } else if (this.selectedOption === 'noche'&&!this.nightCards.includes(number)) {
       this.dbService.mDb.execute(
         `insert into limits (pick,grupo) values ('${number}',2)`
         );

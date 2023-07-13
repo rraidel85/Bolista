@@ -46,10 +46,27 @@ export class ListsService {
       for (const betObj of bets) {
         const bet = betObj.bet;
         const [first, ...rest]: string[] = bet.split('-');
-        const picks = first.match(/^pa(s|c)e /i)
-          ? first.replace(/^pa(s|c)e /i, '')
-          : first;
-        if (!bet.match(this.betRegExp)) {
+        let picks= first;
+        if(first.match(/^pa(s|c)e /i)){
+          picks = first.replace(/^pa(s|c)e /i, '')
+          if(+rest[0]>99999||(rest[1]&&+rest[1]>99999)){
+            badBets.push(
+              this.handleErrors(
+                'Error: Cantidad de dinero invalida',
+                betObj.start,
+                betObj.end
+              )
+            );
+          }
+        }else if(+rest[0]>999||(rest[1]&&+rest[1]>999)){
+          badBets.push(
+            this.handleErrors(
+              'Error: Cantidad de dinero invalida',
+              betObj.start,
+              betObj.end
+            )
+          );
+        }else if (!bet.match(this.betRegExp)) {
           if (!bet.match(this.allowedChars)) {
             badBets.push(
               this.handleErrors(
@@ -77,11 +94,13 @@ export class ListsService {
               pickList = picks.split(',');
             }
             let pickError = false;
-            let currentSize: number = pickList[0].length===1?2:pickList[0].length;
+            let currentSize: number =
+              pickList[0].length === 1 ? 2 : pickList[0].length;
             for (let elem of pickList) {
-              const pick= elem.length===1?'0'+elem:elem;
-              if (pick.length === 0) {break;}
-              else if (pick.match(/(al?)|con/)) {
+              const pick = elem.length === 1 ? '0' + elem : elem;
+              if (pick.length === 0) {
+                break;
+              } else if (pick.match(/(al?)|con/)) {
                 let pickss = pick.replace('con', ',');
                 pickss = pickss.replace('al', ',');
                 pickss = pickss.replace('a', ',');
@@ -137,26 +156,28 @@ export class ListsService {
               const start = '0'.repeat(3 - startN.length) + startN;
               const end = '0'.repeat(3 - endN.length) + endN;
               const diff = +end - +start;
-
-              if (
-                (diff % 100 === 0 &&
-                  diff !== 100 &&
-                  start.slice(1) === end.slice(1)) ||
-                (diff > 1 &&
-                  diff < 10 &&
-                  start.slice(0, -1) === end.slice(0, -1)) ||
-                (diff % 10 === 0 &&
-                  diff !== 10 &&
-                  start.slice(2) === end.slice(2) &&
-                  start.slice(0, 1) === end.slice(0, 1)) ||
-                (diff % 11 === 0 &&
-                  diff !== 11 &&
-                  start[0] === end[0] &&
-                  start[1] === start[2] &&
-                  end[1] === end[2]) ||
-                (start[0] === '0' && end[0] === '0')
-              ) {
-                continue;
+              console.log(diff);
+              
+              if (diff > 0) {
+                if (
+                  (diff % 100 === 0 &&
+                    diff !== 100 &&
+                    start.slice(1) === end.slice(1)) ||
+                  
+                  (diff % 10 === 0 &&
+                    diff !== 10 &&
+                    start.slice(2) === end.slice(2) &&
+                    start.slice(0, 1) === end.slice(0, 1)) ||
+                  (diff % 11 === 0 &&
+                    diff !== 11 &&
+                    start[0] === end[0] &&
+                    start[1] === start[2] &&
+                    end[1] === end[2])||
+                    (diff < 99)
+                  // (start[0] === '0' && end[0] === '0')
+                ) {
+                  continue;
+                }
               }
               badBets.push(
                 this.handleErrors(
@@ -166,7 +187,7 @@ export class ListsService {
                 )
               );
             }
-            if (existing.includes(pick)) {
+            /* if (existing.includes(pick)) {
               badBets.push(
                 this.handleErrors(
                   'Error: Números repetidos',
@@ -176,12 +197,12 @@ export class ListsService {
               );
             }
 
-            existing.push(pick);
+            existing.push(pick); */
           }
         }
       }
       if (badBets.length !== 0) {
-        // console.log(badBets);
+        console.log(badBets);
 
         throw new ListException('Se encontraron errores', badBets);
       }
@@ -237,11 +258,20 @@ export class ListsService {
       }
       // if is corrido
       if (prices[1] && prices[1].includes('c')) {
-        this.addToNumbers(picks.length==1?'0'+picks:picks, prices[0], pase, prices[1].replace('c', ''));
+        this.addToNumbers(
+          picks.length == 1 ? '0' + picks : picks,
+          prices[0],
+          pase,
+          prices[1].replace('c', '')
+        );
       }
       // if is candado || con
       else if (picks.includes('(') || picks.includes('con')) {
-        this.addToNumbers(picks.length==1?'0'+picks:picks, prices[0], pase);
+        this.addToNumbers(
+          picks.length == 1 ? '0' + picks : picks,
+          prices[0],
+          pase
+        );
         /* } else 
 
         serieNumbers.forEach((pick) => {
@@ -249,30 +279,42 @@ export class ListsService {
         }); */
       } else {
         const separatedPicks: string[] = picks.split(',');
-        
+
         separatedPicks.forEach((pick) => {
           if (pick.includes('a')) {
-            
             const [start, end]: string[] = pick.replace('l', '').split('a');
             const serieNumbers: string[] = [];
             const diff = +end - +start;
+            console.log(start);
+            
             let step = 1;
-            if (diff % 100 === 0) step = 100;
-            else if (diff % 11 === 0) step = 11;
-            else if (diff % 10 === 0) step = 10;
+            if (diff % 100 === 0&&diff!==100) step = 100;
+            else if (diff % 11 === 0&&diff!==11) step = 11;
+            else if (diff % 10 === 0&&diff!==10) step = 10;
             for (let i = 0; i < diff + 1; i += step) {
               let nextNumber = +start + i;
-              let stringedNumber = nextNumber.toString();
+              let stringedNumber = '0'.repeat(start.length-nextNumber.toString().length)+ nextNumber.toString();
+              console.log(start.length);
+              console.log('0'.repeat(3 - start.length));
+              console.log(stringedNumber);
               if (stringedNumber.length === 1) {
                 stringedNumber = '0' + stringedNumber;
               }
               serieNumbers.push(stringedNumber);
             }
             serieNumbers.forEach((pick) => {
-              this.addToNumbers(pick.length==1?'0'+pick:pick, prices[0], pase);
+              this.addToNumbers(
+                pick.length == 1 ? '0' + pick : pick,
+                prices[0],
+                pase
+              );
             });
           } else {
-            this.addToNumbers(pick.length==1?'0'+pick:pick, prices[0], pase);
+            this.addToNumbers(
+              pick.length == 1 ? '0' + pick : pick,
+              prices[0],
+              pase
+            );
           }
         });
       }
