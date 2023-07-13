@@ -271,20 +271,23 @@ export class SmsListComponent implements OnInit, OnDestroy {
   async onWillDismiss(event: Event) {
     const ev = event as CustomEvent<OverlayEventDetail<ModalSmsDataDismiss>>;
     if (ev.detail.role === 'confirm') {
-      await this.smsService.saveOrUpdate(ev.detail.data!.sms);
+      const smsBodyWithoutSpaces = this.listService.removeSpaces(ev.detail.data!.sms.body);
+      const noSpacesSms: SMSObject = {...ev.detail.data!.sms, body: smsBodyWithoutSpaces}
+
+      await this.smsService.saveOrUpdate(noSpacesSms);
 
       if (this.selectedSegment === 'received') {
         this.receivedSMS$ = this.receivedSMS$.pipe(
           tap((ret) => {
-            ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
-            this.oldSms = ev.detail.data!.sms; // Update oldText with new text
+            ret.smsList[ev.detail.data!.smsIndex] = noSpacesSms;
+            this.oldSms = noSpacesSms; // Update oldText with new text
           })
         );
       } else if (this.selectedSegment === 'sent') {
         this.sentSMS$ = this.sentSMS$.pipe(
           tap((ret) => {
-            ret.smsList[ev.detail.data!.smsIndex] = ev.detail.data!.sms;
-            this.oldSms = ev.detail.data!.sms; // Update oldText with new text
+            ret.smsList[ev.detail.data!.smsIndex] = noSpacesSms;
+            this.oldSms = noSpacesSms; // Update oldText with new text
           })
         );
       }

@@ -29,7 +29,6 @@ export class ListsService {
 
   validateMessage(message: string): Promise<any> {
     const badBets: BetError[] = [];
-
     /*  console.log('asd');
     const noSpaces = this.removeSpaces(message);
     console.log(noSpaces); */
