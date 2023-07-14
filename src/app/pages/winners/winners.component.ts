@@ -1,5 +1,6 @@
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Toast } from '@capacitor/toast';
 import { IonInput, IonSelect, IonicModule } from '@ionic/angular';
 import { Observable } from 'rxjs';
@@ -39,29 +40,29 @@ import { HoraService } from 'src/app/services/hora.service';
         </ion-grid>
 
         <ion-grid>
-          <ion-row>
-            <ion-col>
-              <ion-item lines="inset">
-                <ion-label position="stacked">Pick3:</ion-label>
-                <ion-input #pick3 type="text" inputmode="numeric"></ion-input>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+  <ion-row>
+    <ion-col>
+      <ion-item lines="inset">
+        <ion-label position="stacked">Pick3:</ion-label>
+        <ion-input #pick3 type="text" inputmode="numeric" maxlength="3" pattern="[0-9]{3}" patternError="Ingrese un número de 3 dígitos"></ion-input>
+      </ion-item>
+    </ion-col>
+  </ion-row>
+</ion-grid>
 
         <ion-grid>
           <ion-row>
             <ion-col>
               <ion-item lines="inset">
                 <ion-label position="stacked">Pick4:</ion-label>
-                <ion-input #pick41 inputmode="numeric"></ion-input>
+                <ion-input #pick41 type="text" inputmode="numeric" maxlength="2" pattern="[0-9]{2}" patternError="Ingrese un número de 2 dígitos"></ion-input>
               </ion-item>
             </ion-col>
 
             <ion-col>
               <ion-item lines="inset">
                 <ion-label position="stacked">Pick4:</ion-label>
-                <ion-input #pick42 inputmode="numeric"></ion-input>
+                <ion-input #pick42 type="text" inputmode="numeric" maxlength="2" pattern="[0-9]{2}" patternError="Ingrese un número de 2 dígitos"></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -129,7 +130,7 @@ import { HoraService } from 'src/app/services/hora.service';
   `,
   styleUrls: ['./winners.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, HoraPipe, AsyncPipe],
+  imports: [CommonModule, IonicModule, HoraPipe, AsyncPipe, FormsModule],
 })
 export class WinnersComponent implements OnInit {
   horaActual$!: Observable<string>;
