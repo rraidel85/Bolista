@@ -149,7 +149,7 @@ export class WinnersComponent implements OnInit {
     this.dbService.mDb.query(`select * from ganadores`).then((ret) => {
       const { pick3, pick41, pick42 } = ret.values![0];
       console.log(pick3);
-      
+
       this.pick3.value = pick3 === '0' ? '' : pick3;
       this.pick41.value = pick41 === '0' ? '' : pick41;
       this.pick42.value = pick42 === '0' ? '' : pick42;
@@ -202,9 +202,14 @@ export class WinnersComponent implements OnInit {
     const fijo: string = this.pick3.value!.toString().slice(1);
     this.winners = [];
     let firstForThird =
-      +this.pick41.value!.toString()[1] + +this.pick42.value!.toString()[1];
+      +this.pick3.value!.toString()[2] +
+      +this.pick41.value!.toString()[1] +
+      +this.pick42.value!.toString()[1];
     let firstForSecond =
-      +this.pick41.value!.toString()[0] + +this.pick42.value!.toString()[0];
+      +this.pick3.value!.toString()[1] +
+      +this.pick41.value!.toString()[0] +
+      +this.pick42.value!.toString()[0];
+
     if (firstForThird > 9) {
       firstForSecond += +firstForThird.toString()[0];
       firstForSecond = +firstForSecond.toString()[1];
@@ -214,6 +219,7 @@ export class WinnersComponent implements OnInit {
       firstForSecond.toString() + this.pick41.value,
       firstForThird.toString() + this.pick42.value,
     ];
+    console.log(centenaCorrida);
 
     list?.forEach((element) => {
       let mayWin = {
@@ -367,4 +373,3 @@ export class WinnersComponent implements OnInit {
     return this.winners.map((x) => x.aPagar).reduce((a, b) => a + b, 0);
   }
 }
-
