@@ -214,6 +214,8 @@ export class WinnersComponent implements OnInit {
       firstForSecond += +firstForThird.toString()[0];
       firstForSecond = +firstForSecond.toString()[1];
       firstForThird = +firstForThird.toString()[1];
+    }else{
+      firstForSecond = +firstForSecond.toString()[firstForThird.toString().length-1]
     }
     const centenaCorrida = [
       firstForSecond.toString() + this.pick41.value,
