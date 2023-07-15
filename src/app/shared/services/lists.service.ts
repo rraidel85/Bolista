@@ -426,7 +426,7 @@ export class ListsService {
         if (after && before) {
           if (before.match(/^\d|c$/) && after.match(/^p$/i)) {
             newString += ',';
-          } else if (before.match(/^e$/i) && after.match(/^\d$/)) {
+          } else if (before.match(/^e$/i) && after.match(/^(\d|\()$/)) {
             newString += char;
           }
         }
