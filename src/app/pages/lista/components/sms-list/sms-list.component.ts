@@ -249,6 +249,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
   }
 
   segmentChanged(event: any) {
+    this.smsToImport = []; // Resetting smsToimport list in changing segments 
     this.selectedSegment = event.target.value;
   }
 
@@ -300,6 +301,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
 
   onCheckedSms(sms: SMSObject) {
     this.smsToImport = [...this.smsToImport, sms];
+    console.log(this.smsToImport)
   }
 
   onUnCheckedSms(sms: SMSObject) {
@@ -307,6 +309,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
       (element) => sms.id != element.id
     );
     this.smsToImport = [...newSmsList];
+    console.log(this.smsToImport)
   }
 
   async importSmsList() {
