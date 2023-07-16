@@ -58,7 +58,7 @@ import { LongPressDirective } from '../../directives/longpress.directive';
     NgStyle,
     ErrorDirective,
     DatePipe,
-    LongPressDirective
+    LongPressDirective,
   ],
 })
 export class SmsComponent {
@@ -94,7 +94,6 @@ export class SmsComponent {
   async onCheckboxChange(event: any) {
     if (event.target.checked) {
       try {
-        console.log(this.sms.body)
         await this.listService.validateMessage(this.sms.body);
         // There is no error in message validation
         this.checkedSms.emit(this.sms);

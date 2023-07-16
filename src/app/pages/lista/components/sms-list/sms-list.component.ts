@@ -22,11 +22,9 @@ import { ListCardService } from '../../services/list-card.service';
           <ion-menu-button></ion-menu-button>
         </ion-buttons>
         <ion-title>Mensajes</ion-title>
+        
       </ion-toolbar>
-    </ion-header>
-
-    <ion-content [fullscreen]="true">
-      <ion-segment
+      <ion-segment style=""
         [swipeGesture]="true"
         value="received"
         (ionChange)="segmentChanged($event)"
@@ -40,10 +38,14 @@ import { ListCardService } from '../../services/list-card.service';
           <ion-icon name="paper-plane"></ion-icon>
         </ion-segment-button>
       </ion-segment>
+      
+    </ion-header>
 
+    <ion-content [fullscreen]="true">
+     
       <ng-container *ngIf="selectedSegment === 'received'">
         <ng-container *ngIf="receivedSMS$ | async as receivedSMS">
-          <ion-button
+        <ion-button slot="fixed"
             *ngIf="receivedSMS.smsList.length !== 0"
             class="ion-margin-top importar-button"
             expand="block"
@@ -52,6 +54,7 @@ import { ListCardService } from '../../services/list-card.service';
           >
             Importar
           </ion-button>
+          
           <ng-container *ngIf="receivedSMS.smsList.length !== 0; else noSms">
             <ion-list style="background:var(--ion-color-light);">
               <app-sms
@@ -68,7 +71,7 @@ import { ListCardService } from '../../services/list-card.service';
 
       <ng-container *ngIf="selectedSegment === 'sent'">
         <ng-container *ngIf="sentSMS$ | async as sentSMS">
-          <ion-button
+          <ion-button slot="fixed"
             *ngIf="sentSMS.smsList.length !== 0"
             class="ion-margin-top importar-button"
             expand="block"
@@ -246,6 +249,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
   }
 
   segmentChanged(event: any) {
+    this.smsToImport = []; // Resetting smsToimport list in changing segments 
     this.selectedSegment = event.target.value;
   }
 
@@ -297,6 +301,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
 
   onCheckedSms(sms: SMSObject) {
     this.smsToImport = [...this.smsToImport, sms];
+    console.log(this.smsToImport)
   }
 
   onUnCheckedSms(sms: SMSObject) {
@@ -304,6 +309,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
       (element) => sms.id != element.id
     );
     this.smsToImport = [...newSmsList];
+    console.log(this.smsToImport)
   }
 
   async importSmsList() {
