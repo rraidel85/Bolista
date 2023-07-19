@@ -52,6 +52,6 @@ ion-modal.auto-height {
 
 ion-modal.auto-height .ion-content {
   max-height: 100%;
-  overflow: auto;
+  overflow: scroll;
   padding: 10px;
 }
