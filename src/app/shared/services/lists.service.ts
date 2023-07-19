@@ -278,13 +278,12 @@ export class ListsService {
         }); */
       } else {
         const separatedPicks: string[] = picks.split(',');
-
+        
         separatedPicks.forEach((pick) => {
           if (pick.includes('a')) {
             const [start, end]: string[] = pick.replace('l', '').split('a');
             const serieNumbers: string[] = [];
             const diff = +end - +start;
-            console.log(start);
             
             let step = 1;
             if (diff % 100 === 0&&diff!==100) step = 100;
@@ -292,13 +291,14 @@ export class ListsService {
             else if (diff % 10 === 0&&diff!==10) step = 10;
             for (let i = 0; i < diff + 1; i += step) {
               let nextNumber = +start + i;
-              let stringedNumber = '0'.repeat(start.length-nextNumber.toString().length)+ nextNumber.toString();
-              console.log(start.length);
-              console.log('0'.repeat(3 - start.length));
-              console.log(stringedNumber);
+              let stringedNumber =''
               if (stringedNumber.length === 1) {
                 stringedNumber = '0' + stringedNumber;
               }
+              stringedNumber = '0'.repeat(end.length-nextNumber.toString().length)+ nextNumber.toString();
+              // console.log(end.length-nextNumber.toString().length);
+              // console.log('0'.repeat(3 - start.length));
+              // console.log(stringedNumber);
               serieNumbers.push(stringedNumber);
             }
             serieNumbers.forEach((pick) => {
