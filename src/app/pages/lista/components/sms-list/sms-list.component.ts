@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, inject, OnDestroy } from '@angular/core';
-import { IonModal, IonicModule } from '@ionic/angular';
+import { IonModal, IonicModule, ToastController } from '@ionic/angular';
 import { SmsService } from '../../services/sms.service';
 import { AsyncPipe, JsonPipe, NgFor, NgIf } from '@angular/common';
 import { SMSObject } from 'capacitor-sms-inbox';
@@ -163,6 +163,7 @@ export class SmsListComponent implements OnInit, OnDestroy {
   listService = inject(ListsService);
   listCardService = inject(ListCardService);
   router = inject(Router);
+  toastController = inject(ToastController);
 
   selectedSegment: string = 'received';
   receivedSMS$!: Observable<{ smsList: SMSObject[] }>;
@@ -246,6 +247,8 @@ export class SmsListComponent implements OnInit, OnDestroy {
     this.groupSuscription = this.route.queryParams.subscribe((params) => {
       this.group = Number(params['group']);
     });
+
+    this.smsToImport = []; // Reset sms checkboxes on component start
   }
 
   segmentChanged(event: any) {
@@ -265,11 +268,16 @@ export class SmsListComponent implements OnInit, OnDestroy {
   }
 
   confirm() {
-    const dismissData: ModalSmsDataDismiss = {
-      sms: this.currentEditingSms,
-      smsIndex: this.currentEditingIndex,
-    };
-    this.modal.dismiss(dismissData, 'confirm');
+    if (this.currentEditingSms.body.trim() !== '') {
+      const dismissData: ModalSmsDataDismiss = {
+        sms: this.currentEditingSms,
+        smsIndex: this.currentEditingIndex,
+      };
+      this.modal.dismiss(dismissData, 'confirm');
+    }
+    else{
+      this.presentToast();
+    }
   }
 
   async onWillDismiss(event: Event) {
@@ -322,6 +330,18 @@ export class SmsListComponent implements OnInit, OnDestroy {
     }
 
     this.router.navigate(['lista']);
+  }
+
+  async presentToast() {
+    const toast = await this.toastController.create({
+      message: 'El mensaje no puede estar vacío',
+      duration: 2000,
+      position: 'top',
+      cssClass: 'error-toast',
+      icon: 'warning-outline',
+    });
+
+    await toast.present();
   }
 
   ngOnDestroy(): void {

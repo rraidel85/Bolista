@@ -140,7 +140,7 @@ export class AppComponent implements OnInit,OnDestroy {
         } else { */
         
 
-      // this.activateTrial();
+      this.activateTrial();
   }
 
   activateTrial(){
