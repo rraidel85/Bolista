@@ -45,10 +45,10 @@ export class ListsService {
       for (const betObj of bets) {
         const bet = betObj.bet;
         const [first, ...rest]: string[] = bet.split('-');
-        let picks= first;
-        if(first.match(/^pa(s|c)e /i)){
-          picks = first.replace(/^pa(s|c)e /i, '')
-          if(+rest[0]>99999||(rest[1]&&+rest[1]>99999)){
+        let picks = first;
+        if (first.match(/^pa(s|c)e /i)) {
+          picks = first.replace(/^pa(s|c)e /i, '');
+          if (+rest[0] > 99999 || (rest[1] && +rest[1] > 99999)) {
             badBets.push(
               this.handleErrors(
                 'Error: Cantidad de dinero invalida',
@@ -57,7 +57,7 @@ export class ListsService {
               )
             );
           }
-        }else if(+rest[0]>999||(rest[1]&&+rest[1]>999)){
+        } else if (+rest[0] > 999 || (rest[1] && +rest[1] > 999)) {
           badBets.push(
             this.handleErrors(
               'Error: Cantidad de dinero invalida',
@@ -65,7 +65,7 @@ export class ListsService {
               betObj.end
             )
           );
-        }else if (!bet.match(this.betRegExp)) {
+        } else if (!bet.match(this.betRegExp)) {
           if (!bet.match(this.allowedChars)) {
             badBets.push(
               this.handleErrors(
@@ -156,13 +156,12 @@ export class ListsService {
               const end = '0'.repeat(3 - endN.length) + endN;
               const diff = +end - +start;
               console.log(diff);
-              
+
               if (diff > 0) {
                 if (
                   (diff % 100 === 0 &&
                     diff !== 100 &&
                     start.slice(1) === end.slice(1)) ||
-                  
                   (diff % 10 === 0 &&
                     diff !== 10 &&
                     start.slice(2) === end.slice(2) &&
@@ -171,8 +170,8 @@ export class ListsService {
                     diff !== 11 &&
                     start[0] === end[0] &&
                     start[1] === start[2] &&
-                    end[1] === end[2])||
-                    (diff < 99)
+                    end[1] === end[2]) ||
+                  diff < 99
                   // (start[0] === '0' && end[0] === '0')
                 ) {
                   continue;
@@ -265,37 +264,53 @@ export class ListsService {
         );
       }
       // if is candado || con
-      else if (picks.includes('(') || picks.includes('con')) {
+      else if (picks.includes('(')) {
+        const candado: string[] = picks
+          .replace('(', '')
+          .split('con');
+          const start=candado[0].length===1? '0'+candado[0]:candado[0]
+          const mid=candado[1].length===1? '0'+candado[1]:candado[1]
+          const end=candado[2].length===1? '0'+candado[2]:candado[2]
+        let stringed =`(${start},${mid},${end})`
         this.addToNumbers(
-          picks.length == 1 ? '0' + picks : picks,
+          stringed,
           prices[0],
           pase
         );
+
         /* } else 
 
         serieNumbers.forEach((pick) => {
           this.addToNumbers(pick, prices[0], pase);
         }); */
+      } else if (picks.includes('con')) {
+        const conBet: string[] = picks.split('con');
+        const start=conBet[0].length == 1 ? '0' + conBet[0] : conBet[0]
+        const end=conBet[1].length == 1 ? '0' + conBet[1] : conBet[1]
+        let stringed = `${start}con${end}`;
+        this.addToNumbers(stringed, prices[0], pase);
       } else {
         const separatedPicks: string[] = picks.split(',');
-        
+
         separatedPicks.forEach((pick) => {
           if (pick.includes('a')) {
             const [start, end]: string[] = pick.replace('l', '').split('a');
             const serieNumbers: string[] = [];
             const diff = +end - +start;
-            
+
             let step = 1;
-            if (diff % 100 === 0&&diff!==100) step = 100;
-            else if (diff % 11 === 0&&diff!==11) step = 11;
-            else if (diff % 10 === 0&&diff!==10) step = 10;
+            if (diff % 100 === 0 && diff !== 100) step = 100;
+            else if (diff % 11 === 0 && diff !== 11) step = 11;
+            else if (diff % 10 === 0 && diff !== 10) step = 10;
             for (let i = 0; i < diff + 1; i += step) {
               let nextNumber = +start + i;
-              let stringedNumber =''
+              let stringedNumber = '';
               if (stringedNumber.length === 1) {
                 stringedNumber = '0' + stringedNumber;
               }
-              stringedNumber = '0'.repeat(end.length-nextNumber.toString().length)+ nextNumber.toString();
+              stringedNumber =
+                '0'.repeat(end.length - nextNumber.toString().length) +
+                nextNumber.toString();
               // console.log(end.length-nextNumber.toString().length);
               // console.log('0'.repeat(3 - start.length));
               // console.log(stringedNumber);
@@ -405,7 +420,7 @@ export class ListsService {
   removeSpaces(message: string): string {
     let trimedString = '';
     let newString = '';
-    const messg = message.trim();
+    const messg = message.trim().replace('\n','');
 
     for (let i = 0; i < messg.length; i++) {
       const char = messg[i];
