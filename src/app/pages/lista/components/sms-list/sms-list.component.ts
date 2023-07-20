@@ -112,7 +112,7 @@ import { ListCardService } from '../../services/list-card.service';
               <ion-textarea
                 type="text"
                 [(ngModel)]="currentEditingSms.body"
-                rows="8"
+                [autoGrow]="true"
               >
               </ion-textarea>
             </ion-item>
@@ -309,7 +309,6 @@ export class SmsListComponent implements OnInit, OnDestroy {
 
   onCheckedSms(sms: SMSObject) {
     this.smsToImport = [...this.smsToImport, sms];
-    console.log(this.smsToImport)
   }
 
   onUnCheckedSms(sms: SMSObject) {
@@ -317,7 +316,6 @@ export class SmsListComponent implements OnInit, OnDestroy {
       (element) => sms.id != element.id
     );
     this.smsToImport = [...newSmsList];
-    console.log(this.smsToImport)
   }
 
   async importSmsList() {

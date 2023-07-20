@@ -155,7 +155,7 @@ export class ListsService {
               const start = '0'.repeat(3 - startN.length) + startN;
               const end = '0'.repeat(3 - endN.length) + endN;
               const diff = +end - +start;
-              console.log(diff);
+              // console.log(diff);
 
               if (diff > 0) {
                 if (
@@ -200,7 +200,7 @@ export class ListsService {
         }
       }
       if (badBets.length !== 0) {
-        console.log(badBets);
+        // console.log(badBets);
 
         throw new ListException('Se encontraron errores', badBets);
       }
