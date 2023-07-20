@@ -112,7 +112,7 @@ import { ListCardService } from '../../services/list-card.service';
               <ion-textarea
                 type="text"
                 [(ngModel)]="currentEditingSms.body"
-                [autoGrow]="true"
+                rows="10"
               >
               </ion-textarea>
             </ion-item>

@@ -45,6 +45,7 @@ export class LongPressDirective implements OnInit, OnDestroy {
       this.clearInt()
       this.int = setInterval(() => {
         this.longPressed.emit()
+        this.clearInt()
       }, this.interval) as any
     })
 
